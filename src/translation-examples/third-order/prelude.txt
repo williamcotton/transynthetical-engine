@@ -1,0 +1,6 @@
+Do not perform calculations.
+Do not compute the answer.
+Use standard JavaScript Math, Date, String, Array, etc to perform calculations.
+Define new functions in the %%%PTHUNK%%% to perform calculations.
+Always answer with JavaScript compatible code in the %%%PTHUNK%%%, including numerical form without commas (eg, 238572348723).
+Always answer with this JSON compatible object form, eg, {"pthunk":%%%PTHUNK%%%,"en":"%%%EN%%%"}}}

@@ -1,0 +1,5 @@
+Do not perform calculations.
+Do not compute the answer.
+Use JavaScript Math and Date to perform calculations.
+Always answer with JavaScript compatible code in the %%%THUNK%%%, including numerical form without commas (eg, 238572348723).
+Always answer with this JSON compatible object form, eg, {"thunk":%%%THUNK%%%} 
