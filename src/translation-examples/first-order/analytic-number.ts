@@ -2,7 +2,7 @@ import { toNum } from "../../ask";
 
 export const targetType = `data`;
 
-export const question = `What is the population of Geneseo, NY?`;
+export const prompt = `What is the population of Geneseo, NY?`;
 
 export const en = `The capital of France is {answer}.`;
 

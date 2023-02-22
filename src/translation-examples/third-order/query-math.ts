@@ -5,7 +5,7 @@ import { Solution } from "../../ask";
 
 export const targetType = `pthunk`;
 
-export const question = `What is twice the population of Albequerque, New Mexico?`;
+export const prompt = `What is twice the population of Albequerque, New Mexico?`;
 
 export const en = `The population of Albequerque, New Mexico is {answer}.`;
 

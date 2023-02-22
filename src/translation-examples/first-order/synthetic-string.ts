@@ -1,6 +1,6 @@
 export const targetType = `data`;
 
-export const question = `What is the capital of France?`;
+export const prompt = `What is the capital of France?`;
 
 export const en = `The capital of France is {answer}.`;
 

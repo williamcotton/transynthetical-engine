@@ -2,7 +2,7 @@ import { Solution } from "../../ask";
 
 export const targetType = `thunk`;
 
-export const question = `What's the rot13 of "Hello World"?`;
+export const prompt = `What's the rot13 of "Hello World"?`;
 
 export const en = `The rot13 of 'Hello World' is {answer}.`;
 

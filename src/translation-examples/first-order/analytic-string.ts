@@ -1,6 +1,6 @@
 export const targetType = `data`;
 
-export const question = `What year did Batman first appear in comics?`;
+export const prompt = `What year did Batman first appear in comics?`;
 
 export const en = `Batman first appeared in comics in {answer}.`;
 

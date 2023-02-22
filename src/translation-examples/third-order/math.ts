@@ -5,7 +5,7 @@ import { Solution } from "../../ask";
 
 export const targetType = `pthunk`;
 
-export const question = `A decade ago, Oakville's population was 67,624 people. Now, it is 190% larger. What is Oakville's current population?`;
+export const prompt = `A decade ago, Oakville's population was 67,624 people. Now, it is 190% larger. What is Oakville's current population?`;
 
 export const en = `The current population of Oakville is {answer} people.`;
 

@@ -73,7 +73,7 @@ export async function ask({
 }: AskParams): Promise<Solution> {
   // Augment the prompt with the analytic augmentation and the context.
   const augmentedPrompt = analyticAugmentation
-    ? analyticAugmentation + buildPrompt(prompt, context)
+    ? analyticAugmentation + buildPrompt({ context, prompt })
     : prompt;
 
   dispatch({

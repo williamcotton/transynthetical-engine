@@ -2,7 +2,7 @@ import { Solution } from "../../ask";
 
 export const targetType = `thunk`;
 
-export const question = `4 days a week, Laura practices martial arts for 1.5 hours. Considering a week is 7 days, what is her average practice time per day each week?`;
+export const prompt = `4 days a week, Laura practices martial arts for 1.5 hours. Considering a week is 7 days, what is her average practice time per day each week?`;
 
 export const en = `Laura practices an average of {answer} hours per day.`;
 
