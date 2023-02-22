@@ -1,11 +1,11 @@
-import extractedTexts, {
+import compiledTranslationExamples, {
   TranslationExample,
   TranslationExamplesAndPrelude,
 } from "../compiler";
 
-const firstOrderExtractedTexts = extractedTexts["first-order"];
-const secondOrderExtractedTexts = extractedTexts["second-order"];
-const thirdOrderExtractedTexts = extractedTexts["third-order"];
+const firstOrder = compiledTranslationExamples["first-order"];
+const secondOrder = compiledTranslationExamples["second-order"];
+const thirdOrder = compiledTranslationExamples["third-order"];
 
 export function buildPrompt({
   context,
@@ -17,29 +17,31 @@ export function buildPrompt({
   return ` Q: C(${context}) ${prompt}`;
 }
 
-function extractedTextToAnalyticAugmentation(
-  extractedText: TranslationExample
+function translationExampleToAnalyticAugmentation(
+  translationExample: TranslationExample
 ): string {
   const jsonTarget = {
-    [extractedText.targetType]: extractedText.target,
-    en: extractedText.en,
+    [translationExample.targetType]: translationExample.target,
+    en: translationExample.en,
   };
   const jsonTargetString = JSON.stringify(jsonTarget);
-  return buildPrompt(extractedText) + jsonTargetString;
+  return buildPrompt(translationExample) + jsonTargetString;
 }
 
-function extractedTextsToAnalyticAugmentations({
+function translationExamplesToAnalyticAugmentations({
   translationExamples,
   prelude,
 }: TranslationExamplesAndPrelude): string {
   return `${prelude} ${translationExamples
-    .map((extractedText) => extractedTextToAnalyticAugmentation(extractedText))
+    .map((translationExample) =>
+      translationExampleToAnalyticAugmentation(translationExample)
+    )
     .join("")}`;
 }
 
 export const analyticAugmentations = [
   "",
-  extractedTextsToAnalyticAugmentations(firstOrderExtractedTexts),
-  extractedTextsToAnalyticAugmentations(secondOrderExtractedTexts),
-  extractedTextsToAnalyticAugmentations(thirdOrderExtractedTexts),
+  translationExamplesToAnalyticAugmentations(firstOrder),
+  translationExamplesToAnalyticAugmentations(secondOrder),
+  translationExamplesToAnalyticAugmentations(thirdOrder),
 ];

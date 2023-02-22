@@ -27,11 +27,11 @@ export type TranslationExamplesAndPrelude = {
   prelude: string;
 };
 
-export type ExtractedTexts = {
+export type CompiledTranslationExamples = {
   [order: string]: TranslationExamplesAndPrelude;
 };
 
-const extractedTexts: ExtractedTexts = {};
+const compiledTranslationExamples: CompiledTranslationExamples = {};
 
 const options = {
   target: ts.ScriptTarget.ES2017,
@@ -95,10 +95,10 @@ orders.forEach((order) => {
       targetType: extractedTargetType as TranslationTarget,
     });
   });
-  extractedTexts[order] = {
+  compiledTranslationExamples[order] = {
     translationExamples,
     prelude,
   };
 });
 
-export default extractedTexts;
+export default compiledTranslationExamples;
