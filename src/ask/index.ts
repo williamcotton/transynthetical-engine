@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 import { Dispatch } from "../dispatch";
 import { query } from "../query";
 import { archive } from "../archive";
@@ -22,6 +24,7 @@ export function toNum(str: string) {
 }
 
 export type Solution = SolutionTranslationTarget & {
+  uuid: string;
   answer: any;
   solutions: Solution[];
   originalPrompt?: string;
@@ -38,13 +41,18 @@ export type Solution = SolutionTranslationTarget & {
   completion?: string;
 };
 
-function parseCompletion(completion: string, dispatch: Dispatch): Solution {
+function parseCompletion(
+  completion: string,
+  dispatch: Dispatch,
+  uuid: string
+): Solution {
   let solution: Solution;
   try {
     solution = JSON.parse(completion);
     dispatch({ type: "json_parse" });
   } catch (e) {
     solution = {
+      uuid,
       answer: undefined,
       en: "",
       en_answer: "",
@@ -79,6 +87,8 @@ export async function ask({
   evaluate = true,
   queryEngines = [wolframAlphaQueryEngine, wikipediaQueryEngine],
 }: AskParams): Promise<Solution> {
+  const uuid = uuidv4();
+
   // Augment the prompt with the analytic augmentation and the context.
   const augmentedPrompt = analyticAugmentation
     ? analyticAugmentation + buildPrompt({ context, prompt })
@@ -97,7 +107,7 @@ export async function ask({
   dispatch({ type: "ask_completion", completion });
 
   // Parse the completion text.
-  const solution = parseCompletion(completion, dispatch);
+  const solution = parseCompletion(completion, dispatch, uuid);
   dispatch({ type: "ask_solution", solution });
 
   // Evaluate the solution.
