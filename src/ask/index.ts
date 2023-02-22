@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Dispatch } from "../dispatch";
 import { query } from "../query";
-import { archive } from "../archive";
+import { archiveFactory } from "../archive";
 import { analyticAugmentations, buildPrompt } from "../analytic-augmentations";
 import { LLM } from "../large-language-models";
 import { TranslationTarget } from "../compiler";
@@ -24,7 +24,6 @@ export function toNum(str: string) {
 }
 
 export type Solution = SolutionTranslationTarget & {
-  uuid: string;
   answer: any;
   solutions: Solution[];
   originalPrompt?: string;
@@ -39,6 +38,7 @@ export type Solution = SolutionTranslationTarget & {
   error?: Error;
   raw?: any;
   completion?: string;
+  uuid?: string;
 };
 
 function parseCompletion(
@@ -49,7 +49,8 @@ function parseCompletion(
   let solution: Solution;
   try {
     solution = JSON.parse(completion);
-    dispatch({ type: "json_parse" });
+    solution.uuid = uuid;
+    dispatch({ type: "json_parse", solution });
   } catch (e) {
     solution = {
       uuid,
@@ -119,6 +120,7 @@ export async function ask({
       evaluated = await eval(solution.thunk)(); // second-order
     } else if (solution.pthunk) {
       query.engines = queryEngines;
+      const archive = archiveFactory(solution);
       evaluated = await eval(solution.pthunk)(dispatch, query, archive); // third-order
     } else {
       evaluated = { answer: undefined, en: "" }; // zeroth-order
