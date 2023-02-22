@@ -1,10 +1,7 @@
 import { Dispatch } from "../dispatch";
 import { query } from "../query";
 import { archive } from "../archive";
-import {
-  analyticAugmentations,
-  buildQuestion,
-} from "../analytic-augmentations";
+import { analyticAugmentations, buildPrompt } from "../analytic-augmentations";
 import { LLM } from "../large-language-models";
 import openAiLLM from "../large-language-models/openai";
 import { TranslationTarget } from "../compiler";
@@ -22,6 +19,8 @@ export function toNum(str: string) {
 
 export type Solution = SolutionTranslationTarget & {
   answer: string | number | undefined;
+  originalPrompt?: string;
+  augmentedPrompt?: string;
   en?: string;
   solutions: Solution[];
   analytic?: boolean;
@@ -31,15 +30,13 @@ export type Solution = SolutionTranslationTarget & {
   query?: boolean;
   error?: Error;
   raw?: any;
+  completion?: string;
 };
 
-function parseCompletionText(
-  completionText: string,
-  dispatch: Dispatch
-): Solution {
+function parseCompletion(completion: string, dispatch: Dispatch): Solution {
   let solution: Solution;
   try {
-    solution = JSON.parse(completionText);
+    solution = JSON.parse(completion);
     dispatch({ type: "json_parse" });
   } catch (e) {
     solution = {
@@ -52,7 +49,7 @@ function parseCompletionText(
       parsed: false,
       error: e as unknown as any,
     };
-    dispatch({ type: "parse_error", completionText, error: e });
+    dispatch({ type: "parse_error", completion, error: e });
   }
   return solution;
 }
@@ -63,6 +60,7 @@ type AskParams = {
   context?: string;
   analyticAugmentation?: string;
   llm?: LLM;
+  evaluate?: boolean;
 };
 
 export async function ask({
@@ -71,35 +69,49 @@ export async function ask({
   context = "",
   analyticAugmentation = analyticAugmentations[3],
   llm = openAiLLM,
+  evaluate = true,
 }: AskParams): Promise<Solution> {
+  dispatch({ type: "ask", prompt, context, analyticAugmentation });
+
   // Augment the prompt with the analytic augmentation and the context.
   const augmentedPrompt = analyticAugmentation
-    ? analyticAugmentation + buildQuestion(prompt, context)
+    ? analyticAugmentation + buildPrompt(prompt, context)
     : prompt;
 
   // Request a completion from the large language model.
-  const completionText = await llm.requestCompletion(augmentedPrompt);
+  const completion = await llm.requestCompletion(augmentedPrompt);
 
   // Parse the completion text.
-  const solution = parseCompletionText(completionText, dispatch);
+  const solution = parseCompletion(completion, dispatch);
 
   // Evaluate the solution.
   let evaluated: { [key: string]: any } = {};
-  if (solution.data) {
-    evaluated = eval(solution.data); // first-order
-  } else if (solution.thunk) {
-    evaluated = await eval(solution.thunk)(); // second-order
-  } else if (solution.pthunk) {
-    evaluated = await eval(solution.pthunk)(dispatch, query, archive); // third-order
-  } else {
-    evaluated = { answer: undefined, en: "" }; // zeroth-order
+  if (evaluate) {
+    if (solution.data) {
+      evaluated = eval(solution.data); // first-order
+    } else if (solution.thunk) {
+      evaluated = await eval(solution.thunk)(); // second-order
+    } else if (solution.pthunk) {
+      evaluated = await eval(solution.pthunk)(dispatch, query, archive); // third-order
+    } else {
+      evaluated = { answer: undefined, en: "" }; // zeroth-order
+    }
+
+    // Replace the {answer} placeholder in the English translation with the answer.
+    evaluated.en_answer = solution.en
+      ? solution.en.replace("{answer}", evaluated.answer || "")
+      : "";
   }
 
-  // Replace the {answer} placeholder in the English translation with the answer.
-  evaluated.en_answer = solution.en
-    ? solution.en.replace("{answer}", evaluated.answer || "")
-    : "";
+  const completeSolution = {
+    ...solution,
+    ...evaluated,
+    originalPrompt: prompt,
+    augmentedPrompt,
+    completion,
+  };
 
-  // Return the solution and the evaluated solution.
-  return { ...solution, ...evaluated };
+  dispatch({ type: "ask_complete", ...completeSolution });
+
+  return completeSolution;
 }

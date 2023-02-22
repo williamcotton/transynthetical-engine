@@ -7,8 +7,8 @@ const firstOrderExtractedTexts = extractedTexts["first-order"];
 const secondOrderExtractedTexts = extractedTexts["second-order"];
 const thirdOrderExtractedTexts = extractedTexts["third-order"];
 
-export function buildQuestion(context: string, question: string): string {
-  return `Q: C(${context}) ${question}`;
+export function buildPrompt(context: string, question: string): string {
+  return ` Q: C(${context}) ${question}`;
 }
 
 function extractedTextToAnalyticAugmentation(
@@ -20,7 +20,7 @@ function extractedTextToAnalyticAugmentation(
   };
   const jsonTargetString = JSON.stringify(jsonTarget);
   return (
-    buildQuestion(extractedText.context, extractedText.question) +
+    buildPrompt(extractedText.context, extractedText.question) +
     jsonTargetString
   );
 }

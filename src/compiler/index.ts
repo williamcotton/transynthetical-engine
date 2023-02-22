@@ -67,10 +67,6 @@ directories.forEach((directory) => {
       compilerOptions: options,
     }).outputText;
 
-    // const preparedTarget = `(${javascriptTarget
-    //   .replace(/(\r\n|\n|\r)/gm, "")
-    //   .replace(/\s+/g, " ")})(dispatch, query, archive))`;
-
     const preparedTarget = javascriptTarget
       .replace(/(\r\n|\n|\r)/gm, "")
       .replace(/\s+/g, " ")
