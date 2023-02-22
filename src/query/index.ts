@@ -11,10 +11,19 @@ export type QueryParams = {
   dispatch: Dispatch;
 };
 
-export const queryEngines = [wolframAlphaQueryEngine, wikipediaQueryEngine];
+export const defaultQueryEngines = [
+  wolframAlphaQueryEngine,
+  wikipediaQueryEngine,
+];
 
 export type QuerySolution = Solution & {
   otherSolutions: Solution[];
+  weight: number;
+};
+
+export type Query = {
+  (query: QueryParams): Promise<QuerySolution>;
+  engines: typeof defaultQueryEngines;
 };
 
 export const query: Query = async ({
@@ -25,18 +34,15 @@ export const query: Query = async ({
   dispatch,
 }: QueryParams): Promise<QuerySolution> => {
   dispatch({ type: "query", prompt, topic, target, target_type: type });
-  const [wolfromSolution, wikipediaSolution] = await Promise.all(
-    queryEngines.map((qe) => qe({ prompt, topic, target, type, dispatch }))
+  const solutions = await Promise.all(
+    query.engines.map((qe) => qe({ prompt, topic, target, type, dispatch }))
   );
-  if (wolfromSolution.answer) {
-    wolfromSolution.otherSolutions.push(wikipediaSolution);
-    return wolfromSolution;
-  }
-  if (wikipediaSolution.answer) {
-    wikipediaSolution.otherSolutions.push(wolfromSolution);
-    return wikipediaSolution;
-  }
-  return { answer: undefined, solutions: [], otherSolutions: [] };
+  const solution = solutions.reduce(
+    (acc, s) => (s.weight > acc.weight && s.answer ? s : acc),
+    { answer: undefined, solutions: [], otherSolutions: [], weight: 0 }
+  );
+  solution.otherSolutions = solutions.filter((s) => s !== solution);
+  return solution;
 };
 
-export type Query = (query: QueryParams) => Promise<QuerySolution>;
+query.engines = [];

@@ -1,5 +1,5 @@
 import { Dispatch } from "../dispatch";
-import { query } from "../query";
+import { defaultQueryEngines, query } from "../query";
 import { archive } from "../archive";
 import { analyticAugmentations, buildPrompt } from "../analytic-augmentations";
 import { LLM } from "../large-language-models";
@@ -63,6 +63,7 @@ type AskParams = {
   analyticAugmentation?: string;
   llm?: LLM;
   evaluate?: boolean;
+  queryEngines?: typeof defaultQueryEngines;
 };
 
 export async function ask({
@@ -72,6 +73,7 @@ export async function ask({
   analyticAugmentation = analyticAugmentations[3],
   llm = openAiLLM,
   evaluate = true,
+  queryEngines = defaultQueryEngines,
 }: AskParams): Promise<Solution> {
   // Augment the prompt with the analytic augmentation and the context.
   const augmentedPrompt = analyticAugmentation
@@ -102,6 +104,7 @@ export async function ask({
     } else if (solution.thunk) {
       evaluated = await eval(solution.thunk)(); // second-order
     } else if (solution.pthunk) {
+      query.engines = queryEngines;
       evaluated = await eval(solution.pthunk)(dispatch, query, archive); // third-order
     } else {
       evaluated = { answer: undefined, en: "" }; // zeroth-order

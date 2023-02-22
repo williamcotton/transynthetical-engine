@@ -12,8 +12,11 @@ async function mockQuery(query: QueryParams) {
     otherSolutions: [],
     computed: true,
     query: false,
+    weight: 0.1,
   };
 }
+
+mockQuery.engines = [] as any;
 
 import solution from "../../../src/translation-examples/third-order/query-math";
 

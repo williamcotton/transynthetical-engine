@@ -35,7 +35,8 @@ export async function wolframAlphaQueryEngine({
       answer: solution.answer,
       solutions: [solution],
       otherSolutions: [],
+      weight: 0.2,
     };
   }
-  return { answer: undefined, solutions: [], otherSolutions: [] };
+  return { answer: undefined, solutions: [], otherSolutions: [], weight: 0 };
 }

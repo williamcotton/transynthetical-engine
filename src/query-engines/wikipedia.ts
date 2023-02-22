@@ -24,5 +24,6 @@ export async function wikipediaQueryEngine({
     answer: solution.answer,
     solutions: [solution],
     otherSolutions: [],
+    weight: 0.1,
   };
 }
