@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import ts from "typescript";
 
-const directories = ["first-order", "second-order", "third-order"];
+const orders = ["first-order", "second-order", "third-order"];
 const pattern =
   /\/\/ %TRANSLATION_TARGET_RESPONSE_START%([\s\S]*)\/\/ %TRANSLATION_TARGET_RESPONSE_END%/;
 
@@ -18,7 +18,7 @@ export type TranslationExample = {
   targetType: TranslationTarget;
 };
 
-export type DirectoryTranslationExample = {
+export type OrderTranslationExample = {
   [filename: string]: TranslationExample;
 };
 
@@ -28,7 +28,7 @@ export type TranslationExamplesAndPrelude = {
 };
 
 export type ExtractedTexts = {
-  [directory: string]: TranslationExamplesAndPrelude;
+  [order: string]: TranslationExamplesAndPrelude;
 };
 
 const extractedTexts: ExtractedTexts = {};
@@ -38,18 +38,13 @@ const options = {
   module: ts.ModuleKind.CommonJS,
 };
 
-directories.forEach((directory) => {
-  const directoryPath = path.join(
-    __dirname,
-    "..",
-    "translation-examples",
-    directory
-  );
+orders.forEach((order) => {
+  const orderPath = path.join(__dirname, "..", "translation-examples", order);
   const files = fs
-    .readdirSync(directoryPath)
+    .readdirSync(orderPath)
     .filter((file) => file.endsWith(".ts"));
 
-  const preludePath = path.join(directoryPath, preludeFilename);
+  const preludePath = path.join(orderPath, preludeFilename);
   const prelude = fs
     .readFileSync(preludePath, "utf8")
     .replace(/(\r\n|\n|\r)/gm, " ");
@@ -57,7 +52,7 @@ directories.forEach((directory) => {
   const translationExamples: TranslationExample[] = [];
 
   files.forEach((file) => {
-    const filePath = path.join(directoryPath, file);
+    const filePath = path.join(orderPath, file);
     const fileContents = fs.readFileSync(filePath, "utf8");
 
     const match = fileContents.match(pattern);
@@ -67,18 +62,14 @@ directories.forEach((directory) => {
       compilerOptions: options,
     }).outputText;
 
-    // remove newlines, extra spaces, and double quotes
-    const trimmedTarget = javascriptTarget;
-    // .replace(/(\r\n|\n|\r)/gm, "")
-    // .replace(/\s+/g, " ")
-    // .replace(/"/g, "'");
+    // if first-order, remove semi-colons
+    const trimmedTarget =
+      order == "first-order"
+        ? javascriptTarget.replace(/;/, "")
+        : javascriptTarget;
 
-    // if the last character is a semi-colon, remove it then wrap in parens
-    const preparedTarget = `(${
-      trimmedTarget[trimmedTarget.length - 1] === ";"
-        ? trimmedTarget.slice(0, -1)
-        : trimmedTarget
-    })`;
+    // wrap in parens to make it a valid expression
+    const preparedTarget = `(${trimmedTarget})`;
 
     const enMatch = fileContents.match(/export const en = `(.*)`;/);
     const extractedEn = enMatch ? enMatch[1].trim() : "";
@@ -104,7 +95,7 @@ directories.forEach((directory) => {
       targetType: extractedTargetType as TranslationTarget,
     });
   });
-  extractedTexts[directory] = {
+  extractedTexts[order] = {
     translationExamples,
     prelude,
   };
