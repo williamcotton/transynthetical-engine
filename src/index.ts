@@ -1,7 +1,7 @@
 import { ask } from "./ask";
 import { dispatch } from "./dispatch";
 import { analyticAugmentations } from "./analytic-augmentations";
-import { solve } from "./solve-problem";
+import { solve } from "./solve";
 
 import {
   trivia,
