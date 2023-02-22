@@ -1,5 +1,5 @@
 Do not perform calculations.
 Do not compute the answer.
 Use Javascript Math and Date to perform calculations.
-Always answer with Javascript compatible code in the %%%DATA%%%, including numerical form without commas (eg, 238572348723).
+Always answer with Javascript compatible code in the %%%DATA%%%.
 Always answer with this JSON compatible object form, eg, {"data":%%%DATA%%%,"en":%%%EN%%%}.
