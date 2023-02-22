@@ -67,10 +67,18 @@ directories.forEach((directory) => {
       compilerOptions: options,
     }).outputText;
 
-    const preparedTarget = javascriptTarget
+    // remove newlines, extra spaces, and double quotes
+    const trimmedTarget = javascriptTarget
       .replace(/(\r\n|\n|\r)/gm, "")
       .replace(/\s+/g, " ")
       .replace(/"/g, "'");
+
+    // if the last character is a semi-colon, remove it then wrap in parens
+    const preparedTarget = `(${
+      trimmedTarget[trimmedTarget.length - 1] === ";"
+        ? trimmedTarget.slice(0, -1)
+        : trimmedTarget
+    })`;
 
     const enMatch = fileContents.match(/export const en = `(.*)`;/);
     const extractedEn = enMatch ? enMatch[1].trim() : "";

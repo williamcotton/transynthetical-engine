@@ -12,7 +12,7 @@ export const en = `The current population of Oakville is {answer} people.`;
 export const context = ``;
 
 // %TRANSLATION_TARGET_RESPONSE_START%
-(async function solution(
+async function solution(
   dispatch: Dispatch,
   query: Query,
   archive: Archive
@@ -27,5 +27,7 @@ export const context = ``;
     computed: true,
     query: false,
   };
-});
+}
 // %TRANSLATION_TARGET_RESPONSE_END%
+
+export default solution;

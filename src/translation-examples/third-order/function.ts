@@ -12,7 +12,7 @@ export const en = `The rot13 of 'Hello World' is {answer}.`;
 export const context = ``;
 
 // %TRANSLATION_TARGET_RESPONSE_START%
-(async function solution(
+async function solution(
   dispatch: Dispatch,
   query: Query,
   archive: Archive
@@ -38,5 +38,7 @@ export const context = ``;
   archive.add("compute_rot13", compute_rot13, [{ str: "string" }]);
   dispatch({ type: "compute_response" });
   return { answer: rot13, solutions: [], computed: true, query: false };
-});
+}
 // %TRANSLATION_TARGET_RESPONSE_END%
+
+export default solution;

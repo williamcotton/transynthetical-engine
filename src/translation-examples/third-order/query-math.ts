@@ -14,7 +14,7 @@ export const context = ``;
 // TODO: instead of (populationOfAlbequerque.answer as number), infer the type from what is passed into the query
 
 // %TRANSLATION_TARGET_RESPONSE_START%
-(async function solution(
+async function solution(
   dispatch: Dispatch,
   query: Query,
   archive: Archive
@@ -36,5 +36,7 @@ export const context = ``;
     computed: true,
     query: true,
   };
-});
+}
 // %TRANSLATION_TARGET_RESPONSE_END%
+
+export default solution;

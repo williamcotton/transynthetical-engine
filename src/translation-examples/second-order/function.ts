@@ -9,7 +9,7 @@ export const en = `The rot13 of 'Hello World' is {answer}.`;
 export const context = ``;
 
 // %TRANSLATION_TARGET_RESPONSE_START%
-(async function solution(): Promise<Solution> {
+async function solution(): Promise<Solution> {
   const sentence = "Hello World";
   function compute_rot13(str: string) {
     return str
@@ -28,5 +28,7 @@ export const context = ``;
   }
   const rot13 = compute_rot13(sentence);
   return { answer: rot13, solutions: [], computed: true };
-});
+}
 // %TRANSLATION_TARGET_RESPONSE_END%
+
+export default solution;

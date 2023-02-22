@@ -9,13 +9,15 @@ export const en = `Laura practices an average of {answer} hours per day.`;
 export const context = ``;
 
 // %TRANSLATION_TARGET_RESPONSE_START%
-(async function () {
+async function solution(): Promise<Solution> {
   const daysPracticedInAWeek = 4;
   const hoursPracticedInADay = 1.5;
   const daysInAWeek = 7;
   const totalHoursPracticedInAWeek =
     daysPracticedInAWeek * hoursPracticedInADay;
   const averagePracticeTimePerDay = totalHoursPracticedInAWeek / daysInAWeek;
-  return { answer: averagePracticeTimePerDay, computed: true };
-});
+  return { answer: averagePracticeTimePerDay, solutions: [], computed: true };
+}
 // %TRANSLATION_TARGET_RESPONSE_END%
+
+export default solution;
