@@ -1,7 +1,7 @@
-import { Dispatch, dispatch } from "../../dispatch";
-import { Archive, archive } from "../../archive";
-import { Query, query } from "../../query";
-import { Solution } from "../..";
+import { Dispatch } from "../../dispatch";
+import { Archive } from "../../archive";
+import { Query } from "../../query";
+import { Solution } from "../../ask";
 
 export const targetType = `pthunk`;
 
