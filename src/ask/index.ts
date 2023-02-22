@@ -18,10 +18,11 @@ export function toNum(str: string) {
 }
 
 export type Solution = SolutionTranslationTarget & {
-  answer: string | number | undefined;
+  answer: any;
   originalPrompt?: string;
   augmentedPrompt?: string;
   en?: string;
+  en_answer?: string;
   solutions: Solution[];
   analytic?: boolean;
   synthetic?: boolean;
