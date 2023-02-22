@@ -1,10 +1,14 @@
 import { Dispatch } from "../dispatch";
-import { defaultQueryEngines, query } from "../query";
+import { query } from "../query";
 import { archive } from "../archive";
 import { analyticAugmentations, buildPrompt } from "../analytic-augmentations";
 import { LLM } from "../large-language-models";
-import openAiLLM from "../large-language-models/openai";
 import { TranslationTarget } from "../compiler";
+import { QueryEngine } from "../query-engines";
+
+import { openAiLLM } from "../large-language-models/openai";
+import { wikipediaQueryEngine } from "../query-engines/wikipedia";
+import { wolframAlphaQueryEngine } from "../query-engines/wolfram-alpha";
 
 type SolutionTranslationTarget = {
   [Type in TranslationTarget]?: string;
@@ -63,7 +67,7 @@ type AskParams = {
   analyticAugmentation?: string;
   llm?: LLM;
   evaluate?: boolean;
-  queryEngines?: typeof defaultQueryEngines;
+  queryEngines?: QueryEngine[];
 };
 
 export async function ask({
@@ -73,7 +77,7 @@ export async function ask({
   analyticAugmentation = analyticAugmentations[3],
   llm = openAiLLM,
   evaluate = true,
-  queryEngines = defaultQueryEngines,
+  queryEngines = [wolframAlphaQueryEngine, wikipediaQueryEngine],
 }: AskParams): Promise<Solution> {
   // Augment the prompt with the analytic augmentation and the context.
   const augmentedPrompt = analyticAugmentation

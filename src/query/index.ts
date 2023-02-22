@@ -1,7 +1,6 @@
 import { Solution } from "../ask";
 import { Dispatch } from "../dispatch";
-import { wikipediaQueryEngine } from "../query-engines/wikipedia";
-import { wolframAlphaQueryEngine } from "../query-engines/wolfram-alpha";
+import { QueryEngine } from "../query-engines";
 
 export type QueryParams = {
   prompt: string;
@@ -11,11 +10,6 @@ export type QueryParams = {
   dispatch: Dispatch;
 };
 
-export const defaultQueryEngines = [
-  wolframAlphaQueryEngine,
-  wikipediaQueryEngine,
-];
-
 export type QuerySolution = Solution & {
   otherSolutions: Solution[];
   weight: number;
@@ -23,7 +17,7 @@ export type QuerySolution = Solution & {
 
 export type Query = {
   (query: QueryParams): Promise<QuerySolution>;
-  engines: typeof defaultQueryEngines;
+  engines: QueryEngine[];
 };
 
 export const query: Query = async ({

@@ -9,7 +9,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const openAiLLM: LLM = {
+export const openAiLLM: LLM = {
   requestCompletion: async (prompt: string) => {
     const response = await openai.createCompletion({
       model: "text-davinci-003",
@@ -20,5 +20,3 @@ const openAiLLM: LLM = {
     return response.data.choices[0].text || "";
   },
 };
-
-export default openAiLLM;
