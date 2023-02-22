@@ -1,5 +1,5 @@
 import wikipedia from "wikipedia";
-import { ask } from "..";
+import { ask } from "../ask";
 import { analyticAugmentations } from "../analytic-augmentations";
 import { QueryParams, QuerySolution } from "../query";
 
@@ -12,12 +12,12 @@ export async function wikipediaQueryEngine({
 }: QueryParams): Promise<QuerySolution> {
   const wikipediaSummary = await wikipedia.summary(topic);
   const wikipediaSummaryContext = wikipediaSummary.extract;
-  const solution = await ask(
+  const solution = await ask({
     prompt,
     dispatch,
-    wikipediaSummaryContext,
-    analyticAugmentations[1]
-  );
+    context: wikipediaSummaryContext,
+    analyticAugmentation: analyticAugmentations[1],
+  });
   solution.raw = wikipediaSummary;
   dispatch({ type: "query_wikipedia_response", answer: solution.answer });
   return {

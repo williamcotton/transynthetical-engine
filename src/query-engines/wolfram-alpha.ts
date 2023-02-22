@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 // @ts-ignore
 import WolframAlphaAPI from "wolfram-alpha-node";
-import { ask, Solution } from "..";
+import { ask } from "../ask";
 import { analyticAugmentations } from "../analytic-augmentations";
 import { QueryParams, QuerySolution } from "../query";
 
@@ -23,12 +23,12 @@ export async function wolframAlphaQueryEngine({
         [p.title]: p.subpods[0].plaintext,
       }))
     );
-    const solution = await ask(
+    const solution = await ask({
       prompt,
       dispatch,
-      wolfromAlphaContext,
-      analyticAugmentations[1]
-    );
+      context: wolfromAlphaContext,
+      analyticAugmentation: analyticAugmentations[1],
+    });
     solution.query = wolfromAlphaQuery;
     dispatch({ type: "query_wolfram_response", answer: solution.answer });
     return {

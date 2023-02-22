@@ -1,5 +1,5 @@
-import { Solution } from "..";
-import { Action, Dispatch } from "../dispatch";
+import { Solution } from "../ask";
+import { Dispatch } from "../dispatch";
 import { wikipediaQueryEngine } from "../query-engines/wikipedia";
 import { wolframAlphaQueryEngine } from "../query-engines/wolfram-alpha";
 

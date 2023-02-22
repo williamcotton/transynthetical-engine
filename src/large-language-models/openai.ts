@@ -1,6 +1,7 @@
 import { Configuration, OpenAIApi } from "openai";
 
 import * as dotenv from "dotenv";
+import { LLM } from ".";
 dotenv.config();
 
 const configuration = new Configuration({
@@ -8,7 +9,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export default {
+const openAiLLM: LLM = {
   requestCompletion: async (prompt: string) => {
     const response = await openai.createCompletion({
       model: "text-davinci-003",
@@ -19,3 +20,5 @@ export default {
     return response.data.choices[0].text || "";
   },
 };
+
+export default openAiLLM;
