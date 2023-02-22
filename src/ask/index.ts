@@ -19,11 +19,11 @@ export function toNum(str: string) {
 
 export type Solution = SolutionTranslationTarget & {
   answer: any;
+  solutions: Solution[];
   originalPrompt?: string;
   augmentedPrompt?: string;
   en?: string;
   en_answer?: string;
-  solutions: Solution[];
   analytic?: boolean;
   synthetic?: boolean;
   computed?: boolean;
@@ -43,6 +43,7 @@ function parseCompletion(completion: string, dispatch: Dispatch): Solution {
     solution = {
       answer: undefined,
       en: "",
+      en_answer: "",
       solutions: [],
       analytic: false,
       synthetic: false,
