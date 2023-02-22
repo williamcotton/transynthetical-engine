@@ -71,18 +71,26 @@ export async function ask({
   llm = openAiLLM,
   evaluate = true,
 }: AskParams): Promise<Solution> {
-  dispatch({ type: "ask", prompt, context, analyticAugmentation });
-
   // Augment the prompt with the analytic augmentation and the context.
   const augmentedPrompt = analyticAugmentation
     ? analyticAugmentation + buildPrompt(prompt, context)
     : prompt;
 
+  dispatch({
+    type: "ask",
+    prompt,
+    context,
+    analyticAugmentation,
+    augmentedPrompt,
+  });
+
   // Request a completion from the large language model.
   const completion = await llm.requestCompletion(augmentedPrompt);
+  dispatch({ type: "ask_completion", completion });
 
   // Parse the completion text.
   const solution = parseCompletion(completion, dispatch);
+  dispatch({ type: "ask_solution", solution });
 
   // Evaluate the solution.
   let evaluated: { [key: string]: any } = {};
