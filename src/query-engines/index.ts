@@ -1,3 +1,8 @@
+import { Dispatch } from "../dispatch";
 import { QueryParams, QuerySolution } from "../query";
 
-export type QueryEngine = (query: QueryParams) => Promise<QuerySolution>;
+export type QueryEngineParams = QueryParams & {
+  dispatch: Dispatch;
+};
+
+export type QueryEngine = (query: QueryEngineParams) => Promise<QuerySolution>;

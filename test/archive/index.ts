@@ -16,7 +16,7 @@ describe("compiler", () => {
       en_answer: "en_answer",
       solutions: [],
     };
-    const archive = archiveFactory(solution);
+    const archive = archiveFactory({ solution });
     const addedResponse = archive.add("test", t, [{ s: "string" }]);
     expect(addedResponse).deep.equal({
       name: "test",

@@ -1,4 +1,3 @@
-import { Dispatch } from "../../dispatch";
 import { Archive } from "../../archive";
 import { Query } from "../../query";
 import { Solution } from "../../ask";
@@ -12,15 +11,9 @@ export const en = `The current population of Oakville is {answer} people.`;
 export const context = ``;
 
 // %TRANSLATION_TARGET_RESPONSE_START%
-async function solution(
-  dispatch: Dispatch,
-  query: Query,
-  archive: Archive
-): Promise<Solution> {
-  dispatch({ type: "compute" });
+async function solution(query: Query, archive: Archive): Promise<Solution> {
   const populationOfOakvilleTenYearsAgo = 67624;
   const populationOfOakvilleNow = populationOfOakvilleTenYearsAgo * 1.9;
-  dispatch({ type: "compute_response" });
   return {
     answer: populationOfOakvilleNow,
     solutions: [],

@@ -16,13 +16,11 @@ async function mockQuery(query: QueryParams) {
   };
 }
 
-mockQuery.engines = [] as any;
-
 import solution from "../../../src/translation-examples/third-order/query-math";
 
 describe("Third-order translation example: query-math", () => {
   it("should return the expected solution", async () => {
-    expect(await solution(dispatch, mockQuery, archive)).deep.equal({
+    expect(await solution(mockQuery, archive)).deep.equal({
       answer: 1129198,
       solutions: [],
       computed: true,

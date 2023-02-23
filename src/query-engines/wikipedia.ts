@@ -1,7 +1,8 @@
 import wikipedia from "wikipedia";
 import { ask } from "../ask";
 import { analyticAugmentations } from "../analytic-augmentations";
-import { QueryParams, QuerySolution } from "../query";
+import { QuerySolution } from "../query";
+import { QueryEngineParams } from ".";
 
 export async function wikipediaQueryEngine({
   prompt,
@@ -9,7 +10,7 @@ export async function wikipediaQueryEngine({
   target,
   type,
   dispatch,
-}: QueryParams): Promise<QuerySolution> {
+}: QueryEngineParams): Promise<QuerySolution> {
   const wikipediaSummary = await wikipedia.summary(topic);
   const wikipediaSummaryContext = wikipediaSummary.extract;
   const solution = await ask({

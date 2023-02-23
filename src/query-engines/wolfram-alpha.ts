@@ -3,7 +3,8 @@ import * as dotenv from "dotenv";
 import WolframAlphaAPI from "wolfram-alpha-node";
 import { ask } from "../ask";
 import { analyticAugmentations } from "../analytic-augmentations";
-import { QueryParams, QuerySolution } from "../query";
+import { QuerySolution } from "../query";
+import { QueryEngineParams } from ".";
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ export async function wolframAlphaQueryEngine({
   target,
   type,
   dispatch,
-}: QueryParams): Promise<QuerySolution> {
+}: QueryEngineParams): Promise<QuerySolution> {
   const wolfromAlphaQuery = await wolframAlpha.getFull(prompt);
   if (wolfromAlphaQuery.pods) {
     const wolfromAlphaContext = JSON.stringify(
@@ -38,5 +39,10 @@ export async function wolframAlphaQueryEngine({
       weight: 0.2,
     };
   }
-  return { answer: undefined, solutions: [], otherSolutions: [], weight: 0 };
+  return {
+    answer: undefined,
+    solutions: [],
+    otherSolutions: [],
+    weight: 0,
+  };
 }

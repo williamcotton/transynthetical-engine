@@ -24,7 +24,13 @@ export type ArchiveAdd = (
   argTypes: ArgTypes
 ) => void;
 
-export const archiveFactory = (solution: Solution): Archive => {
+export const archiveFactory = ({
+  solution,
+  database,
+}: {
+  solution: Solution;
+  database?: any;
+}): Archive => {
   return {
     add: (name, func, argTypes): AddedResponse => {
       const stringFunc = func.toString();
@@ -41,9 +47,11 @@ export const archiveFactory = (solution: Solution): Archive => {
 };
 
 export const archive = archiveFactory({
-  uuid: "uuid",
-  answer: "answer",
-  en: "en",
-  en_answer: "en_answer",
-  solutions: [],
+  solution: {
+    uuid: "uuid",
+    answer: "answer",
+    en: "en",
+    en_answer: "en_answer",
+    solutions: [],
+  },
 });
