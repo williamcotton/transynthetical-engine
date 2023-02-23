@@ -1,3 +1,5 @@
+import sqlite3 from "sqlite3";
+
 import { Solution } from "../ask";
 import { Dispatch } from "../dispatch";
 import { QueryEngine } from "../query-engines";
@@ -32,10 +34,12 @@ export const queryFactory =
     queryEngines,
     solution: parentSolution,
     dispatch,
+    database,
   }: {
     queryEngines: QueryEngine[];
     solution: Solution;
     dispatch: Dispatch;
+    database: sqlite3.Database;
   }): Query =>
   async ({
     prompt,
@@ -45,7 +49,9 @@ export const queryFactory =
   }: QueryParams): Promise<QuerySolution> => {
     dispatch({ type: "query", prompt, topic, target, target_type: type });
     const solutions = await Promise.all(
-      queryEngines.map((qe) => qe({ prompt, topic, target, type, dispatch }))
+      queryEngines.map((qe) =>
+        qe({ prompt, topic, target, type, dispatch, database })
+      )
     );
     const solution = solutions.reduce(
       (acc, s) => (s.weight > acc.weight && s.answer ? s : acc),

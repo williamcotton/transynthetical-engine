@@ -1,4 +1,4 @@
-import { Archive } from "../../archive";
+import { Archiver } from "../../archive";
 import { Query } from "../../query";
 import { Solution } from "../../ask";
 
@@ -13,7 +13,7 @@ export const context = ``;
 // TODO: instead of (populationOfAlbequerque.answer as number), infer the type from what is passed into the query
 
 // %TRANSLATION_TARGET_RESPONSE_START%
-async function solution(query: Query, archive: Archive): Promise<Solution> {
+async function solution(query: Query, archiver: Archiver): Promise<Solution> {
   const populationOfAlbequerque = await query({
     prompt: "What is the population of Albequerque, New Mexico?",
     topic: "Albequerque, New Mexico",

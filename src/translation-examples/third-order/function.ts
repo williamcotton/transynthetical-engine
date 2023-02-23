@@ -1,4 +1,4 @@
-import { Archive } from "../../archive";
+import { Archiver } from "../../archive";
 import { Query } from "../../query";
 import { Solution } from "../../ask";
 
@@ -11,7 +11,7 @@ export const en = `The rot13 of 'Hello World' is {answer}.`;
 export const context = ``;
 
 // %TRANSLATION_TARGET_RESPONSE_START%
-async function solution(query: Query, archive: Archive): Promise<Solution> {
+async function solution(query: Query, archiver: Archiver): Promise<Solution> {
   const sentence = "Hello World";
   function compute_rot13(str: string) {
     return str
@@ -29,7 +29,7 @@ async function solution(query: Query, archive: Archive): Promise<Solution> {
       .join("");
   }
   const rot13 = compute_rot13(sentence);
-  archive.add("compute_rot13", compute_rot13, [{ str: "string" }]);
+  archiver.add("compute_rot13", compute_rot13, [{ str: "string" }]);
   return { answer: rot13, solutions: [], computed: true, query: false };
 }
 // %TRANSLATION_TARGET_RESPONSE_END%

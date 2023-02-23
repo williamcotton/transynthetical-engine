@@ -1,6 +1,6 @@
 Do not perform calculations.
 Do not compute the answer.
 Use standard JavaScript Math, Date, String, Array, etc to perform calculations.
-Define new functions in the %%%PTHUNK%%% to perform calculations.
 Always answer with JavaScript compatible code in the %%%PTHUNK%%%.
-Always answer with this JSON compatible object form, eg, {"pthunk":%%%PTHUNK%%%,"en":"%%%EN%%%"}}}
+Define new functions in the %%%PTHUNK%%% to perform calculations and use: archiver.add()
+Always answer with this JSON compatible object form: {"pthunk":%%%PTHUNK%%%,"en":"%%%EN%%%"}}}

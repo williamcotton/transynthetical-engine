@@ -1,4 +1,4 @@
-import { Archive } from "../../archive";
+import { Archiver } from "../../archive";
 import { Query } from "../../query";
 import { Solution } from "../../ask";
 
@@ -11,7 +11,7 @@ export const en = `The current population of Oakville is {answer} people.`;
 export const context = ``;
 
 // %TRANSLATION_TARGET_RESPONSE_START%
-async function solution(query: Query, archive: Archive): Promise<Solution> {
+async function solution(query: Query, archiver: Archiver): Promise<Solution> {
   const populationOfOakvilleTenYearsAgo = 67624;
   const populationOfOakvilleNow = populationOfOakvilleTenYearsAgo * 1.9;
   return {

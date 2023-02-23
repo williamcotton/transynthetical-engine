@@ -10,6 +10,7 @@ export async function wikipediaQueryEngine({
   target,
   type,
   dispatch,
+  database,
 }: QueryEngineParams): Promise<QuerySolution> {
   const wikipediaSummary = await wikipedia.summary(topic);
   const wikipediaSummaryContext = wikipediaSummary.extract;
@@ -18,6 +19,7 @@ export async function wikipediaQueryEngine({
     dispatch,
     context: wikipediaSummaryContext,
     analyticAugmentation: analyticAugmentations[1],
+    database,
   });
   solution.raw = wikipediaSummary;
   dispatch({ type: "query_wikipedia_response", answer: solution.answer });

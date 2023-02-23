@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import sqlite3 from "sqlite3";
 
 import { Dispatch } from "../dispatch";
 import { queryFactory } from "../query";
@@ -11,6 +12,7 @@ import { QueryEngine } from "../query-engines";
 import { openAiLLM } from "../large-language-models/openai";
 import { wikipediaQueryEngine } from "../query-engines/wikipedia";
 import { wolframAlphaQueryEngine } from "../query-engines/wolfram-alpha";
+import { insertSolution } from "./insert-solution";
 
 type SolutionTranslationTarget = {
   [Type in TranslationTarget]?: string;
@@ -24,7 +26,7 @@ export function toNum(str: string) {
 }
 
 export type Solution = SolutionTranslationTarget & {
-  answer: any;
+  answer: any; //
   solutions: Solution[];
   originalPrompt?: string;
   augmentedPrompt?: string;
@@ -39,6 +41,7 @@ export type Solution = SolutionTranslationTarget & {
   raw?: any;
   completion?: string;
   uuid?: string;
+  analyticAugmentation?: string;
 };
 
 function parseCompletion(
@@ -77,6 +80,7 @@ type AskParams = {
   llm?: LLM;
   evaluate?: boolean;
   queryEngines?: QueryEngine[];
+  database: sqlite3.Database;
 };
 
 export async function ask({
@@ -87,6 +91,7 @@ export async function ask({
   llm = openAiLLM,
   evaluate = true,
   queryEngines = [wolframAlphaQueryEngine, wikipediaQueryEngine],
+  database,
 }: AskParams): Promise<Solution> {
   const uuid = uuidv4();
 
@@ -111,19 +116,29 @@ export async function ask({
   const solution = parseCompletion(completion, dispatch, uuid);
   dispatch({ type: "ask_solution", solution });
 
+  // Create the query and archive functions.
+  const query = queryFactory({
+    queryEngines,
+    solution,
+    dispatch,
+    database,
+  });
+  const archiver = archiveFactory({ solution, dispatch, database });
+
   // Evaluate the solution.
   let evaluated: { [key: string]: any } = {};
   if (evaluate) {
-    if (solution.data) {
-      evaluated = eval(solution.data); // first-order
-    } else if (solution.thunk) {
-      evaluated = await eval(solution.thunk)(); // second-order
-    } else if (solution.pthunk) {
-      const query = queryFactory({ queryEngines, solution, dispatch });
-      const archive = archiveFactory({ solution });
-      evaluated = await eval(solution.pthunk)(query, archive); // third-order
-    } else {
-      evaluated = { answer: undefined, en: "" }; // zeroth-order
+    evaluated = { answer: undefined, en: "" }; // zeroth-order
+    try {
+      if (solution.data) {
+        evaluated = eval(solution.data); // first-order
+      } else if (solution.thunk) {
+        evaluated = await eval(solution.thunk)(); // second-order
+      } else if (solution.pthunk) {
+        evaluated = await eval(solution.pthunk)(query, archiver); // third-order
+      }
+    } catch (e) {
+      evaluated.error = e;
     }
 
     // Replace the {answer} placeholder in the English translation with the answer.
@@ -137,9 +152,11 @@ export async function ask({
     ...evaluated,
     originalPrompt: prompt,
     augmentedPrompt,
+    analyticAugmentation,
     completion,
   };
 
+  insertSolution(database, completeSolution);
   dispatch({ type: "ask_complete", ...completeSolution });
 
   return completeSolution;

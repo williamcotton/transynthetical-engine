@@ -1,3 +1,5 @@
+import sqlite3 from "sqlite3";
+
 import { ask } from "../ask";
 import { Dispatch } from "../dispatch";
 import { Problem } from "../training-data";
@@ -11,8 +13,20 @@ function arrayEquals(a: any[], b: any[]) {
   );
 }
 
-export async function solve(problem: Problem, dispatch: Dispatch) {
-  const solvedProblem = await ask({ prompt: problem.question, dispatch });
+export async function solve({
+  problem,
+  dispatch,
+  database,
+}: {
+  problem: Problem;
+  dispatch: Dispatch;
+  database: sqlite3.Database;
+}) {
+  const solvedProblem = await ask({
+    prompt: problem.question,
+    dispatch,
+    database,
+  });
   let correct: boolean;
   if (Array.isArray(solvedProblem.answer) && Array.isArray(problem.answer)) {
     correct = arrayEquals(solvedProblem.answer, problem.answer);

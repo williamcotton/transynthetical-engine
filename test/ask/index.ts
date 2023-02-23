@@ -1,3 +1,5 @@
+import sqlite3 from "sqlite3";
+
 import { describe, it } from "node:test";
 import { expect } from "chai";
 
@@ -6,6 +8,8 @@ import { LLM } from "../../src/large-language-models";
 import { ask } from "../../src/ask";
 
 function dispatch() {}
+
+const database = new sqlite3.Database(":memory:");
 
 describe("ask", () => {
   it("should return the expected solution to a first-order prompt", async () => {
@@ -21,6 +25,7 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
+      database,
     });
 
     expect(solution.answer).equal(12);
@@ -40,6 +45,7 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
+      database,
     });
 
     expect(solution.answer).equal(12);
@@ -59,6 +65,7 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
+      database,
     });
 
     expect(solution.answer).equal(12);
@@ -78,6 +85,7 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
+      database,
     });
 
     expect(solution.answer).equal(undefined);
