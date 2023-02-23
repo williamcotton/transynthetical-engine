@@ -15,6 +15,7 @@ export type Archive = {
   stringFunc: string;
   argTypes: ArgTypes;
   solutionUuid?: string;
+  description?: string;
 };
 
 export type Archiver = {
@@ -24,7 +25,8 @@ export type Archiver = {
 export type ArchiveAdd = (
   name: string,
   func: (...args: any[]) => any,
-  argTypes: ArgTypes
+  argTypes: ArgTypes,
+  description?: string
 ) => Archive;
 
 export const archiveFactory = ({
@@ -37,13 +39,14 @@ export const archiveFactory = ({
   dispatch: Dispatch;
 }): Archiver => {
   return {
-    add: (name, func, argTypes) => {
+    add: (name, func, argTypes, description) => {
       const stringFunc = func.toString();
       const archive = {
         name,
         stringFunc,
         argTypes,
         solutionUuid: solution.uuid,
+        description,
       };
 
       insertArchive(database, archive);

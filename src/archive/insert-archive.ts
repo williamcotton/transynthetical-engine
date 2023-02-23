@@ -9,17 +9,19 @@ export function insertArchive(database: sqlite3.Database, archive: Archive) {
       stringFunc TEXT,
       argTypes TEXT,
       solutionUuid TEXT,
-      verified BOOLEAN DEFAULT 0
+      verified BOOLEAN DEFAULT 0,
+      description TEXT
     )`);
 
     const insertStatement = database.prepare(
-      "INSERT INTO archives (name, stringFunc, argTypes, solutionUuid) VALUES (?, ?, ?, ?)"
+      "INSERT INTO archives (name, stringFunc, argTypes, solutionUuid, description) VALUES (?, ?, ?, ?, ?)"
     );
     insertStatement.run(
       archive.name,
       archive.stringFunc,
       JSON.stringify(archive.argTypes),
-      archive.solutionUuid
+      archive.solutionUuid,
+      archive.description
     );
   });
 }

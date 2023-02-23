@@ -13,6 +13,7 @@ async function mockQuery(query: QueryParams) {
     computed: true,
     query: false,
     weight: 0.1,
+    uuid: "",
   };
 }
 

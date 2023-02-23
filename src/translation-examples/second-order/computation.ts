@@ -1,4 +1,4 @@
-import { Solution } from "../../ask";
+import { ThunkSolution } from "../../ask";
 
 export const targetType = `thunk`;
 
@@ -9,7 +9,7 @@ export const en = `Laura practices an average of {answer} hours per day.`;
 export const context = ``;
 
 // %TRANSLATION_TARGET_RESPONSE_START%
-async function solution(): Promise<Solution> {
+async function solution(): Promise<ThunkSolution> {
   const daysPracticedInAWeek = 4;
   const hoursPracticedInADay = 1.5;
   const daysInAWeek = 7;

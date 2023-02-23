@@ -21,7 +21,10 @@ export function insertSolution(database: sqlite3.Database, solution: Solution) {
         completion TEXT,
         original_prompt TEXT,
         augmented_prompt TEXT,
-        analytic_augmentation TEXT
+        analytic_augmentation TEXT,
+        context TEXT,
+        parentSolutionUUid TEXT,
+        verified BOOLEAN DEFAULT 0
       )
     `
     );
@@ -44,7 +47,9 @@ export function insertSolution(database: sqlite3.Database, solution: Solution) {
       completion,
       original_prompt,
       augmented_prompt,
-      analytic_augmentation
+      analytic_augmentation,
+      context,
+      parentSolutionUUid
     ) VALUES (
       $uuid,
       $answer,
@@ -61,7 +66,9 @@ export function insertSolution(database: sqlite3.Database, solution: Solution) {
       $completion,
       $original_prompt,
       $augmented_prompt,
-      $analytic_augmentation
+      $analytic_augmentation,
+      $context,
+      $parentSolutionUUid
     )
   `,
       {
@@ -81,6 +88,8 @@ export function insertSolution(database: sqlite3.Database, solution: Solution) {
         $original_prompt: solution.originalPrompt,
         $augmented_prompt: solution.augmentedPrompt,
         $analytic_augmentation: solution.analyticAugmentation,
+        $context: solution.context,
+        $parentSolutionUUid: solution.parentSolutionUUid,
       }
     );
   });

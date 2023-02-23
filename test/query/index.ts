@@ -18,6 +18,7 @@ describe("query", () => {
           solutions: [],
           otherSolutions: [],
           weight: 0.05,
+          uuid: "",
         }),
       () =>
         Promise.resolve({
@@ -25,6 +26,7 @@ describe("query", () => {
           solutions: [],
           otherSolutions: [],
           weight: 0.2,
+          uuid: "",
         }),
       () =>
         Promise.resolve({
@@ -32,6 +34,7 @@ describe("query", () => {
           solutions: [],
           otherSolutions: [],
           weight: 0.3,
+          uuid: "",
         }),
     ];
     const query = queryFactory({
@@ -51,10 +54,23 @@ describe("query", () => {
       answer: 7574,
       solutions: [],
       otherSolutions: [
-        { answer: 6000, solutions: [], otherSolutions: [], weight: 0.05 },
-        { answer: undefined, solutions: [], otherSolutions: [], weight: 0.3 },
+        {
+          answer: 6000,
+          solutions: [],
+          otherSolutions: [],
+          weight: 0.05,
+          uuid: "",
+        },
+        {
+          answer: undefined,
+          solutions: [],
+          otherSolutions: [],
+          weight: 0.3,
+          uuid: "",
+        },
       ],
       weight: 0.2,
+      uuid: "",
     });
   });
 });

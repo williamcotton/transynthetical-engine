@@ -1,4 +1,4 @@
-import { Solution } from "../../ask";
+import { ThunkSolution } from "../../ask";
 
 export const targetType = `thunk`;
 
@@ -9,7 +9,7 @@ export const en = `The rot13 of 'Hello World' is {answer}.`;
 export const context = ``;
 
 // %TRANSLATION_TARGET_RESPONSE_START%
-async function solution(): Promise<Solution> {
+async function solution(): Promise<ThunkSolution> {
   const sentence = "Hello World";
   function compute_rot13(str: string) {
     return str

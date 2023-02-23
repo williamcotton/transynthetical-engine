@@ -6,6 +6,7 @@ import { QueryParams, QuerySolution } from "../query";
 export type QueryEngineParams = QueryParams & {
   dispatch: Dispatch;
   database: sqlite3.Database;
+  parentSolutionUUid: string;
 };
 
 export type QueryEngine = (query: QueryEngineParams) => Promise<QuerySolution>;

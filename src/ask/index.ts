@@ -40,23 +40,30 @@ export type Solution = SolutionTranslationTarget & {
   error?: Error;
   raw?: any;
   completion?: string;
-  uuid?: string;
+  uuid: string;
   analyticAugmentation?: string;
+  context?: string;
+  parentSolutionUUid?: string;
 };
+
+export type ThunkSolution = Omit<Solution, "uuid">;
 
 function parseCompletion(
   completion: string,
   dispatch: Dispatch,
-  uuid: string
+  uuid: string,
+  parentSolutionUUid?: string
 ): Solution {
   let solution: Solution;
   try {
     solution = JSON.parse(completion);
     solution.uuid = uuid;
+    solution.parentSolutionUUid = parentSolutionUUid;
     dispatch({ type: "json_parse", solution });
   } catch (e) {
     solution = {
       uuid,
+      parentSolutionUUid,
       answer: undefined,
       en: "",
       en_answer: "",
@@ -81,6 +88,7 @@ type AskParams = {
   evaluate?: boolean;
   queryEngines?: QueryEngine[];
   database: sqlite3.Database;
+  parentSolutionUUid?: string;
 };
 
 export async function ask({
@@ -92,6 +100,7 @@ export async function ask({
   evaluate = true,
   queryEngines = [wolframAlphaQueryEngine, wikipediaQueryEngine],
   database,
+  parentSolutionUUid,
 }: AskParams): Promise<Solution> {
   const uuid = uuidv4();
 
@@ -113,7 +122,12 @@ export async function ask({
   dispatch({ type: "ask_completion", completion });
 
   // Parse the completion text.
-  const solution = parseCompletion(completion, dispatch, uuid);
+  const solution = parseCompletion(
+    completion,
+    dispatch,
+    uuid,
+    parentSolutionUUid
+  );
   dispatch({ type: "ask_solution", solution });
 
   // Create the query and archive functions.
@@ -154,6 +168,7 @@ export async function ask({
     augmentedPrompt,
     analyticAugmentation,
     completion,
+    context,
   };
 
   insertSolution(database, completeSolution);

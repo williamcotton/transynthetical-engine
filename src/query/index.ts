@@ -26,6 +26,7 @@ export const query = async (query: QueryParams): Promise<QuerySolution> => {
     solutions: [],
     otherSolutions: [],
     weight: 0,
+    uuid: "",
   };
 };
 
@@ -50,7 +51,15 @@ export const queryFactory =
     dispatch({ type: "query", prompt, topic, target, target_type: type });
     const solutions = await Promise.all(
       queryEngines.map((qe) =>
-        qe({ prompt, topic, target, type, dispatch, database })
+        qe({
+          prompt,
+          topic,
+          target,
+          type,
+          dispatch,
+          database,
+          parentSolutionUUid: parentSolution.uuid,
+        })
       )
     );
     const solution = solutions.reduce(
@@ -60,6 +69,7 @@ export const queryFactory =
         solutions: [],
         otherSolutions: [],
         weight: 0,
+        uuid: "",
       }
     );
     solution.otherSolutions = solutions.filter((s) => s !== solution);

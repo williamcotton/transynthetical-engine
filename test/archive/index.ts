@@ -23,12 +23,13 @@ describe("compiler", () => {
       solutions: [],
     };
     const archive = archiveFactory({ solution, dispatch, database });
-    const addedResponse = archive.add("test", t, [{ s: "string" }]);
+    const addedResponse = archive.add("test", t, [{ s: "string" }], "test");
     expect(addedResponse).deep.equal({
       name: "test",
       stringFunc: "function t(s) {\n    return s;\n}",
       argTypes: [{ s: "string" }],
       solutionUuid: "uuid",
+      description: "test",
     });
   });
 });
