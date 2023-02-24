@@ -19,7 +19,7 @@ export async function wikipediaQueryEngine({
     prompt,
     dispatch,
     context: wikipediaSummaryContext,
-    analyticAugmentation: analyticAugmentations[1],
+    analyticAugmentation: analyticAugmentations[1], // first-order
     database,
     parentSolutionUUid,
   });

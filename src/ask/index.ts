@@ -95,7 +95,7 @@ export async function ask({
   prompt,
   dispatch,
   context = "",
-  analyticAugmentation = analyticAugmentations[3],
+  analyticAugmentation = analyticAugmentations[3], // third-order
   llm = openAiLLM,
   evaluate = true,
   queryEngines = [wolframAlphaQueryEngine, wikipediaQueryEngine],

@@ -1,6 +1,6 @@
 import sqlite3 from "sqlite3";
 
-import { Solution } from "../ask";
+import { Solution, toNum } from "../ask";
 import { Dispatch } from "../dispatch";
 import { QueryEngine } from "../query-engines";
 
@@ -73,5 +73,8 @@ export const queryFactory =
       }
     );
     solution.otherSolutions = solutions.filter((s) => s !== solution);
+    if (type === "number" && typeof solution.answer === "string") {
+      solution.answer = toNum(solution.answer);
+    }
     return solution;
   };
