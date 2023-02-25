@@ -1,5 +1,3 @@
-import sqlite3 from "sqlite3";
-
 import { describe, it } from "node:test";
 import { expect } from "chai";
 
@@ -7,7 +5,9 @@ import { queryFactory } from "../../src/query";
 
 function dispatch() {}
 
-const database = new sqlite3.Database(":memory:");
+const database = {
+  query: () => Promise.resolve({ rows: [] }),
+} as any;
 
 describe("query", () => {
   it("should call the query engines and return the answer from the response with the highest weight", async () => {

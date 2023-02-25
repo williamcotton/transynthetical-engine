@@ -1,5 +1,4 @@
-import sqlite3 from "sqlite3";
-
+import { Pool } from "pg";
 import { ask } from "../ask";
 import { Dispatch } from "../dispatch";
 import { Problem } from "../training-data";
@@ -20,7 +19,7 @@ export async function solve({
 }: {
   problem: Problem;
   dispatch: Dispatch;
-  database: sqlite3.Database;
+  database: Pool;
 }) {
   const solvedProblem = await ask({
     prompt: problem.question,

@@ -1,11 +1,11 @@
-import sqlite3 from "sqlite3";
+import { Pool } from "pg";
 
 import { Dispatch } from "../dispatch";
 import { QueryParams, QuerySolution } from "../query";
 
 export type QueryEngineParams = QueryParams & {
   dispatch: Dispatch;
-  database: sqlite3.Database;
+  database: Pool;
   parentSolutionUUid: string;
 };
 

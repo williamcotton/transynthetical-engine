@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-import sqlite3 from "sqlite3";
 
 import { Dispatch } from "../dispatch";
 import { queryFactory } from "../query";
@@ -13,6 +12,7 @@ import { openAiLLM } from "../large-language-models/openai";
 import { wikipediaQueryEngine } from "../query-engines/wikipedia";
 import { wolframAlphaQueryEngine } from "../query-engines/wolfram-alpha";
 import { insertSolution } from "./insert-solution";
+import { Pool } from "pg";
 
 type SolutionTranslationTarget = {
   [Type in TranslationTarget]?: string;
@@ -87,7 +87,7 @@ type AskParams = {
   llm?: LLM;
   evaluate?: boolean;
   queryEngines?: QueryEngine[];
-  database: sqlite3.Database;
+  database: Pool;
   parentSolutionUUid?: string;
 };
 

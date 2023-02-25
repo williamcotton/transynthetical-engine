@@ -1,5 +1,3 @@
-import sqlite3 from "sqlite3";
-
 import { describe, it } from "node:test";
 import { expect } from "chai";
 
@@ -7,7 +5,9 @@ import { archiveFactory } from "../../src/archive";
 
 function dispatch() {}
 
-const database = new sqlite3.Database(":memory:");
+const database = {
+  query: () => Promise.resolve({ rows: [] }),
+} as any;
 
 function t(s: string) {
   return s;

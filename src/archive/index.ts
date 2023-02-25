@@ -1,4 +1,4 @@
-import sqlite3 from "sqlite3";
+import { Pool } from "pg";
 
 import { Solution } from "../ask";
 import { Dispatch } from "../dispatch";
@@ -35,7 +35,7 @@ export const archiveFactory = ({
   dispatch,
 }: {
   solution: Solution;
-  database: sqlite3.Database;
+  database: Pool;
   dispatch: Dispatch;
 }): Archiver => {
   return {
@@ -65,6 +65,8 @@ export const archive = archiveFactory({
     en_answer: "en_answer",
     solutions: [],
   },
-  database: new sqlite3.Database(":memory:"),
+  database: {
+    query: () => Promise.resolve({ rows: [] }),
+  } as any,
   dispatch: () => {},
 });

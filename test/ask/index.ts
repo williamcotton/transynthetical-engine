@@ -1,5 +1,3 @@
-import sqlite3 from "sqlite3";
-
 import { describe, it } from "node:test";
 import { expect } from "chai";
 
@@ -9,7 +7,9 @@ import { ask } from "../../src/ask";
 
 function dispatch() {}
 
-const database = new sqlite3.Database(":memory:");
+const database = {
+  query: () => Promise.resolve({ rows: [] }),
+} as any;
 
 describe("ask", () => {
   it("should return the expected solution to a first-order prompt", async () => {

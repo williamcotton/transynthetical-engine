@@ -1,27 +1,28 @@
-import sqlite3 from "sqlite3";
+import { Pool, QueryResult } from "pg";
 import { Archive } from "./index";
 
-export function insertArchive(database: sqlite3.Database, archive: Archive) {
-  database.serialize(() => {
-    database.run(`CREATE TABLE IF NOT EXISTS archives (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      stringFunc TEXT,
-      argTypes TEXT,
-      solutionUuid TEXT,
-      verified BOOLEAN DEFAULT 0,
-      description TEXT
-    )`);
+export function insertArchive(database: Pool, archive: Archive) {
+  const query = `
+    INSERT INTO archives (
+      name,
+      string_func,
+      arg_types,
+      solution_uuid,
+      verified,
+      description
+    ) VALUES (
+      $1, $2, $3, $4, $5, $6
+    )
+  `;
 
-    const insertStatement = database.prepare(
-      "INSERT INTO archives (name, stringFunc, argTypes, solutionUuid, description) VALUES (?, ?, ?, ?, ?)"
-    );
-    insertStatement.run(
-      archive.name,
-      archive.stringFunc,
-      JSON.stringify(archive.argTypes),
-      archive.solutionUuid,
-      archive.description
-    );
-  });
+  const values = [
+    archive.name,
+    archive.stringFunc,
+    JSON.stringify(archive.argTypes),
+    archive.solutionUuid,
+    false,
+    archive.description,
+  ];
+
+  database.query(query, values);
 }

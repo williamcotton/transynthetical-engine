@@ -1,4 +1,4 @@
-import sqlite3 from "sqlite3";
+import { Pool } from "pg";
 
 import { Solution, toNum } from "../ask";
 import { Dispatch } from "../dispatch";
@@ -40,7 +40,7 @@ export const queryFactory =
     queryEngines: QueryEngine[];
     solution: Solution;
     dispatch: Dispatch;
-    database: sqlite3.Database;
+    database: Pool;
   }): Query =>
   async ({
     prompt,
