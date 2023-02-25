@@ -44,6 +44,7 @@ export type Solution = SolutionTranslationTarget & {
   analyticAugmentation?: string;
   context?: string;
   parentSolutionUUid?: string;
+  promptEmbedding?: string;
 };
 
 export type ThunkSolution = Omit<Solution, "uuid">;
@@ -137,7 +138,7 @@ export async function ask({
     dispatch,
     database,
   });
-  const archiver = archiveFactory({ solution, dispatch, database });
+  const archiver = archiveFactory({ solution, dispatch, database, llm });
 
   // Evaluate the solution.
   let evaluated: { [key: string]: any } = {};
@@ -161,6 +162,9 @@ export async function ask({
       : "";
   }
 
+  const embeddings = await llm.requestEmbedding(prompt);
+  const promptEmbedding = `[${embeddings.toString()}]`;
+
   const completeSolution = {
     ...solution,
     ...evaluated,
@@ -169,6 +173,7 @@ export async function ask({
     analyticAugmentation,
     completion,
     context,
+    promptEmbedding,
   };
 
   insertSolution(database, completeSolution);

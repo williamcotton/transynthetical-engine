@@ -19,6 +19,9 @@ describe("ask", () => {
       requestCompletion: async () => {
         return '{ "data": "({ answer: 12, solutions: [], computed: true })", "en": "The answer is {answer}" }';
       },
+      requestEmbedding: async () => {
+        return [0.1, 0.2, 0.3, 0.4, 0.5];
+      },
     };
 
     const solution = await ask({
@@ -38,6 +41,9 @@ describe("ask", () => {
     const mockLLM: LLM = {
       requestCompletion: async () => {
         return '{ "thunk": "(function () { const answer = 5 + 7; return { answer, solutions: [], computed: true }; })", "en": "The answer is {answer}" }';
+      },
+      requestEmbedding: async () => {
+        return [0.1, 0.2, 0.3, 0.4, 0.5];
       },
     };
 
@@ -59,6 +65,9 @@ describe("ask", () => {
       requestCompletion: async () => {
         return '{ "pthunk": "(function (query, dispatch, archive) { const answer = 5 + 7; return { answer, solutions: [], computed: true }; })", "en": "The answer is {answer}" }';
       },
+      requestEmbedding: async () => {
+        return [0.1, 0.2, 0.3, 0.4, 0.5];
+      },
     };
 
     const solution = await ask({
@@ -78,6 +87,9 @@ describe("ask", () => {
     const mockLLM: LLM = {
       requestCompletion: async () => {
         return "The answer is 12";
+      },
+      requestEmbedding: async () => {
+        return [0.1, 0.2, 0.3, 0.4, 0.5];
       },
     };
 

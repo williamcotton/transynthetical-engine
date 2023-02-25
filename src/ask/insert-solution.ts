@@ -1,4 +1,4 @@
-import { Pool, QueryResult } from "pg";
+import { Pool } from "pg";
 import { Solution } from "./index";
 
 export function insertSolution(database: Pool, solution: Solution) {
@@ -22,10 +22,12 @@ export function insertSolution(database: Pool, solution: Solution) {
       analytic_augmentation,
       context,
       parent_solution_uuid,
-      verified
+      verified,
+      prompt_embedding
     ) VALUES (
       $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
-      $11, $12, $13, $14, $15, $16, $17, $18, $19
+      $11, $12, $13, $14, $15, $16, $17, $18, $19,
+      $20
     )
   `;
 
@@ -49,6 +51,7 @@ export function insertSolution(database: Pool, solution: Solution) {
     solution.context,
     solution.parentSolutionUUid,
     false,
+    solution.promptEmbedding,
   ];
 
   database.query(query, values);

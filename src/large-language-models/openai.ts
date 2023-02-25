@@ -19,4 +19,12 @@ export const openAiLLM: LLM = {
     });
     return response.data.choices[0].text || "";
   },
+  requestEmbedding: async (text: string) => {
+    const response = await openai.createEmbedding({
+      model: "text-embedding-ada-002",
+      input: text,
+    });
+    const [{ embedding }] = response.data.data;
+    return embedding;
+  },
 };

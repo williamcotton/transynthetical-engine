@@ -1,4 +1,4 @@
-import { Pool, QueryResult } from "pg";
+import { Pool } from "pg";
 import { Archive } from "./index";
 
 export function insertArchive(database: Pool, archive: Archive) {
@@ -9,9 +9,10 @@ export function insertArchive(database: Pool, archive: Archive) {
       arg_types,
       solution_uuid,
       verified,
-      description
+      description,
+      description_embedding
     ) VALUES (
-      $1, $2, $3, $4, $5, $6
+      $1, $2, $3, $4, $5, $6, $7
     )
   `;
 
@@ -22,6 +23,7 @@ export function insertArchive(database: Pool, archive: Archive) {
     archive.solutionUuid,
     false,
     archive.description,
+    archive.descriptionEmbedding,
   ];
 
   database.query(query, values);

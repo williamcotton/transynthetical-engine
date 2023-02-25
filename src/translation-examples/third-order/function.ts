@@ -33,7 +33,7 @@ async function solution(
   }
   const rot13 = compute_rot13(sentence);
   const compute_rot13_description = `The function compute_rot13 takes a string as an input and applies the ROT13 encryption algorithm to it. This algorithm shifts each letter in the input string by 13 positions in the alphabet while preserving the case and ignoring non-letter characters. For example, the letter "a" would be transformed into "n", "b" into "o", and so on. The function accomplishes this by splitting the input string into an array of individual characters, mapping each character to its ROT13 equivalent using a combination of character codes and modulo arithmetic, and then rejoining the resulting array of transformed characters into a single string.`;
-  archiver.add(
+  await archiver.add(
     "compute_rot13",
     compute_rot13,
     [{ str: "string" }],
