@@ -34,7 +34,7 @@ const archive = archiveFactory({
 describe("Third-order translation example: function", () => {
   it("should return the expected solution", async () => {
     expect(await solution(query, archive)).deep.equal({
-      answer: "Uryyb Jbeyq",
+      answer: "ryybUnl beyqJnl",
       solutions: [],
       computed: true,
       query: false,
