@@ -582,7 +582,7 @@ export const openEnded: Problem[] = [
   },
   {
     question:
-      "Answering as [rowInt, colInt], writing custom predictBestMove, getEmptySpaces, minimax and checkWinner functions implemented in the thunk, what is the best tic-tac-toe move for player X on this board: [['X', '_', 'X'], ['_', '_', '_'], ['O', '_', 'O']]?",
+      "Answering as [rowInt, colInt], writing custom predictBestMove, getEmptySpaces, minimax and checkWinner functions implemented in the thunk (unless they already are available in the archive), what is the best tic-tac-toe move for player X on this board: [['X', '_', 'X'], ['_', '_', '_'], ['O', '_', 'O']]?",
     answer: [0, 1],
     grade_level: "University",
     category: "Computer Science",
