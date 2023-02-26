@@ -85,7 +85,7 @@ export const archiveFactory = ({
     },
     findNearest: async (embedding) => {
       const archives = await database.query(
-        `SELECT * FROM archives ORDER BY description_embedding <-> $1 LIMIT 10`,
+        `SELECT * FROM archives WHERE verified = true ORDER BY description_embedding <-> $1 LIMIT 10`,
         [`[${embedding.toString()}]`]
       );
 
