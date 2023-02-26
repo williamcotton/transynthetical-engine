@@ -11,7 +11,7 @@ export async function wikipediaQueryEngine({
   type,
   dispatch,
   database,
-  parentSolutionUUid,
+  parentSolutionUuid,
 }: QueryEngineParams): Promise<QuerySolution> {
   const wikipediaSummary = await wikipedia.summary(topic);
   const wikipediaSummaryContext = wikipediaSummary.extract;
@@ -21,7 +21,7 @@ export async function wikipediaQueryEngine({
     context: wikipediaSummaryContext,
     analyticAugmentation: analyticAugmentations[1], // first-order
     database,
-    parentSolutionUUid,
+    parentSolutionUuid,
   });
   solution.raw = wikipediaSummary;
   dispatch({ type: "query_wikipedia_response", answer: solution.answer });

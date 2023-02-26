@@ -1,6 +1,7 @@
 import { Pool } from "pg";
 
 import { Solution } from "../ask";
+import { ArchivedFunction } from "../compiler";
 import { Dispatch } from "../dispatch";
 import { LLM } from "../large-language-models";
 import { insertArchive } from "./insert-archive";
@@ -22,6 +23,8 @@ export type Archive = {
 
 export type Archiver = {
   add: ArchiveAdd;
+  call: ArchiveCall;
+  findNearest: ArchiveFindNearest;
 };
 
 export type ArchiveAdd = (
@@ -31,13 +34,19 @@ export type ArchiveAdd = (
   description: string
 ) => Promise<Archive>;
 
+export type ArchiveCall = (name: string, ...args: any[]) => Promise<any>;
+
+export type ArchiveFindNearest = (
+  embedding: number[]
+) => Promise<ArchivedFunction[]>;
+
 export const archiveFactory = ({
-  solution,
+  solutionUuid,
   database,
   dispatch,
   llm,
 }: {
-  solution: Solution;
+  solutionUuid: string;
   database: Pool;
   dispatch: Dispatch;
   llm: LLM;
@@ -46,14 +55,14 @@ export const archiveFactory = ({
     add: async (name, func, argTypes, description) => {
       const stringFunc = func.toString();
 
-      const embeddings = await llm.requestEmbedding(description);
-      const descriptionEmbedding = `[${embeddings.toString()}]`;
+      const embedding = await llm.requestEmbedding(description);
+      const descriptionEmbedding = `[${embedding.toString()}]`;
 
       const archive = {
         name,
         stringFunc,
         argTypes,
-        solutionUuid: solution.uuid,
+        solutionUuid,
         description,
         descriptionEmbedding,
       };
@@ -63,27 +72,29 @@ export const archiveFactory = ({
 
       return archive;
     },
+    call: async (name, ...args) => {
+      const archive = await database.query(
+        `SELECT * FROM archives WHERE name = $1`,
+        [name]
+      );
+
+      const func = eval(`(${archive.rows[0].string_func})`);
+      const result = func(...args);
+
+      return result;
+    },
+    findNearest: async (embedding) => {
+      const archives = await database.query(
+        `SELECT * FROM archives ORDER BY description_embedding <-> $1 LIMIT 10`,
+        [`[${embedding.toString()}]`]
+      );
+
+      return archives.rows.map((archive) => {
+        return {
+          name: archive.name,
+          arg_types: JSON.parse(archive.arg_types),
+        };
+      });
+    },
   };
 };
-
-export const archive = archiveFactory({
-  solution: {
-    uuid: "uuid",
-    answer: "answer",
-    en: "en",
-    en_answer: "en_answer",
-    solutions: [],
-  },
-  database: {
-    query: () => Promise.resolve({ rows: [] }),
-  } as any,
-  dispatch: () => {},
-  llm: {
-    requestEmbedding: async () => {
-      return [0.1, 0.2, 0.3, 0.4, 0.5];
-    },
-    requestCompletion: async () => {
-      return "completion";
-    },
-  },
-});

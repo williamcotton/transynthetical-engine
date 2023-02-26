@@ -49,7 +49,7 @@ export function insertSolution(database: Pool, solution: Solution) {
     solution.augmentedPrompt,
     solution.analyticAugmentation,
     solution.context,
-    solution.parentSolutionUUid,
+    solution.parentSolutionUuid,
     false,
     solution.promptEmbedding,
   ];

@@ -16,6 +16,12 @@ export type TranslationExample = {
   prompt: string;
   context: string;
   targetType: TranslationTarget;
+  archivedFunctions: ArchivedFunction[];
+};
+
+export type ArchivedFunction = {
+  name: string;
+  arg_types: [{ [key: string]: string }];
 };
 
 export type OrderTranslationExample = {
@@ -87,12 +93,20 @@ orders.forEach((order) => {
       ? targetTypeMatch[1].trim()
       : "";
 
+    const archivedFunctionsMatch = fileContents.match(
+      /export const archivedFunctions = `(.*)`/
+    );
+    const extractedArchivedFunctions = archivedFunctionsMatch
+      ? JSON.parse(archivedFunctionsMatch[1].trim())
+      : [];
+
     translationExamples.push({
       prompt: extractedPrompt,
       context: extractedContext,
       target: preparedTarget,
       en: extractedEn,
       targetType: extractedTargetType as TranslationTarget,
+      archivedFunctions: extractedArchivedFunctions as ArchivedFunction[],
     });
   });
   compiledTranslationExamples[order] = {

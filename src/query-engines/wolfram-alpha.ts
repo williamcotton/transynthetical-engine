@@ -17,7 +17,7 @@ export async function wolframAlphaQueryEngine({
   type,
   dispatch,
   database,
-  parentSolutionUUid,
+  parentSolutionUuid,
 }: QueryEngineParams): Promise<QuerySolution> {
   const wolfromAlphaQuery = await wolframAlpha.getFull(prompt);
   if (wolfromAlphaQuery.pods) {
@@ -32,7 +32,7 @@ export async function wolframAlphaQueryEngine({
       context: wolfromAlphaContext,
       analyticAugmentation: analyticAugmentations[1],
       database,
-      parentSolutionUUid,
+      parentSolutionUuid,
     });
     solution.query = wolfromAlphaQuery;
     dispatch({ type: "query_wolfram_response", answer: solution.answer });

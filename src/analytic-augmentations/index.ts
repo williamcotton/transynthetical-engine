@@ -1,4 +1,5 @@
 import compiledTranslationExamples, {
+  ArchivedFunction,
   TranslationExample,
   TranslationExamplesAndPrelude,
 } from "../compiler";
@@ -7,14 +8,33 @@ const firstOrder = compiledTranslationExamples["first-order"];
 const secondOrder = compiledTranslationExamples["second-order"];
 const thirdOrder = compiledTranslationExamples["third-order"];
 
+export const archivedFunctions = [
+  {
+    name: "compute_rot13",
+    arg_types: [{ str: "string" }],
+  },
+];
+
+// AF(compute_rot13(string))
+
 export function buildPrompt({
   context,
   prompt,
+  archivedFunctions = [],
 }: {
   context: string;
   prompt: string;
+  archivedFunctions: ArchivedFunction[];
 }): string {
-  return ` Q: C(${context}) ${prompt}`;
+  const archivedFunctionsString = archivedFunctions
+    .map((archivedFunction) => {
+      const typesString = archivedFunction.arg_types.map((t) =>
+        Object.values(t)
+      );
+      return `${archivedFunction.name}(${typesString})`;
+    })
+    .join(" ");
+  return ` Q: C(${context}) AF(${archivedFunctionsString}) ${prompt}`;
 }
 
 function translationExampleToAnalyticAugmentation(

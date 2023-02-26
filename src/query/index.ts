@@ -20,25 +20,15 @@ export type Query = {
   (query: QueryParams): Promise<QuerySolution>;
 };
 
-export const query = async (query: QueryParams): Promise<QuerySolution> => {
-  return {
-    answer: undefined,
-    solutions: [],
-    otherSolutions: [],
-    weight: 0,
-    uuid: "",
-  };
-};
-
 export const queryFactory =
   ({
     queryEngines,
-    solution: parentSolution,
+    solutionUuid: parentSolutionUuid,
     dispatch,
     database,
   }: {
     queryEngines: QueryEngine[];
-    solution: Solution;
+    solutionUuid: string;
     dispatch: Dispatch;
     database: Pool;
   }): Query =>
@@ -58,7 +48,7 @@ export const queryFactory =
           type,
           dispatch,
           database,
-          parentSolutionUUid: parentSolution.uuid,
+          parentSolutionUuid,
         })
       )
     );

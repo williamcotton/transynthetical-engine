@@ -39,7 +39,7 @@ describe("query", () => {
     ];
     const query = queryFactory({
       queryEngines,
-      solution: { answer: 0, uuid: "", solutions: [] },
+      solutionUuid: "uuid",
       dispatch,
       database,
     });
@@ -49,7 +49,6 @@ describe("query", () => {
       target: "population",
       type: "number",
     });
-    console.log(querySolution);
     expect(querySolution).deep.equal({
       answer: 7574,
       solutions: [],

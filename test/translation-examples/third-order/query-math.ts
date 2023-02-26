@@ -1,9 +1,24 @@
 import { describe, it } from "node:test";
 import { expect } from "chai";
 
-import { archive } from "../../../src/archive";
-import { dispatch } from "../../../src/dispatch";
 import { QueryParams } from "../../../src/query";
+import { archiveFactory } from "../../../src/archive";
+
+const archive = archiveFactory({
+  solutionUuid: "uuid",
+  database: {
+    query: () => Promise.resolve({ rows: [] }),
+  } as any,
+  dispatch: () => {},
+  llm: {
+    requestEmbedding: async () => {
+      return [0.1, 0.2, 0.3, 0.4, 0.5];
+    },
+    requestCompletion: async () => {
+      return "completion";
+    },
+  },
+});
 
 async function mockQuery(query: QueryParams) {
   return {

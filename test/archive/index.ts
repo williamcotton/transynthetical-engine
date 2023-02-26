@@ -15,19 +15,13 @@ function t(s: string) {
 
 describe("compiler", async () => {
   it("should return the compiled translation examples for each order", async () => {
-    const solution = {
-      uuid: "uuid",
-      answer: "answer",
-      en: "en",
-      en_answer: "en_answer",
-      solutions: [],
-    };
+    const solutionUuid = "uuid";
     const llm = {
       requestEmbedding: async () => {
         return [0.1, 0.2, 0.3, 0.4, 0.5];
       },
     } as any;
-    const archiver = archiveFactory({ solution, dispatch, database, llm });
+    const archiver = archiveFactory({ solutionUuid, dispatch, database, llm });
     const addedResponse = await archiver.add(
       "test",
       t,

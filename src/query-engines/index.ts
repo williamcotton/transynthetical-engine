@@ -6,7 +6,7 @@ import { QueryParams, QuerySolution } from "../query";
 export type QueryEngineParams = QueryParams & {
   dispatch: Dispatch;
   database: Pool;
-  parentSolutionUUid: string;
+  parentSolutionUuid: string;
 };
 
 export type QueryEngine = (query: QueryEngineParams) => Promise<QuerySolution>;

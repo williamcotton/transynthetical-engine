@@ -43,7 +43,7 @@ export type Solution = SolutionTranslationTarget & {
   uuid: string;
   analyticAugmentation?: string;
   context?: string;
-  parentSolutionUUid?: string;
+  parentSolutionUuid?: string;
   promptEmbedding?: string;
 };
 
@@ -53,18 +53,18 @@ function parseCompletion(
   completion: string,
   dispatch: Dispatch,
   uuid: string,
-  parentSolutionUUid?: string
+  parentSolutionUuid?: string
 ): Solution {
   let solution: Solution;
   try {
     solution = JSON.parse(completion);
     solution.uuid = uuid;
-    solution.parentSolutionUUid = parentSolutionUUid;
+    solution.parentSolutionUuid = parentSolutionUuid;
     dispatch({ type: "json_parse", solution });
   } catch (e) {
     solution = {
       uuid,
-      parentSolutionUUid,
+      parentSolutionUuid,
       answer: undefined,
       en: "",
       en_answer: "",
@@ -89,7 +89,7 @@ type AskParams = {
   evaluate?: boolean;
   queryEngines?: QueryEngine[];
   database: Pool;
-  parentSolutionUUid?: string;
+  parentSolutionUuid?: string;
 };
 
 export async function ask({
@@ -101,20 +101,40 @@ export async function ask({
   evaluate = true,
   queryEngines = [wolframAlphaQueryEngine, wikipediaQueryEngine],
   database,
-  parentSolutionUUid,
+  parentSolutionUuid,
 }: AskParams): Promise<Solution> {
   const uuid = uuidv4();
 
+  // Create the query and archive functions.
+  const query = queryFactory({
+    queryEngines,
+    solutionUuid: uuid,
+    dispatch,
+    database,
+  });
+  const archiver = archiveFactory({
+    solutionUuid: uuid,
+    dispatch,
+    database,
+    llm,
+  });
+
+  dispatch({ type: "ask", prompt, context, analyticAugmentation, uuid });
+
+  // Request an embedding from the large language model.
+  const embedding = await llm.requestEmbedding(prompt);
+
+  dispatch({ type: "ask_embedding", embedding });
+
+  const archivedFunctions = await archiver.findNearest(embedding);
+
   // Augment the prompt with the analytic augmentation and the context.
   const augmentedPrompt = analyticAugmentation
-    ? analyticAugmentation + buildPrompt({ context, prompt })
+    ? analyticAugmentation + buildPrompt({ context, prompt, archivedFunctions })
     : prompt;
 
   dispatch({
-    type: "ask",
-    prompt,
-    context,
-    analyticAugmentation,
+    type: "ask_augmented_prompt",
     augmentedPrompt,
   });
 
@@ -127,18 +147,9 @@ export async function ask({
     completion,
     dispatch,
     uuid,
-    parentSolutionUUid
+    parentSolutionUuid
   );
   dispatch({ type: "ask_solution", solution });
-
-  // Create the query and archive functions.
-  const query = queryFactory({
-    queryEngines,
-    solution,
-    dispatch,
-    database,
-  });
-  const archiver = archiveFactory({ solution, dispatch, database, llm });
 
   // Evaluate the solution.
   let evaluated: { [key: string]: any } = {};
@@ -162,9 +173,6 @@ export async function ask({
       : "";
   }
 
-  const embeddings = await llm.requestEmbedding(prompt);
-  const promptEmbedding = `[${embeddings.toString()}]`;
-
   const completeSolution = {
     ...solution,
     ...evaluated,
@@ -173,7 +181,6 @@ export async function ask({
     analyticAugmentation,
     completion,
     context,
-    promptEmbedding,
   };
 
   insertSolution(database, completeSolution);
