@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { Solution } from "./index";
 
-export function insertSolution(database: Pool, solution: Solution) {
+export async function insertSolution(database: Pool, solution: Solution) {
   const query = `
     INSERT INTO solutions (
       uuid,
@@ -54,5 +54,5 @@ export function insertSolution(database: Pool, solution: Solution) {
     solution.promptEmbedding,
   ];
 
-  database.query(query, values);
+  await database.query(query, values);
 }

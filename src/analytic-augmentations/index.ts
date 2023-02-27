@@ -15,8 +15,6 @@ export const archivedFunctions = [
   },
 ];
 
-// AF(compute_rot13(string))
-
 export function buildPrompt({
   context,
   prompt,
@@ -34,7 +32,7 @@ export function buildPrompt({
       return `${archivedFunction.name}(${typesString})`;
     })
     .join(" ");
-  return ` Q: C(${context}) AF(${archivedFunctionsString}) ${prompt}`;
+  return ` Q: C(${context}) EAF(${archivedFunctionsString}) ${prompt}`;
 }
 
 function translationExampleToAnalyticAugmentation(

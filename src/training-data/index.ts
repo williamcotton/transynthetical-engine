@@ -590,10 +590,10 @@ export const openEnded: Problem[] = [
   },
   {
     question:
-      "Answering as [Cp, Cpk, Pp, Ppk], given 10 widget widths in cm, [10.1, 9.8, 10.2, 10.3, 10.1, 10.2, 10.1, 10.2, 10.1, 10.2], the upper spec limit of 20.5cm and a the lower spec limit of 1.5cm, writing custom functions implemented in the thunk, what are the Cp, Cpk, Pp and Ppk?",
+      "Answering as array [Cp, Cpk, Pp, Ppk], given 10 widget widths in cm, [10.1, 9.8, 10.2, 10.3, 10.1, 10.2, 10.1, 10.2, 10.1, 10.2], the upper spec limit of 20.5cm and a the lower spec limit of 1.5cm, what are the Cp, Cpk, Pp and Ppk?",
     answer: [
       24.956829530904898, 22.6713093528115, 0.02631578947368421,
-      0.028968713789107765,
+      0.4542105263157894,
     ],
     grade_level: "University",
     category: "Statistics",

@@ -10,7 +10,7 @@ export const en = `The rot13 of 'Hello World' is {answer}.`;
 
 export const context = ``;
 
-export const archivedFunctions = `[{ "name": "compute_rot13", "arg_types": [{ "str": "string" }] } ]`;
+export const archivedFunctions = `[{ "name": "compute_rot13", "arg_types": [{ "str": "string" }] }, { "name": "compute_pig_latin", "arg_types": [{ "word": "string" }] }]`;
 
 // %TRANSLATION_TARGET_RESPONSE_START%
 async function solution(

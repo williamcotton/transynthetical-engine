@@ -67,7 +67,7 @@ export const archiveFactory = ({
         descriptionEmbedding,
       };
 
-      insertArchive(database, archive);
+      await insertArchive(database, archive);
       dispatch({ type: "add", archive });
 
       return archive;
@@ -78,8 +78,14 @@ export const archiveFactory = ({
         [name]
       );
 
-      const func = eval(`(${archive.rows[0].string_func})`);
-      const result = func(...args);
+      let result: any;
+      try {
+        const func = eval(`(${archive.rows[0].string_func})`);
+        result = func(...args);
+      } catch (e) {
+        console.log(e);
+        result = 0;
+      }
 
       return result;
     },

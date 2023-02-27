@@ -183,7 +183,7 @@ export async function ask({
     context,
   };
 
-  insertSolution(database, completeSolution);
+  await insertSolution(database, completeSolution);
   dispatch({ type: "ask_complete", ...completeSolution });
 
   return completeSolution;

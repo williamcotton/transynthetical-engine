@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { Archive } from "./index";
 
-export function insertArchive(database: Pool, archive: Archive) {
+export async function insertArchive(database: Pool, archive: Archive) {
   const query = `
     INSERT INTO archives (
       name,
@@ -26,5 +26,5 @@ export function insertArchive(database: Pool, archive: Archive) {
     archive.descriptionEmbedding,
   ];
 
-  database.query(query, values);
+  await database.query(query, values);
 }
