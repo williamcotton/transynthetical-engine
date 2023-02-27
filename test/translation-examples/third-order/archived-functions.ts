@@ -15,7 +15,7 @@ const query = async (query: QueryParams): Promise<QuerySolution> => {
   };
 };
 
-const string_func = `
+const compute_rot13 = `
 function compute_rot13(str) {
   return str
     .split("")
@@ -41,7 +41,7 @@ const archive = archiveFactory({
         rows: [
           {
             name: "compute_rot13",
-            string_func,
+            compute_rot13,
           },
         ],
       }),
@@ -60,7 +60,7 @@ const archive = archiveFactory({
 describe("Third-order translation example: archived-functions", () => {
   it("should return the expected solution", async () => {
     expect(await solution(query, archive)).deep.equal({
-      answer: "Uryyb Jbeyq",
+      answer: "ryybUnl beyqJnl",
       solutions: [],
       computed: true,
       query: false,

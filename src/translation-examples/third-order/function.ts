@@ -6,11 +6,11 @@ export const targetType = `pthunk`;
 
 export const prompt = `What's the rot13 of "Hello World" in pig latin?`;
 
-export const en = `The rot13 of 'Hello World' is {answer}.`;
+export const en = `The rot13 of 'Hello World' in pig latin is {answer}.`;
 
 export const context = ``;
 
-export const archivedFunctions = `[{ "name": "compute_fibonacci", "arg_types": [{ "num": "number" }] } ]`;
+export const archivedFunctions = `[{ "name": "compute_fibonacci", "arg_types": [{ "num": "number" }] }]`;
 
 // %TRANSLATION_TARGET_RESPONSE_START%
 async function solution(

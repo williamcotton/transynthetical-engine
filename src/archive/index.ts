@@ -23,7 +23,7 @@ export type Archive = {
 
 export type Archiver = {
   add: ArchiveAdd;
-  call: ArchiveCall;
+  get: ArchiveGet;
   findNearest: ArchiveFindNearest;
 };
 
@@ -34,7 +34,7 @@ export type ArchiveAdd = (
   description: string
 ) => Promise<Archive>;
 
-export type ArchiveCall = (name: string, ...args: any[]) => Promise<any>;
+export type ArchiveGet = (name: string) => Promise<(...args: any[]) => any>;
 
 export type ArchiveFindNearest = (
   embedding: number[]
@@ -72,22 +72,20 @@ export const archiveFactory = ({
 
       return archive;
     },
-    call: async (name, ...args) => {
+    get: async (name, ...args) => {
       const archive = await database.query(
         `SELECT * FROM archives WHERE name = $1`,
         [name]
       );
 
-      let result: any;
+      let func: (...args: any[]) => any;
       try {
-        const func = eval(`(${archive.rows[0].string_func})`);
-        result = func(...args);
+        func = eval(`(${archive.rows[0].string_func})`);
       } catch (e) {
-        console.log(e);
-        result = 0;
+        func = () => 0;
       }
 
-      return result;
+      return func;
     },
     findNearest: async (embedding) => {
       const archives = await database.query(
