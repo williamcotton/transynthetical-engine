@@ -1,6 +1,8 @@
 import { Pool } from "pg";
 import { ask } from "../ask";
 import { Dispatch } from "../dispatch";
+import { LLM } from "../large-language-models";
+import { QueryEngine } from "../query-engines";
 import { Problem } from "../training-data";
 
 function arrayEquals(a: any[], b: any[]) {
@@ -16,15 +18,21 @@ export async function solve({
   problem,
   dispatch,
   database,
+  llm,
+  queryEngines,
 }: {
   problem: Problem;
   dispatch: Dispatch;
   database: Pool;
+  llm: LLM;
+  queryEngines: QueryEngine[];
 }) {
   const solvedProblem = await ask({
     prompt: problem.question,
     dispatch,
     database,
+    llm,
+    queryEngines,
   });
   let correct: boolean;
   if (Array.isArray(solvedProblem.answer) && Array.isArray(problem.answer)) {

@@ -1,9 +1,25 @@
 import { Pool, QueryResult } from "pg";
 
+import * as dotenv from "dotenv";
+dotenv.config();
+
 import { ask } from "./ask";
 import { dispatch } from "./dispatch";
-import { analyticAugmentations } from "./analytic-augmentations";
 import { solve } from "./solve";
+import { openAiLLMFactory } from "./large-language-models/openai";
+import { wikipediaQueryEngineFactory } from "./query-engines/wikipedia";
+import { wolframAlphaQueryEngineFactory } from "./query-engines/wolfram-alpha";
+
+const llm = openAiLLMFactory({ apiKey: process.env.OPENAI_API_KEY || "" });
+
+const queryEngines = [
+  wikipediaQueryEngineFactory({ llm, ask }),
+  wolframAlphaQueryEngineFactory({
+    llm,
+    apiKey: process.env.WOLFRAM_ALPHA_API_KEY || "",
+    ask,
+  }),
+];
 
 const database = new Pool({
   user: "",
@@ -42,6 +58,6 @@ import {
 
 const problem = openEnded[3];
 
-solve({ problem, dispatch, database }).then((result) => {
+solve({ problem, dispatch, database, llm, queryEngines }).then((result) => {
   return console.log(result);
 });

@@ -105,3 +105,6 @@ dist
 
 # sqlite3 database
 *.db
+
+# large datasets
+datasets/

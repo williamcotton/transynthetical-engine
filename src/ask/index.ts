@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { Pool } from "pg";
 
 import { Dispatch } from "../dispatch";
 import { queryFactory } from "../query";
@@ -7,12 +8,7 @@ import { analyticAugmentations, buildPrompt } from "../analytic-augmentations";
 import { LLM } from "../large-language-models";
 import { TranslationTarget } from "../compiler";
 import { QueryEngine } from "../query-engines";
-
-import { openAiLLM } from "../large-language-models/openai";
-import { wikipediaQueryEngine } from "../query-engines/wikipedia";
-import { wolframAlphaQueryEngine } from "../query-engines/wolfram-alpha";
 import { insertSolution } from "./insert-solution";
-import { Pool } from "pg";
 
 type SolutionTranslationTarget = {
   [Type in TranslationTarget]?: string;
@@ -26,7 +22,7 @@ export function toNum(str: string) {
 }
 
 export type Solution = SolutionTranslationTarget & {
-  answer: any; //
+  answer: any;
   solutions: Solution[];
   originalPrompt?: string;
   augmentedPrompt?: string;
@@ -85,21 +81,23 @@ type AskParams = {
   dispatch: Dispatch;
   context?: string;
   analyticAugmentation?: string;
-  llm?: LLM;
+  llm: LLM;
   evaluate?: boolean;
-  queryEngines?: QueryEngine[];
+  queryEngines: QueryEngine[];
   database: Pool;
   parentSolutionUuid?: string;
 };
+
+export type Ask = (params: AskParams) => Promise<Solution>;
 
 export async function ask({
   prompt,
   dispatch,
   context = "",
   analyticAugmentation = analyticAugmentations[3], // third-order
-  llm = openAiLLM,
+  llm,
   evaluate = true,
-  queryEngines = [wolframAlphaQueryEngine, wikipediaQueryEngine],
+  queryEngines,
   database,
   parentSolutionUuid,
 }: AskParams): Promise<Solution> {
