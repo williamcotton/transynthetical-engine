@@ -40,6 +40,7 @@ describe("ask", () => {
       insertSolution,
       analyticAugmentation,
       archiverFactory,
+      queryEngines: [],
     });
 
     expect(solution.answer).equal(12);
@@ -65,6 +66,7 @@ describe("ask", () => {
       insertSolution,
       analyticAugmentation,
       archiverFactory,
+      queryEngines: [],
     });
 
     expect(solution.answer).equal(12);
@@ -90,6 +92,7 @@ describe("ask", () => {
       insertSolution,
       analyticAugmentation,
       archiverFactory,
+      queryEngines: [],
     });
 
     expect(solution.answer).equal(12);
@@ -115,6 +118,7 @@ describe("ask", () => {
       insertSolution,
       analyticAugmentation,
       archiverFactory,
+      queryEngines: [],
     });
 
     expect(solution.answer).equal(undefined);

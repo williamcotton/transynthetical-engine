@@ -9,6 +9,8 @@ import { openAiLLMFactory } from "./large-language-models/openai";
 import { archiveFactoryDatabase } from "./archive";
 import { insertSolutionFactory } from "./ask/insert-solution";
 import { analyticAugmentation } from "./analytic-augmentations/question-and-answer";
+import { wikipediaQueryEngine } from "./query-engines/wikipedia";
+import { wolframAlphaQueryEngineFactory } from "./query-engines/wolfram-alpha";
 
 import {
   trivia,
@@ -39,6 +41,13 @@ const llm = openAiLLMFactory({ apiKey: process.env.OPENAI_API_KEY || "" });
 
 const archiverFactory = archiveFactoryDatabase(database);
 
+const queryEngines = [
+  wolframAlphaQueryEngineFactory({
+    apiKey: process.env.WOLFRAM_ALPHA_API_KEY || "",
+  }),
+  wikipediaQueryEngine,
+];
+
 // openEnded[3]
 // "Answering as [rowInt, colInt], writing custom predictBestMove, getEmptySpaces, minimax and checkWinner functions implemented in the thunk, what is the best tic-tac-toe move for player X on this board: [['X', '_', 'X'], ['_', '_', '_'], ['_', '_', '_']]?";
 
@@ -51,7 +60,7 @@ const archiverFactory = archiveFactoryDatabase(database);
 // addition[5]
 // "The hobby store normally sells 10,576 trading cards per month. In June, the hobby store sold 15,498 more trading cards than normal. In total, how many trading cards did the hobby store sell in June?";
 
-const problem = openEnded[3];
+const problem = trivia[10];
 
 solve({
   problem,
@@ -60,6 +69,7 @@ solve({
   analyticAugmentation,
   insertSolution,
   archiverFactory,
+  queryEngines,
 }).then((result) => {
   return console.log(result);
 });

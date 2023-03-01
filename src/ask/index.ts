@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { Dispatch } from "../dispatch";
 import { ArchiverFactory } from "../archive";
+import { QueryEngine, queryFactory } from "../query";
 import { LLM } from "../large-language-models";
 import {
   AnalyticAugmentation,
@@ -74,7 +75,7 @@ function parseCompletion(
   return solution;
 }
 
-type AskParams = {
+export type AskParams = {
   prompt: string;
   dispatch: Dispatch;
   order?: number;
@@ -85,6 +86,7 @@ type AskParams = {
   parentSolutionUuid?: string;
   archiverFactory: ArchiverFactory;
   insertSolution: any;
+  queryEngines: QueryEngine[];
 };
 
 export type Ask = (params: AskParams) => Promise<Solution>;
@@ -100,10 +102,22 @@ export async function ask({
   parentSolutionUuid,
   archiverFactory,
   insertSolution,
+  queryEngines,
 }: AskParams): Promise<Solution> {
   const uuid = uuidv4();
 
   const archiver = archiverFactory({ dispatch, llm, solutionUuid: uuid });
+  const query = queryFactory({
+    queryEngines,
+    dispatch,
+    llm,
+    analyticAugmentation,
+    evaluate,
+    uuid,
+    archiverFactory,
+    insertSolution,
+    ask,
+  });
 
   const analyticAugmentationOrder = analyticAugmentation.orders[order];
 
@@ -139,8 +153,6 @@ export async function ask({
     parentSolutionUuid
   );
   dispatch({ type: "ask_solution", solution });
-
-  const query = () => ({ answer: 123 });
 
   // Evaluate the solution.
   let evaluated: { [key: string]: any } = {};

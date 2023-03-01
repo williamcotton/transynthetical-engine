@@ -1,4 +1,4 @@
-import { toNum } from "../../ask";
+import { toNum } from "../../../../ask";
 
 export const targetType = `data`;
 

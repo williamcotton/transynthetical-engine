@@ -3,6 +3,7 @@ import { ArchiverFactory } from "../archive";
 import { ask } from "../ask";
 import { Dispatch } from "../dispatch";
 import { LLM } from "../large-language-models";
+import { QueryEngine } from "../query";
 import { Problem } from "../training-data";
 
 function arrayEquals(a: any[], b: any[]) {
@@ -21,6 +22,7 @@ export async function solve({
   analyticAugmentation,
   insertSolution,
   archiverFactory,
+  queryEngines,
 }: {
   problem: Problem;
   dispatch: Dispatch;
@@ -28,6 +30,7 @@ export async function solve({
   analyticAugmentation: AnalyticAugmentation;
   archiverFactory: ArchiverFactory;
   insertSolution: any;
+  queryEngines: QueryEngine[];
 }) {
   const solvedProblem = await ask({
     prompt: problem.question,
@@ -36,6 +39,7 @@ export async function solve({
     llm,
     analyticAugmentation,
     archiverFactory,
+    queryEngines,
   });
   let correct: boolean;
   if (Array.isArray(solvedProblem.answer) && Array.isArray(problem.answer)) {
