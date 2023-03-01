@@ -3,8 +3,6 @@ import { ArchiverFactory } from "../archive";
 import { ask } from "../ask";
 import { Dispatch } from "../dispatch";
 import { LLM } from "../large-language-models";
-import { QueryFactory } from "../query";
-import { QueryEngine } from "../query-engines";
 import { Problem } from "../training-data";
 
 function arrayEquals(a: any[], b: any[]) {
@@ -23,13 +21,11 @@ export async function solve({
   analyticAugmentation,
   insertSolution,
   archiverFactory,
-  queryFactory,
 }: {
   problem: Problem;
   dispatch: Dispatch;
   llm: LLM;
   analyticAugmentation: AnalyticAugmentation;
-  queryFactory: QueryFactory;
   archiverFactory: ArchiverFactory;
   insertSolution: any;
 }) {
@@ -39,7 +35,6 @@ export async function solve({
     insertSolution,
     llm,
     analyticAugmentation,
-    queryFactory,
     archiverFactory,
   });
   let correct: boolean;

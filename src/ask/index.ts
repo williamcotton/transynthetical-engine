@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { Dispatch } from "../dispatch";
-import { QueryFactory } from "../query";
 import { ArchiverFactory } from "../archive";
 import { LLM } from "../large-language-models";
 import {
@@ -84,7 +83,6 @@ type AskParams = {
   llm: LLM;
   evaluate?: boolean;
   parentSolutionUuid?: string;
-  queryFactory: QueryFactory;
   archiverFactory: ArchiverFactory;
   insertSolution: any;
 };
@@ -100,22 +98,11 @@ export async function ask({
   llm,
   evaluate = true,
   parentSolutionUuid,
-  queryFactory,
   archiverFactory,
   insertSolution,
 }: AskParams): Promise<Solution> {
   const uuid = uuidv4();
 
-  const query = queryFactory({
-    dispatch,
-    solutionUuid: uuid,
-    llm,
-    analyticAugmentation,
-    queryFactory,
-    archiverFactory,
-    ask,
-    insertSolution,
-  });
   const archiver = archiverFactory({ dispatch, llm, solutionUuid: uuid });
 
   const analyticAugmentationOrder = analyticAugmentation.orders[order];
@@ -152,6 +139,8 @@ export async function ask({
     parentSolutionUuid
   );
   dispatch({ type: "ask_solution", solution });
+
+  const query = () => ({ answer: 123 });
 
   // Evaluate the solution.
   let evaluated: { [key: string]: any } = {};

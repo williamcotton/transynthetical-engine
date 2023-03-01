@@ -1,5 +1,4 @@
 import { Archiver } from "../../../../archive";
-import { Query } from "../../../../query";
 import { ThunkSolution } from "../../../../ask";
 
 export const targetType = `pthunk`;
@@ -12,7 +11,7 @@ export const context = ``;
 
 // %TRANSLATION_TARGET_RESPONSE_START%
 async function solution(
-  query: Query,
+  query: any,
   archiver: Archiver
 ): Promise<ThunkSolution> {
   const populationOfOakvilleTenYearsAgo = 67624;

@@ -2,7 +2,6 @@ import { describe, it } from "node:test";
 import { expect } from "chai";
 
 import solution from "../../../../../src/analytic-augmentations/question-and-answer/translation-examples/third-order/archived-functions";
-import { QueryParams, QuerySolution } from "../../../../../src/query";
 
 import { archiveFactoryDatabase } from "../../../../../src/archive";
 
@@ -23,7 +22,7 @@ const database = {
 
 const archiveFactory = archiveFactoryDatabase(database);
 
-const query = async (query: QueryParams): Promise<QuerySolution> => {
+const query = async (query: any): Promise<any> => {
   return {
     answer: undefined,
     solutions: [],

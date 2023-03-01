@@ -1,5 +1,4 @@
 import { Archiver } from "../../../../archive";
-import { Query } from "../../../../query";
 import { ThunkSolution } from "../../../../ask";
 
 export const targetType = `pthunk`;
@@ -16,7 +15,7 @@ export const archivedFunctions = `[{ "name": "compute_rot13", "arg_types": [{ "s
 
 // %TRANSLATION_TARGET_RESPONSE_START%
 async function solution(
-  query: Query,
+  query: any,
   archiver: Archiver
 ): Promise<ThunkSolution> {
   const sentence = "Hello World";

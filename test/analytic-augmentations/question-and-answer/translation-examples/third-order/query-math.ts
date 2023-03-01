@@ -3,7 +3,6 @@ import { expect } from "chai";
 
 import solution from "../../../../../src/analytic-augmentations/question-and-answer/translation-examples/third-order/query-math";
 
-import { QueryParams } from "../../../../../src/query";
 import { archiveFactoryDatabase } from "../../../../../src/archive";
 
 const database = {
@@ -25,7 +24,7 @@ const archive = archiveFactory({
   },
 });
 
-async function mockQuery(query: QueryParams) {
+async function mockQuery(query: any) {
   return {
     answer: 564599,
     solutions: [],

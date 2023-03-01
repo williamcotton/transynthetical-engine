@@ -6,10 +6,7 @@ import { LLM } from "../../src/large-language-models";
 import { ask } from "../../src/ask";
 
 import { analyticAugmentation } from "../../src/analytic-augmentations/question-and-answer";
-import { QueryEngine } from "../../src/query-engines";
 import { insertSolutionFactory } from "../../src/ask/insert-solution";
-
-const queryEngines = [] as QueryEngine[];
 
 function dispatch() {}
 
@@ -19,7 +16,6 @@ const database: any = {
 
 const insertSolution = insertSolutionFactory(database);
 
-const queryFactory: any = () => ({});
 const archiverFactory: any = () => ({
   findNearest: () => Promise.resolve([]),
 });
@@ -43,7 +39,6 @@ describe("ask", () => {
       llm: mockLLM,
       insertSolution,
       analyticAugmentation,
-      queryFactory,
       archiverFactory,
     });
 
@@ -69,7 +64,6 @@ describe("ask", () => {
       llm: mockLLM,
       insertSolution,
       analyticAugmentation,
-      queryFactory,
       archiverFactory,
     });
 
@@ -95,7 +89,6 @@ describe("ask", () => {
       llm: mockLLM,
       insertSolution,
       analyticAugmentation,
-      queryFactory,
       archiverFactory,
     });
 
@@ -121,7 +114,6 @@ describe("ask", () => {
       llm: mockLLM,
       insertSolution,
       analyticAugmentation,
-      queryFactory,
       archiverFactory,
     });
 
