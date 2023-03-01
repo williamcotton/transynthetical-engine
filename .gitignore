@@ -113,4 +113,4 @@ dist
 datasets/
 
 # analytic augmentation builds
-src/analytic_augmentations/**/build/
+src/analytic-augmentations/question-and-answer/build/ 

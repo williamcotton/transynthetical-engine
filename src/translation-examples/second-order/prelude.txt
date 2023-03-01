@@ -1,6 +1,0 @@
-Do not perform calculations.
-Do not compute the answer.
-Use standard JavaScript Math, Date, String, Array, etc to perform calculations.
-Always answer with JavaScript compatible code in the %%%THUNK%%%.
-Define new functions in the %%%THUNK%%% to perform calculations.
-Always answer with this JSON compatible object form, eg, {"thunk":%%%THUNK%%%, "en":"%%%EN%%%"}}

@@ -1,4 +1,4 @@
-import { ThunkSolution } from "../../ask";
+import { ThunkSolution } from "../../../../ask";
 
 export const targetType = `thunk`;
 

@@ -1,24 +1,21 @@
 import wikipedia from "wikipedia";
-import { Ask } from "../ask";
-import { analyticAugmentations } from "../analytic-augmentations";
-import { QuerySolution } from "../query";
+import { QueryEngineFactoryParams, QuerySolution } from "../query";
 import { QueryEngineParams, QueryEngine } from ".";
-import { LLM } from "../large-language-models";
 
 export const wikipediaQueryEngineFactory = ({
   llm,
   ask,
-}: {
-  llm: LLM;
-  ask: Ask;
-}): QueryEngine => {
+  analyticAugmentation,
+  insertSolution,
+  archiverFactory,
+  queryFactory,
+}: QueryEngineFactoryParams): QueryEngine => {
   return async function wikipediaQueryEngine({
     prompt,
     topic,
     target,
     type,
     dispatch,
-    database,
     parentSolutionUuid,
   }: QueryEngineParams): Promise<QuerySolution> {
     const wikipediaSummary = await wikipedia.summary(topic);
@@ -27,11 +24,13 @@ export const wikipediaQueryEngineFactory = ({
       prompt,
       dispatch,
       context: wikipediaSummaryContext,
-      analyticAugmentation: analyticAugmentations[1], // first-order
-      database,
+      analyticAugmentation, // first-order
+      order: 1,
+      insertSolution,
+      queryFactory,
+      archiverFactory,
       parentSolutionUuid,
       llm,
-      queryEngines: [],
     });
     solution.raw = wikipediaSummary;
     dispatch({ type: "query_wikipedia_response", answer: solution.answer });

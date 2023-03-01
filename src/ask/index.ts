@@ -1,14 +1,13 @@
 import { v4 as uuidv4 } from "uuid";
-import { Pool } from "pg";
 
 import { Dispatch } from "../dispatch";
-import { queryFactory } from "../query";
-import { archiveFactory } from "../archive";
-import { analyticAugmentations, buildPrompt } from "../analytic-augmentations";
+import { QueryFactory } from "../query";
+import { ArchiverFactory } from "../archive";
 import { LLM } from "../large-language-models";
-import { TranslationTarget } from "../compiler";
-import { QueryEngine } from "../query-engines";
-import { insertSolution } from "./insert-solution";
+import {
+  AnalyticAugmentation,
+  TranslationTarget,
+} from "../analytic-augmentations";
 
 type SolutionTranslationTarget = {
   [Type in TranslationTarget]?: string;
@@ -37,7 +36,7 @@ export type Solution = SolutionTranslationTarget & {
   raw?: any;
   completion?: string;
   uuid: string;
-  analyticAugmentation?: string;
+  analyticAugmentation?: AnalyticAugmentation;
   context?: string;
   parentSolutionUuid?: string;
   promptEmbedding?: string;
@@ -79,13 +78,15 @@ function parseCompletion(
 type AskParams = {
   prompt: string;
   dispatch: Dispatch;
+  order?: number;
+  analyticAugmentation: AnalyticAugmentation;
   context?: string;
-  analyticAugmentation?: string;
   llm: LLM;
   evaluate?: boolean;
-  queryEngines: QueryEngine[];
-  database: Pool;
   parentSolutionUuid?: string;
+  queryFactory: QueryFactory;
+  archiverFactory: ArchiverFactory;
+  insertSolution: any;
 };
 
 export type Ask = (params: AskParams) => Promise<Solution>;
@@ -94,30 +95,32 @@ export async function ask({
   prompt,
   dispatch,
   context = "",
-  analyticAugmentation = analyticAugmentations[3], // third-order
+  analyticAugmentation, // third-order
+  order = 3,
   llm,
   evaluate = true,
-  queryEngines,
-  database,
   parentSolutionUuid,
+  queryFactory,
+  archiverFactory,
+  insertSolution,
 }: AskParams): Promise<Solution> {
   const uuid = uuidv4();
 
-  // Create the query and archive functions.
   const query = queryFactory({
-    queryEngines,
-    solutionUuid: uuid,
     dispatch,
-    database,
-  });
-  const archiver = archiveFactory({
     solutionUuid: uuid,
-    dispatch,
-    database,
     llm,
+    analyticAugmentation,
+    queryFactory,
+    archiverFactory,
+    ask,
+    insertSolution,
   });
+  const archiver = archiverFactory({ dispatch, llm, solutionUuid: uuid });
 
-  dispatch({ type: "ask", prompt, context, analyticAugmentation, uuid });
+  const analyticAugmentationOrder = analyticAugmentation.orders[order];
+
+  dispatch({ type: "ask", prompt, context, analyticAugmentationOrder, uuid });
 
   // Request an embedding from the large language model.
   const embedding = await llm.requestEmbedding(prompt);
@@ -127,8 +130,9 @@ export async function ask({
   const archivedFunctions = await archiver.findNearest(embedding);
 
   // Augment the prompt with the analytic augmentation and the context.
-  const augmentedPrompt = analyticAugmentation
-    ? analyticAugmentation + buildPrompt({ context, prompt, archivedFunctions })
+  const augmentedPrompt = analyticAugmentationOrder
+    ? analyticAugmentationOrder +
+      analyticAugmentation.buildPrompt({ context, prompt, archivedFunctions })
     : prompt;
 
   dispatch({
@@ -181,7 +185,7 @@ export async function ask({
     context,
   };
 
-  await insertSolution(database, completeSolution);
+  await insertSolution(completeSolution);
   dispatch({ type: "ask_complete", ...completeSolution });
 
   return completeSolution;

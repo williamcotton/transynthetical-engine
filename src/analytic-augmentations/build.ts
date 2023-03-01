@@ -1,4 +1,4 @@
-import { ArchivedFunction } from "../analytic-augmentations/index";
+import { ArchivedFunction, TranslationTarget } from "../analytic-augmentations";
 import fs from "fs";
 import path from "path";
 import ts from "typescript";
@@ -11,11 +11,9 @@ const orders = ["first-order", "second-order", "third-order"];
 const pattern =
   /\/\/ %TRANSLATION_TARGET_RESPONSE_START%([\s\S]*)\/\/ %TRANSLATION_TARGET_RESPONSE_END%/;
 
-export type TranslationTarget = "data" | "thunk" | "pthunk";
-
 const preludeFilename = "prelude.txt";
 
-export type TranslationExample = {
+type TranslationExample = {
   target: string;
   en: string;
   prompt: string;
@@ -24,16 +22,12 @@ export type TranslationExample = {
   archivedFunctions: ArchivedFunction[];
 };
 
-export type OrderTranslationExample = {
-  [filename: string]: TranslationExample;
-};
-
-export type TranslationExamplesAndPrelude = {
+type TranslationExamplesAndPrelude = {
   translationExamples: TranslationExample[];
   prelude: string;
 };
 
-export type CompiledTranslationExamples = {
+type CompiledTranslationExamples = {
   [order: string]: TranslationExamplesAndPrelude;
 };
 
@@ -121,4 +115,71 @@ orders.forEach((order) => {
   };
 });
 
-export default compiledTranslationExamples;
+const firstOrder = compiledTranslationExamples["first-order"];
+const secondOrder = compiledTranslationExamples["second-order"];
+const thirdOrder = compiledTranslationExamples["third-order"];
+
+export function buildPrompt({
+  context,
+  prompt,
+  archivedFunctions = [],
+}: {
+  context: string;
+  prompt: string;
+  archivedFunctions: ArchivedFunction[];
+}): string {
+  const archivedFunctionsString = archivedFunctions
+    .map((archivedFunction) => {
+      const typesString = archivedFunction.arg_types.map((t) =>
+        Object.values(t)
+      );
+      return `${archivedFunction.name}(${typesString})`;
+    })
+    .join(" ");
+  return ` Q: C(${context}) EAF(${archivedFunctionsString}) ${prompt}`;
+}
+
+function translationExampleToAnalyticAugmentation(
+  translationExample: TranslationExample
+): string {
+  const jsonTarget = {
+    [translationExample.targetType]: translationExample.target,
+    en: translationExample.en,
+  };
+  const jsonTargetString = JSON.stringify(jsonTarget);
+  return buildPrompt(translationExample) + jsonTargetString;
+}
+
+function translationExamplesToAnalyticAugmentations({
+  translationExamples,
+  prelude,
+}: TranslationExamplesAndPrelude): string {
+  return `${prelude} ${translationExamples
+    .map((translationExample) =>
+      translationExampleToAnalyticAugmentation(translationExample)
+    )
+    .join("")}`;
+}
+
+const firstOrderString = translationExamplesToAnalyticAugmentations(firstOrder);
+const secondOrderString =
+  translationExamplesToAnalyticAugmentations(secondOrder);
+const thirdOrderString = translationExamplesToAnalyticAugmentations(thirdOrder);
+
+const buildPath = path.join(__dirname, ".", type, "build");
+
+fs.mkdirSync(buildPath, { recursive: true });
+
+// write as json
+fs.writeFileSync(
+  path.join(buildPath, "first-order.json"),
+  JSON.stringify(firstOrderString)
+);
+fs.writeFileSync(
+  path.join(buildPath, "second-order.json"),
+  JSON.stringify(secondOrderString)
+);
+fs.writeFileSync(
+  path.join(buildPath, "third-order.json"),
+  JSON.stringify(thirdOrderString)
+);

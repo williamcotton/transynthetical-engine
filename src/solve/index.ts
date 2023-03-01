@@ -1,7 +1,9 @@
-import { Pool } from "pg";
+import { AnalyticAugmentation } from "../analytic-augmentations";
+import { ArchiverFactory } from "../archive";
 import { ask } from "../ask";
 import { Dispatch } from "../dispatch";
 import { LLM } from "../large-language-models";
+import { QueryFactory } from "../query";
 import { QueryEngine } from "../query-engines";
 import { Problem } from "../training-data";
 
@@ -17,22 +19,28 @@ function arrayEquals(a: any[], b: any[]) {
 export async function solve({
   problem,
   dispatch,
-  database,
   llm,
-  queryEngines,
+  analyticAugmentation,
+  insertSolution,
+  archiverFactory,
+  queryFactory,
 }: {
   problem: Problem;
   dispatch: Dispatch;
-  database: Pool;
   llm: LLM;
-  queryEngines: QueryEngine[];
+  analyticAugmentation: AnalyticAugmentation;
+  queryFactory: QueryFactory;
+  archiverFactory: ArchiverFactory;
+  insertSolution: any;
 }) {
   const solvedProblem = await ask({
     prompt: problem.question,
     dispatch,
-    database,
+    insertSolution,
     llm,
-    queryEngines,
+    analyticAugmentation,
+    queryFactory,
+    archiverFactory,
   });
   let correct: boolean;
   if (Array.isArray(solvedProblem.answer) && Array.isArray(problem.answer)) {

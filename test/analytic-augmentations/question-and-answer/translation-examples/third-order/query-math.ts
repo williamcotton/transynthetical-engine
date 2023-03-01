@@ -1,14 +1,19 @@
 import { describe, it } from "node:test";
 import { expect } from "chai";
 
-import { QueryParams } from "../../../src/query";
-import { archiveFactory } from "../../../src/archive";
+import solution from "../../../../../src/analytic-augmentations/question-and-answer/translation-examples/third-order/query-math";
+
+import { QueryParams } from "../../../../../src/query";
+import { archiveFactoryDatabase } from "../../../../../src/archive";
+
+const database = {
+  query: () => Promise.resolve({ rows: [] }),
+} as any;
+
+const archiveFactory = archiveFactoryDatabase(database);
 
 const archive = archiveFactory({
   solutionUuid: "uuid",
-  database: {
-    query: () => Promise.resolve({ rows: [] }),
-  } as any,
   dispatch: () => {},
   llm: {
     requestEmbedding: async () => {
@@ -31,8 +36,6 @@ async function mockQuery(query: QueryParams) {
     uuid: "",
   };
 }
-
-import solution from "../../../src/translation-examples/third-order/query-math";
 
 describe("Third-order translation example: query-math", () => {
   it("should return the expected solution", async () => {

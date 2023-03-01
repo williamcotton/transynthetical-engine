@@ -1,9 +1,27 @@
 import { describe, it } from "node:test";
 import { expect } from "chai";
 
-import solution from "../../../src/translation-examples/third-order/archived-functions";
-import { archiveFactory } from "../../../src/archive";
-import { QueryParams, QuerySolution } from "../../../src/query";
+import solution from "../../../../../src/analytic-augmentations/question-and-answer/translation-examples/third-order/archived-functions";
+import { QueryParams, QuerySolution } from "../../../../../src/query";
+
+import { archiveFactoryDatabase } from "../../../../../src/archive";
+
+const database = {
+  query: (_: any, params: string[]) => {
+    const string_func =
+      params[0] === "compute_rot13" ? compute_rot13 : compute_pig_latin;
+    return Promise.resolve({
+      rows: [
+        {
+          name: params[0],
+          string_func,
+        },
+      ],
+    });
+  },
+} as any;
+
+const archiveFactory = archiveFactoryDatabase(database);
 
 const query = async (query: QueryParams): Promise<QuerySolution> => {
   return {
@@ -33,19 +51,23 @@ function compute_rot13(str) {
 }
 `;
 
+const compute_pig_latin = `
+function compute_pig_latin(word) {
+  const vowels = ["a", "e", "i", "o", "u"];
+  if (vowels.includes(word[0])) {
+    return word + "way";
+  }
+  for (let i = 1; i < word.length; i++) {
+    if (vowels.includes(word[i])) {
+      return word.slice(i) + word.slice(0, i) + "ay";
+    }
+  }
+  return word + "ay";
+}
+`;
+
 const archive = archiveFactory({
   solutionUuid: "uuid",
-  database: {
-    query: () =>
-      Promise.resolve({
-        rows: [
-          {
-            name: "compute_rot13",
-            compute_rot13,
-          },
-        ],
-      }),
-  } as any,
   dispatch: () => {},
   llm: {
     requestEmbedding: async () => {

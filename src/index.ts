@@ -1,33 +1,17 @@
-import { Pool, QueryResult } from "pg";
+import { Pool } from "pg";
 
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import { ask } from "./ask";
 import { dispatch } from "./dispatch";
 import { solve } from "./solve";
 import { openAiLLMFactory } from "./large-language-models/openai";
 import { wikipediaQueryEngineFactory } from "./query-engines/wikipedia";
-import { wolframAlphaQueryEngineFactory } from "./query-engines/wolfram-alpha";
-
-const llm = openAiLLMFactory({ apiKey: process.env.OPENAI_API_KEY || "" });
-
-const queryEngines = [
-  wikipediaQueryEngineFactory({ llm, ask }),
-  wolframAlphaQueryEngineFactory({
-    llm,
-    apiKey: process.env.WOLFRAM_ALPHA_API_KEY || "",
-    ask,
-  }),
-];
-
-const database = new Pool({
-  user: "",
-  host: "localhost",
-  database: "transynthetical-engine",
-  password: "",
-  port: 5432,
-});
+import { wolframAlphaQueryEngineApiFactory } from "./query-engines/wolfram-alpha";
+import { queryFactoryDatabase } from "./query";
+import { archiveFactoryDatabase } from "./archive";
+import { insertSolutionFactory } from "./ask/insert-solution";
+import { analyticAugmentation } from "./analytic-augmentations/question-and-answer";
 
 import {
   trivia,
@@ -44,6 +28,31 @@ import {
   openEnded,
 } from "./training-data";
 
+const database = new Pool({
+  user: "",
+  host: "localhost",
+  database: "transynthetical-engine",
+  password: "",
+  port: 5432,
+});
+
+const insertSolution = insertSolutionFactory(database);
+
+const llm = openAiLLMFactory({ apiKey: process.env.OPENAI_API_KEY || "" });
+
+const archiverFactory = archiveFactoryDatabase(database);
+
+const wolframAlphaQueryEngineFactory = wolframAlphaQueryEngineApiFactory(
+  process.env.WOLFRAM_ALPHA_API_KEY || ""
+);
+
+const queryEngineFactories = [
+  wikipediaQueryEngineFactory,
+  wolframAlphaQueryEngineFactory,
+];
+
+const queryFactory = queryFactoryDatabase({ database, queryEngineFactories });
+
 // openEnded[3]
 // "Answering as [rowInt, colInt], writing custom predictBestMove, getEmptySpaces, minimax and checkWinner functions implemented in the thunk, what is the best tic-tac-toe move for player X on this board: [['X', '_', 'X'], ['_', '_', '_'], ['_', '_', '_']]?";
 
@@ -58,6 +67,14 @@ import {
 
 const problem = openEnded[3];
 
-solve({ problem, dispatch, database, llm, queryEngines }).then((result) => {
+solve({
+  problem,
+  dispatch,
+  llm,
+  analyticAugmentation,
+  insertSolution,
+  archiverFactory,
+  queryFactory,
+}).then((result) => {
   return console.log(result);
 });

@@ -1,4 +1,0 @@
-Do not perform calculations.
-Do not compute the answer.
-Always answer with Javascript compatible code in the %%%DATA%%%.
-Always answer with this JSON compatible object form, eg, {"data":%%%DATA%%%,"en":%%%EN%%%}

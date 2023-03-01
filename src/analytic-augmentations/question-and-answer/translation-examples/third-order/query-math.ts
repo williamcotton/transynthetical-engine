@@ -1,6 +1,6 @@
-import { Archiver } from "../../archive";
-import { Query } from "../../query";
-import { ThunkSolution } from "../../ask";
+import { Archiver } from "../../../../archive";
+import { Query } from "../../../../query";
+import { ThunkSolution } from "../../../../ask";
 
 export const targetType = `pthunk`;
 

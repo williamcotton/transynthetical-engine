@@ -1,8 +1,16 @@
 import { describe, it } from "node:test";
 import { expect } from "chai";
 
-import { archiveFactory } from "../../../src/archive";
-import { QueryParams, QuerySolution } from "../../../src/query";
+import solution from "../../../../../src/analytic-augmentations/question-and-answer/translation-examples/third-order/function";
+import { QueryParams, QuerySolution } from "../../../../../src/query";
+
+import { archiveFactoryDatabase } from "../../../../../src/archive";
+
+const database = {
+  query: () => Promise.resolve({ rows: [] }),
+} as any;
+
+const archiveFactory = archiveFactoryDatabase(database);
 
 const query = async (query: QueryParams): Promise<QuerySolution> => {
   return {
@@ -16,9 +24,6 @@ const query = async (query: QueryParams): Promise<QuerySolution> => {
 
 const archive = archiveFactory({
   solutionUuid: "uuid",
-  database: {
-    query: () => Promise.resolve({ rows: [] }),
-  } as any,
   dispatch: () => {},
   llm: {
     requestEmbedding: async () => {
@@ -30,12 +35,10 @@ const archive = archiveFactory({
   },
 });
 
-import solution from "../../../src/translation-examples/third-order/math";
-
-describe("Third-order translation example: math", () => {
+describe("Third-order translation example: function", () => {
   it("should return the expected solution", async () => {
     expect(await solution(query, archive)).deep.equal({
-      answer: 128485.59999999999,
+      answer: "ryybUnl beyqJnl",
       solutions: [],
       computed: true,
       query: false,

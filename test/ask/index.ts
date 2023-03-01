@@ -5,11 +5,24 @@ import { LLM } from "../../src/large-language-models";
 
 import { ask } from "../../src/ask";
 
+import { analyticAugmentation } from "../../src/analytic-augmentations/question-and-answer";
+import { QueryEngine } from "../../src/query-engines";
+import { insertSolutionFactory } from "../../src/ask/insert-solution";
+
+const queryEngines = [] as QueryEngine[];
+
 function dispatch() {}
 
-const database = {
+const database: any = {
   query: () => Promise.resolve({ rows: [] }),
-} as any;
+};
+
+const insertSolution = insertSolutionFactory(database);
+
+const queryFactory: any = () => ({});
+const archiverFactory: any = () => ({
+  findNearest: () => Promise.resolve([]),
+});
 
 describe("ask", () => {
   it("should return the expected solution to a first-order prompt", async () => {
@@ -28,7 +41,10 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
-      database,
+      insertSolution,
+      analyticAugmentation,
+      queryFactory,
+      archiverFactory,
     });
 
     expect(solution.answer).equal(12);
@@ -51,7 +67,10 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
-      database,
+      insertSolution,
+      analyticAugmentation,
+      queryFactory,
+      archiverFactory,
     });
 
     expect(solution.answer).equal(12);
@@ -74,7 +93,10 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
-      database,
+      insertSolution,
+      analyticAugmentation,
+      queryFactory,
+      archiverFactory,
     });
 
     expect(solution.answer).equal(12);
@@ -97,7 +119,10 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
-      database,
+      insertSolution,
+      analyticAugmentation,
+      queryFactory,
+      archiverFactory,
     });
 
     expect(solution.answer).equal(undefined);
