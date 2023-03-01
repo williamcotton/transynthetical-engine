@@ -103,8 +103,14 @@ dist
 # TernJS port file
 .tern-port
 
+# DS_Store files
+.DS_Store
+
 # sqlite3 database
 *.db
 
 # large datasets
 datasets/
+
+# analytic augmentation builds
+src/analytic_augmentations/**/build/

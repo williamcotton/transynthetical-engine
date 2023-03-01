@@ -3,6 +3,10 @@ import fs from "fs";
 import path from "path";
 import ts from "typescript";
 
+// get args from command line
+const args = process.argv.slice(2);
+const type = args[0];
+
 const orders = ["first-order", "second-order", "third-order"];
 const pattern =
   /\/\/ %TRANSLATION_TARGET_RESPONSE_START%([\s\S]*)\/\/ %TRANSLATION_TARGET_RESPONSE_END%/;
@@ -41,7 +45,13 @@ const options = {
 };
 
 orders.forEach((order) => {
-  const orderPath = path.join(__dirname, "..", "translation-examples", order);
+  const orderPath = path.join(
+    __dirname,
+    ".",
+    type,
+    "translation-examples",
+    order
+  );
   const files = fs
     .readdirSync(orderPath)
     .filter((file) => file.endsWith(".ts"));

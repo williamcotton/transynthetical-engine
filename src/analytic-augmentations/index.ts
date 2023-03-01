@@ -1,5 +1,4 @@
 import compiledTranslationExamples, {
-  ArchivedFunction,
   TranslationExample,
   TranslationExamplesAndPrelude,
 } from "../compiler";
@@ -63,3 +62,8 @@ export const analyticAugmentations = [
   translationExamplesToAnalyticAugmentations(secondOrder),
   translationExamplesToAnalyticAugmentations(thirdOrder),
 ];
+
+export type ArchivedFunction = {
+  name: string;
+  arg_types: [{ [key: string]: string }];
+};
