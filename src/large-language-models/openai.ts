@@ -7,13 +7,12 @@ export const openAiLLMFactory = ({ apiKey }: { apiKey: string }): LLM => {
   const openai = new OpenAIApi(configuration);
   return {
     requestCompletion: async (prompt: string) => {
-      const response = await openai.createCompletion({
-        model: "text-davinci-003",
+      const response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
         temperature: 0.7,
-        max_tokens: 2048,
-        prompt,
+        messages: [{ role: "user", content: prompt }],
       });
-      return response.data.choices[0].text || "";
+      return response.data.choices[0].message?.content || "";
     },
     requestEmbedding: async (text: string) => {
       const response = await openai.createEmbedding({
