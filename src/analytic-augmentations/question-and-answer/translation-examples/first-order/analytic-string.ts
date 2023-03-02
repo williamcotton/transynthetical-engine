@@ -6,6 +6,8 @@ export const en = `Batman first appeared in comics in {answer}.`;
 
 export const context = `Batman first appeared in comics in 1939.`;
 
+`
 // %TRANSLATION_TARGET_RESPONSE_START%
-({ answer: "1939", analytic: true, computed: false });
+{ "answer": "1939", "type": "string", "analytic": true, "computed": false }
 // %TRANSLATION_TARGET_RESPONSE_END%
+`;

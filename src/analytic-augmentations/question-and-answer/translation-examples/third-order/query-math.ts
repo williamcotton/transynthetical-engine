@@ -9,7 +9,7 @@ export const en = `The population of Albequerque, New Mexico is {answer}.`;
 
 export const context = ``;
 
-export const archivedFunctions = `[{ "name": "compute_rot13", "arg_types": [{ "str": "string" }] }, { "name": "compute_pig_latin", "arg_types": [{ "word": "string" }] }, { "name": "compute_fibonacci", "arg_types": [{ "num": "number" }] }]`;
+// export const archivedFunctions = `[{ "name": "compute_rot13", "arg_types": [{ "str": "string" }] }, { "name": "compute_pig_latin", "arg_types": [{ "word": "string" }] }, { "name": "compute_fibonacci", "arg_types": [{ "num": "number" }] }]`;
 
 // TODO: instead of (populationOfAlbequerque.answer as number), infer the type from what is passed into the query
 

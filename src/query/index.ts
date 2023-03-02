@@ -5,6 +5,13 @@ import { Datastore } from "../datastore";
 import { Dispatch } from "../dispatch";
 import { LLM } from "../large-language-models";
 
+function toNum(str: string) {
+  if (str.indexOf(".") !== -1) {
+    return Math.round(parseFloat(str.replace(/,/g, "")) * 100) / 100;
+  }
+  return parseInt(str.replace(/,/g, ""), 10);
+}
+
 export type QueryParams = {
   prompt: string;
   topic: string;
@@ -85,8 +92,11 @@ export function queryFactory({
       queryEngines: [],
     });
 
+    const answer =
+      solution.type === "number" ? toNum(solution.answer) : solution.answer;
+
     return {
-      answer: solution.answer,
+      answer,
       solutions: [],
     };
   };

@@ -14,13 +14,6 @@ type SolutionTranslationTarget = {
   [Type in TranslationTarget]?: string;
 };
 
-export function toNum(str: string) {
-  if (str.indexOf(".") !== -1) {
-    return Math.round(parseFloat(str.replace(/,/g, "")) * 100) / 100;
-  }
-  return parseInt(str.replace(/,/g, ""), 10);
-}
-
 export type Solution = SolutionTranslationTarget & {
   answer: any;
   solutions: Solution[];
@@ -41,40 +34,10 @@ export type Solution = SolutionTranslationTarget & {
   context?: string;
   parentSolutionUuid?: string;
   promptEmbedding?: string;
+  type?: string;
 };
 
 export type ThunkSolution = Omit<Solution, "uuid">;
-
-function parseCompletion(
-  completion: string,
-  dispatch: Dispatch,
-  uuid: string,
-  parentSolutionUuid?: string
-): Solution {
-  let solution: Solution;
-  try {
-    solution = JSON.parse(completion);
-    solution.uuid = uuid;
-    solution.parentSolutionUuid = parentSolutionUuid;
-    dispatch({ type: "json_parse", solution });
-  } catch (e) {
-    solution = {
-      uuid,
-      parentSolutionUuid,
-      answer: undefined,
-      en: "",
-      en_answer: "",
-      solutions: [],
-      analytic: false,
-      synthetic: false,
-      computed: false,
-      parsed: false,
-      error: e as unknown as any,
-    };
-    dispatch({ type: "parse_error", completion, error: e });
-  }
-  return solution;
-}
 
 export type AskParams = {
   prompt: string;
@@ -149,7 +112,7 @@ export async function ask({
   dispatch({ type: "ask_completion", completion });
 
   // Parse the completion text.
-  const solution = parseCompletion(
+  const solution = analyticAugmentation.parseCompletion(
     completion,
     dispatch,
     uuid,
@@ -160,23 +123,7 @@ export async function ask({
   // Evaluate the solution.
   let evaluated: { [key: string]: any } = {};
   if (evaluate) {
-    evaluated = { answer: undefined, en: "" }; // zeroth-order
-    try {
-      if (solution.data) {
-        evaluated = eval(solution.data); // first-order
-      } else if (solution.thunk) {
-        evaluated = await eval(solution.thunk)(); // second-order
-      } else if (solution.pthunk) {
-        evaluated = await eval(solution.pthunk)(query, archiver); // third-order
-      }
-    } catch (e) {
-      evaluated.error = e;
-    }
-
-    // Replace the {answer} placeholder in the English translation with the answer.
-    evaluated.en_answer = solution.en
-      ? solution.en.replace("{answer}", evaluated.answer || "")
-      : "";
+    evaluated = await analyticAugmentation.evaluator(solution, query, archiver);
   }
 
   const completeSolution = {

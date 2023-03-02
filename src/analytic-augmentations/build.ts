@@ -68,14 +68,9 @@ orders.forEach((order) => {
       compilerOptions: options,
     }).outputText;
 
-    // if first-order, remove semi-colons
-    const trimmedTarget =
-      order == "first-order"
-        ? javascriptTarget.replace(/;/, "")
-        : javascriptTarget;
-
-    // wrap in parens to make it a valid expression
-    const preparedTarget = `(${trimmedTarget})`;
+    // if higher than first-order, wrap in parens to make it a valid expression
+    const preparedTarget =
+      order == "first-order" ? extractedTarget : `(${javascriptTarget})`;
 
     const enMatch = fileContents.match(/export const en = `(.*)`;/);
     const extractedEn = enMatch ? enMatch[1].trim() : "";
