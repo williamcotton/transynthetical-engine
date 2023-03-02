@@ -3,30 +3,13 @@ import { expect } from "chai";
 
 import solution from "../../../../../src/analytic-augmentations/question-and-answer/translation-examples/third-order/archived-functions";
 
-import { archiveFactoryDatabase } from "../../../../../src/archive";
-
-const database = {
-  query: (_: any, params: string[]) => {
-    const string_func =
-      params[0] === "compute_rot13" ? compute_rot13 : compute_pig_latin;
-    return Promise.resolve({
-      rows: [
-        {
-          name: params[0],
-          string_func,
-        },
-      ],
-    });
-  },
-} as any;
-
-const archiveFactory = archiveFactoryDatabase(database);
+import { archiverFactory } from "../../../../../src/archive";
+import { mockDatastore } from "../../../../../src/datastore";
 
 const query = async (query: any): Promise<any> => {
   return {
     answer: undefined,
     solutions: [],
-    otherSolutions: [],
     weight: 0,
     uuid: "",
   };
@@ -65,7 +48,11 @@ function compute_pig_latin(word) {
 }
 `;
 
-const archive = archiveFactory({
+mockDatastore.archives.get = async (name: string) => {
+  return name === "compute_rot13" ? compute_rot13 : compute_pig_latin;
+};
+
+const archive = archiverFactory({
   solutionUuid: "uuid",
   dispatch: () => {},
   llm: {
@@ -76,6 +63,7 @@ const archive = archiveFactory({
       return "completion";
     },
   },
+  datastore: mockDatastore,
 });
 
 describe("Third-order translation example: archived-functions", () => {

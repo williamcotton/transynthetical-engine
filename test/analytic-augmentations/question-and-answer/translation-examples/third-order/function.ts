@@ -3,25 +3,23 @@ import { expect } from "chai";
 
 import solution from "../../../../../src/analytic-augmentations/question-and-answer/translation-examples/third-order/function";
 
-import { archiveFactoryDatabase } from "../../../../../src/archive";
+import { archiverFactory } from "../../../../../src/archive";
+import { mockDatastore } from "../../../../../src/datastore";
 
 const database = {
   query: () => Promise.resolve({ rows: [] }),
 } as any;
 
-const archiveFactory = archiveFactoryDatabase(database);
-
 const query = async (query: any): Promise<any> => {
   return {
     answer: undefined,
     solutions: [],
-    otherSolutions: [],
     weight: 0,
     uuid: "",
   };
 };
 
-const archive = archiveFactory({
+const archive = archiverFactory({
   solutionUuid: "uuid",
   dispatch: () => {},
   llm: {
@@ -32,6 +30,7 @@ const archive = archiveFactory({
       return "completion";
     },
   },
+  datastore: mockDatastore,
 });
 
 describe("Third-order translation example: function", () => {

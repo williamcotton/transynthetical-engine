@@ -1,6 +1,7 @@
 import { AnalyticAugmentation } from "../analytic-augmentations";
 import { ArchiverFactory } from "../archive";
 import { AskParams, Solution } from "../ask";
+import { Datastore } from "../datastore";
 import { Dispatch } from "../dispatch";
 import { LLM } from "../large-language-models";
 
@@ -33,8 +34,7 @@ export function queryFactory({
   analyticAugmentation,
   evaluate,
   uuid,
-  archiverFactory,
-  insertSolution,
+  datastore,
   ask,
 }: {
   queryEngines: QueryEngine[];
@@ -43,8 +43,7 @@ export function queryFactory({
   analyticAugmentation: AnalyticAugmentation;
   evaluate: boolean;
   uuid: string;
-  archiverFactory: ArchiverFactory;
-  insertSolution: any;
+  datastore: Datastore;
   ask: (params: AskParams) => Promise<Solution>;
 }) {
   const query = async ({
@@ -82,8 +81,7 @@ export function queryFactory({
       llm,
       evaluate,
       parentSolutionUuid: uuid,
-      archiverFactory,
-      insertSolution,
+      datastore,
       queryEngines: [],
     });
 

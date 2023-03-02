@@ -6,19 +6,9 @@ import { LLM } from "../../src/large-language-models";
 import { ask } from "../../src/ask";
 
 import { analyticAugmentation } from "../../src/analytic-augmentations/question-and-answer";
-import { insertSolutionFactory } from "../../src/ask/insert-solution";
+import { mockDatastore } from "../../src/datastore";
 
 function dispatch() {}
-
-const database: any = {
-  query: () => Promise.resolve({ rows: [] }),
-};
-
-const insertSolution = insertSolutionFactory(database);
-
-const archiverFactory: any = () => ({
-  findNearest: () => Promise.resolve([]),
-});
 
 describe("ask", () => {
   it("should return the expected solution to a first-order prompt", async () => {
@@ -37,9 +27,8 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
-      insertSolution,
       analyticAugmentation,
-      archiverFactory,
+      datastore: mockDatastore,
       queryEngines: [],
     });
 
@@ -63,9 +52,8 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
-      insertSolution,
       analyticAugmentation,
-      archiverFactory,
+      datastore: mockDatastore,
       queryEngines: [],
     });
 
@@ -89,9 +77,8 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
-      insertSolution,
       analyticAugmentation,
-      archiverFactory,
+      datastore: mockDatastore,
       queryEngines: [],
     });
 
@@ -115,9 +102,8 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
-      insertSolution,
       analyticAugmentation,
-      archiverFactory,
+      datastore: mockDatastore,
       queryEngines: [],
     });
 

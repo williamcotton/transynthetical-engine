@@ -1,6 +1,6 @@
 import { AnalyticAugmentation } from "../analytic-augmentations";
-import { ArchiverFactory } from "../archive";
 import { ask } from "../ask";
+import { Datastore } from "../datastore";
 import { Dispatch } from "../dispatch";
 import { LLM } from "../large-language-models";
 import { QueryEngine } from "../query";
@@ -20,25 +20,25 @@ export async function solve({
   dispatch,
   llm,
   analyticAugmentation,
-  insertSolution,
-  archiverFactory,
+  order = 3,
+  datastore,
   queryEngines,
 }: {
   problem: Problem;
   dispatch: Dispatch;
   llm: LLM;
   analyticAugmentation: AnalyticAugmentation;
-  archiverFactory: ArchiverFactory;
-  insertSolution: any;
+  order?: number;
+  datastore: Datastore;
   queryEngines: QueryEngine[];
 }) {
   const solvedProblem = await ask({
     prompt: problem.question,
     dispatch,
-    insertSolution,
     llm,
     analyticAugmentation,
-    archiverFactory,
+    order,
+    datastore,
     queryEngines,
   });
   let correct: boolean;

@@ -1,13 +1,14 @@
 import { v4 as uuidv4 } from "uuid";
 
 import { Dispatch } from "../dispatch";
-import { ArchiverFactory } from "../archive";
+import { archiverFactory, ArchiverFactory } from "../archive";
 import { QueryEngine, queryFactory } from "../query";
 import { LLM } from "../large-language-models";
 import {
   AnalyticAugmentation,
   TranslationTarget,
 } from "../analytic-augmentations";
+import { Datastore } from "../datastore";
 
 type SolutionTranslationTarget = {
   [Type in TranslationTarget]?: string;
@@ -84,8 +85,7 @@ export type AskParams = {
   llm: LLM;
   evaluate?: boolean;
   parentSolutionUuid?: string;
-  archiverFactory: ArchiverFactory;
-  insertSolution: any;
+  datastore: Datastore;
   queryEngines: QueryEngine[];
 };
 
@@ -100,13 +100,17 @@ export async function ask({
   llm,
   evaluate = true,
   parentSolutionUuid,
-  archiverFactory,
-  insertSolution,
+  datastore,
   queryEngines,
 }: AskParams): Promise<Solution> {
   const uuid = uuidv4();
 
-  const archiver = archiverFactory({ dispatch, llm, solutionUuid: uuid });
+  const archiver = archiverFactory({
+    datastore,
+    dispatch,
+    llm,
+    solutionUuid: uuid,
+  });
   const query = queryFactory({
     queryEngines,
     dispatch,
@@ -114,8 +118,7 @@ export async function ask({
     analyticAugmentation,
     evaluate,
     uuid,
-    archiverFactory,
-    insertSolution,
+    datastore,
     ask,
   });
 
@@ -186,7 +189,7 @@ export async function ask({
     context,
   };
 
-  await insertSolution(completeSolution);
+  await datastore.solutions.add(completeSolution);
   dispatch({ type: "ask_complete", ...completeSolution });
 
   return completeSolution;

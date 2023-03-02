@@ -1,15 +1,10 @@
 import { describe, it } from "node:test";
 import { expect } from "chai";
 
-import { archiveFactoryDatabase } from "../../src/archive";
+import { archiverFactory } from "../../src/archive";
+import { mockDatastore } from "../../src/datastore";
 
 function dispatch() {}
-
-const database = {
-  query: () => Promise.resolve({ rows: [] }),
-} as any;
-
-const archiveFactory = archiveFactoryDatabase(database);
 
 function t(s: string) {
   return s;
@@ -23,7 +18,12 @@ describe("archiver", async () => {
         return [0.1, 0.2, 0.3, 0.4, 0.5];
       },
     } as any;
-    const archiver = archiveFactory({ solutionUuid, dispatch, llm });
+    const archiver = archiverFactory({
+      solutionUuid,
+      dispatch,
+      llm,
+      datastore: mockDatastore,
+    });
     const addedResponse = await archiver.add(
       "test",
       t,

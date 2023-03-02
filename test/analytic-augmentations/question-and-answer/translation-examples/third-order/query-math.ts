@@ -3,15 +3,14 @@ import { expect } from "chai";
 
 import solution from "../../../../../src/analytic-augmentations/question-and-answer/translation-examples/third-order/query-math";
 
-import { archiveFactoryDatabase } from "../../../../../src/archive";
+import { archiverFactory } from "../../../../../src/archive";
+import { mockDatastore } from "../../../../../src/datastore";
 
 const database = {
   query: () => Promise.resolve({ rows: [] }),
 } as any;
 
-const archiveFactory = archiveFactoryDatabase(database);
-
-const archive = archiveFactory({
+const archive = archiverFactory({
   solutionUuid: "uuid",
   dispatch: () => {},
   llm: {
@@ -22,13 +21,13 @@ const archive = archiveFactory({
       return "completion";
     },
   },
+  datastore: mockDatastore,
 });
 
 async function mockQuery(query: any) {
   return {
     answer: 564599,
     solutions: [],
-    otherSolutions: [],
     computed: true,
     query: false,
     weight: 0.1,

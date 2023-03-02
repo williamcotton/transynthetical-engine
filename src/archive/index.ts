@@ -1,10 +1,7 @@
-import { Pool } from "pg";
-
-import { Solution } from "../ask";
 import { ArchivedFunction } from "../analytic-augmentations";
 import { Dispatch } from "../dispatch";
 import { LLM } from "../large-language-models";
-import { insertArchive } from "./insert-archive";
+import { Datastore } from "../datastore";
 
 export type ArgType = "string" | "number" | "boolean" | "object" | "array";
 
@@ -22,21 +19,21 @@ export type Archive = {
 };
 
 export type Archiver = {
-  add: ArchiveAdd;
-  get: ArchiveGet;
-  findNearest: ArchiveFindNearest;
+  add: ArchiverAdd;
+  get: ArchiverGet;
+  findNearest: ArchiverFindNearest;
 };
 
-export type ArchiveAdd = (
+export type ArchiverAdd = (
   name: string,
   func: (...args: any[]) => any | string,
   argTypes: ArgTypes,
   description: string
 ) => Promise<Archive>;
 
-export type ArchiveGet = (name: string) => Promise<(...args: any[]) => any>;
+export type ArchiverGet = (name: string) => Promise<(...args: any[]) => any>;
 
-export type ArchiveFindNearest = (
+export type ArchiverFindNearest = (
   embedding: number[]
 ) => Promise<ArchivedFunction[]>;
 
@@ -46,59 +43,48 @@ export type ArchiverFactoryParams = {
   solutionUuid: string;
   dispatch: Dispatch;
   llm: LLM;
+  datastore: Datastore;
 };
 
-export const archiveFactoryDatabase =
-  (database: Pool) =>
-  ({ solutionUuid, dispatch, llm }: ArchiverFactoryParams): Archiver => {
-    return {
-      add: async (name, func, argTypes, description) => {
-        const stringFunc = typeof func === "string" ? func : func.toString();
+export const archiverFactory = ({
+  datastore,
+  solutionUuid,
+  dispatch,
+  llm,
+}: ArchiverFactoryParams): Archiver => {
+  return {
+    add: async (name, func, argTypes, description) => {
+      const stringFunc = typeof func === "string" ? func : func.toString();
 
-        const embedding = await llm.requestEmbedding(description);
-        const descriptionEmbedding = `[${embedding.toString()}]`;
+      const embedding = await llm.requestEmbedding(description);
+      const descriptionEmbedding = `[${embedding.toString()}]`;
 
-        const archive = {
-          name,
-          stringFunc,
-          argTypes,
-          solutionUuid,
-          description,
-          descriptionEmbedding,
-        };
+      const archive = {
+        name,
+        stringFunc,
+        argTypes,
+        solutionUuid,
+        description,
+        descriptionEmbedding,
+      };
 
-        await insertArchive(database, archive);
-        dispatch({ type: "add", archive });
+      await datastore.archives.add(archive);
+      dispatch({ type: "add", archive });
 
-        return archive;
-      },
-      get: async (name) => {
-        const archive = await database.query(
-          `SELECT * FROM archives WHERE name = $1`,
-          [name]
-        );
+      return archive;
+    },
+    get: async (name) => {
+      const stringFunc = await datastore.archives.get(name);
 
-        let func: (...args: any[]) => any;
-        try {
-          func = eval(`(${archive.rows[0].string_func})`);
-        } catch (e) {
-          func = () => 0;
-        }
+      let func: (...args: any[]) => any;
+      try {
+        func = eval(`(${stringFunc})`);
+      } catch (e) {
+        func = () => 0;
+      }
 
-        return func;
-      },
-      findNearest: async (embedding) => {
-        const archives = await database.query(
-          `SELECT * FROM archives WHERE verified = true ORDER BY description_embedding <-> $1 LIMIT 10`,
-          [`[${embedding.toString()}]`]
-        );
-
-        return archives.rows.map((archive) => {
-          return {
-            name: archive.name,
-            arg_types: JSON.parse(archive.arg_types),
-          };
-        });
-      },
-    };
+      return func;
+    },
+    findNearest: datastore.archives.findNearest,
   };
+};

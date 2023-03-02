@@ -40,7 +40,7 @@
     "chatgpt": "^4.7.1",
     "dotenv": "^16.0.3",
     "gpt-3-encoder": "^1.1.4",
-    "openai": "^3.1.0",
+    "openai": "^3.2.1",
     "pg": "^8.9.0",
     "typescript": "^4.9.5",
     "uuid": "^9.0.0",

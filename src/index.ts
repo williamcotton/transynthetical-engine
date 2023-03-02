@@ -6,8 +6,7 @@ dotenv.config();
 import { dispatch } from "./dispatch";
 import { solve } from "./solve";
 import { openAiLLMFactory } from "./large-language-models/openai";
-import { archiveFactoryDatabase } from "./archive";
-import { insertSolutionFactory } from "./ask/insert-solution";
+import { pgDatastoreFactory } from "./datastore/pg";
 import { analyticAugmentation } from "./analytic-augmentations/question-and-answer";
 import { wikipediaQueryEngine } from "./query-engines/wikipedia";
 import { wolframAlphaQueryEngineFactory } from "./query-engines/wolfram-alpha";
@@ -35,11 +34,9 @@ const database = new Pool({
   port: 5432,
 });
 
-const insertSolution = insertSolutionFactory(database);
-
 const llm = openAiLLMFactory({ apiKey: process.env.OPENAI_API_KEY || "" });
 
-const archiverFactory = archiveFactoryDatabase(database);
+const datastore = pgDatastoreFactory(database);
 
 const queryEngines = [
   wolframAlphaQueryEngineFactory({
@@ -67,8 +64,8 @@ solve({
   dispatch,
   llm,
   analyticAugmentation,
-  insertSolution,
-  archiverFactory,
+  order: 3,
+  datastore,
   queryEngines,
 }).then((result) => {
   return console.log(result);
