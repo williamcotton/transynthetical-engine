@@ -24,9 +24,10 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
           solution_uuid,
           verified,
           description,
-          description_embedding
+          description_embedding,
+          demonstration
         ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7
+          $1, $2, $3, $4, $5, $6, $7, $8
         )
       `;
 
@@ -38,6 +39,7 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
           false,
           archive.description,
           archive.descriptionEmbedding,
+          archive.demonstration,
         ];
 
         await database.query(query, values);

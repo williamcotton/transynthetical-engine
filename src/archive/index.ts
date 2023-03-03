@@ -16,6 +16,7 @@ export type Archive = {
   solutionUuid?: string;
   description?: string;
   descriptionEmbedding?: string;
+  demonstration?: string;
 };
 
 export type Archiver = {
@@ -28,7 +29,8 @@ export type ArchiverAdd = (
   name: string,
   func: (...args: any[]) => any | string,
   argTypes: ArgTypes,
-  description: string
+  description: string,
+  demonstration?: string
 ) => Promise<Archive>;
 
 export type ArchiverGet = (name: string) => Promise<(...args: any[]) => any>;
@@ -53,19 +55,20 @@ export const archiverFactory = ({
   llm,
 }: ArchiverFactoryParams): Archiver => {
   return {
-    add: async (name, func, argTypes, description) => {
+    add: async (name, func, argTypes, description, demonstration) => {
       const stringFunc = typeof func === "string" ? func : func.toString();
 
       const embedding = await llm.requestEmbedding(description);
       const descriptionEmbedding = `[${embedding.toString()}]`;
 
-      const archive = {
+      const archive: Archive = {
         name,
         stringFunc,
         argTypes,
         solutionUuid,
         description,
         descriptionEmbedding,
+        demonstration,
       };
 
       await datastore.archives.add(archive);
