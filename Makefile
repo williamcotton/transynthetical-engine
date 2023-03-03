@@ -1,6 +1,6 @@
 export PATH := node_modules/.bin:$(PATH)
 
-all: .env
+all: .env build-analytic-augmentations
 		ts-node src/index.ts
 
 .env:

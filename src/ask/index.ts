@@ -96,10 +96,17 @@ export async function ask({
 
   const archivedFunctions = await archiver.findNearest(embedding);
 
+  const builtPrompt = analyticAugmentation.buildPrompt({
+    context,
+    prompt,
+    archivedFunctions,
+  });
+
+  dispatch({ type: "ask_built_prompt", builtPrompt });
+
   // Augment the prompt with the analytic augmentation and the context.
   const augmentedPrompt = analyticAugmentationOrder
-    ? analyticAugmentationOrder +
-      analyticAugmentation.buildPrompt({ context, prompt, archivedFunctions })
+    ? analyticAugmentationOrder + builtPrompt
     : prompt;
 
   dispatch({

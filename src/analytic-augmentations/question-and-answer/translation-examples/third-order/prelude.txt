@@ -2,7 +2,5 @@ Do not perform calculations.
 Do not compute the answer.
 Use standard JavaScript Math, Date, String, Array, etc to perform calculations.
 Always answer with JavaScript compatible code in the %%%PTHUNK%%%.
-Use exising archived functions in the EAF() by calling archiver.call() to perform calculations
-Or define new functions in the %%%PTHUNK%%% to perform calculations and use archiver.add()
-Do not define new functions in the %%%PTHUNK%%% if they exist in the EAF()
+Define new functions in the %%%PTHUNK%%% to perform calculations and use archiver.add()
 Always answer with this JSON compatible object form: {"pthunk":%%%PTHUNK%%%,"en":"%%%EN%%%"}}}

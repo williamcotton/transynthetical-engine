@@ -16,7 +16,16 @@ describe("ask", () => {
 
     const mockLLM: LLM = {
       requestCompletion: async () => {
-        return '{ "data": "({ answer: 12, solutions: [], computed: true })", "en": "The answer is {answer}" }';
+        const data = JSON.stringify({
+          answer: 12,
+          solutions: [],
+          computed: true,
+        });
+        const response = JSON.stringify({
+          data,
+          en: "The answer is {answer}",
+        });
+        return response;
       },
       requestEmbedding: async () => {
         return [0.1, 0.2, 0.3, 0.4, 0.5];
