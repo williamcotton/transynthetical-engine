@@ -9,8 +9,6 @@ export const en = `The standard deviation of [1, 2, 3, 4, 5] is {answer}.`;
 
 export const context = ``;
 
-export const archivedFunctions = `[{ "name": "compute_fibonacci", "arg_types": [{ "num": "number" }] }]`;
-
 // %EXEMPLAR_START%
 async function solution(
   query: any,
