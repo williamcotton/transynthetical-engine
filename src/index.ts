@@ -57,7 +57,7 @@ const queryEngines = [
 // addition[5]
 // "The hobby store normally sells 10,576 trading cards per month. In June, the hobby store sold 15,498 more trading cards than normal. In total, how many trading cards did the hobby store sell in June?";
 
-const problem = openEnded[3];
+const problem = fibonacci[2];
 
 solve({
   problem,

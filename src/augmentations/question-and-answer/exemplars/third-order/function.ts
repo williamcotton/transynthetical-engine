@@ -9,7 +9,7 @@ export const en = `The rot13 of 'Hello World' in pig latin is {answer}.`;
 
 export const context = ``;
 
-export const archivedFunctions = `[{ "name": "compute_fibonacci", "arg_types": [{ "num": "number" }] }]`;
+export const archivedFunctions = `[{ "name": "compute_some_function", "arg_types": [{ "num": "number" }] }]`;
 
 // %EXEMPLAR_START%
 async function solution(

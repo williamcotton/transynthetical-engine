@@ -59,14 +59,22 @@ function parseCompletion(
   return solution;
 }
 
-async function evaluator(solution: Solution, query: Query, archiver: Archiver) {
+async function evaluator(
+  dispatch: Dispatch,
+  solution: Solution,
+  query: Query,
+  archiver: Archiver
+) {
   let evaluated: { [key: string]: any } = { answer: undefined, en: "" }; // zeroth-order
   try {
     if (solution.data) {
+      dispatch({ type: "evaluator_data", data: solution.data });
       evaluated = JSON.parse(solution.data); // first-order
     } else if (solution.thunk) {
+      dispatch({ type: "evaluator_thunk", thunk: solution.thunk });
       evaluated = await eval(solution.thunk)(); // second-order
     } else if (solution.pthunk) {
+      dispatch({ type: "evaluator_pthunk", pthunk: solution.pthunk });
       evaluated = await eval(solution.pthunk)(query, archiver); // third-order
     }
   } catch (e) {

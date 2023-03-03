@@ -127,7 +127,12 @@ export async function ask({
   // Evaluate the solution.
   let evaluated: { [key: string]: any } = {};
   if (evaluate) {
-    evaluated = await augmentation.evaluator(solution, query, archiver);
+    evaluated = await augmentation.evaluator(
+      dispatch,
+      solution,
+      query,
+      archiver
+    );
   }
 
   const completeSolution = {

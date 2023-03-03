@@ -69,12 +69,13 @@ export const archiverFactory = ({
       };
 
       await datastore.archives.add(archive);
-      dispatch({ type: "add", archive });
+      dispatch({ type: "archiver_add", archive });
 
       return archive;
     },
     get: async (name) => {
       const stringFunc = await datastore.archives.get(name);
+      dispatch({ type: "archiver_get", name, stringFunc });
 
       let func: (...args: any[]) => any;
       try {

@@ -22,6 +22,7 @@ export type Augmentation = {
   orders: string[];
   buildPrompt: (params: BuildPromptParams) => string;
   evaluator: (
+    dispatch: Dispatch,
     solution: Solution,
     query: Query,
     archiver: Archiver
