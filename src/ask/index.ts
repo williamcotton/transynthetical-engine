@@ -4,10 +4,7 @@ import { Dispatch } from "../dispatch";
 import { archiverFactory, ArchiverFactory } from "../archive";
 import { QueryEngine, queryFactory } from "../query";
 import { LLM } from "../large-language-models";
-import {
-  AnalyticAugmentation,
-  TranslationTarget,
-} from "../analytic-augmentations";
+import { Augmentation, TranslationTarget } from "../augmentations";
 import { Datastore } from "../datastore";
 
 type SolutionTranslationTarget = {
@@ -30,7 +27,7 @@ export type Solution = SolutionTranslationTarget & {
   raw?: any;
   completion?: string;
   uuid: string;
-  analyticAugmentation?: AnalyticAugmentation;
+  augmentation?: Augmentation;
   context?: string;
   parentSolutionUuid?: string;
   promptEmbedding?: string;
@@ -43,7 +40,7 @@ export type AskParams = {
   prompt: string;
   dispatch: Dispatch;
   order?: number;
-  analyticAugmentation: AnalyticAugmentation;
+  augmentation: Augmentation;
   context?: string;
   llm: LLM;
   evaluate?: boolean;
@@ -58,7 +55,7 @@ export async function ask({
   prompt,
   dispatch,
   context = "",
-  analyticAugmentation, // third-order
+  augmentation, // third-order
   order = 3,
   llm,
   evaluate = true,
@@ -78,16 +75,16 @@ export async function ask({
     queryEngines,
     dispatch,
     llm,
-    analyticAugmentation,
+    augmentation,
     evaluate,
     uuid,
     datastore,
     ask,
   });
 
-  const analyticAugmentationOrder = analyticAugmentation.orders[order];
+  const augmentationOrder = augmentation.orders[order];
 
-  dispatch({ type: "ask", prompt, context, analyticAugmentationOrder, uuid });
+  dispatch({ type: "ask", prompt, context, augmentationOrder, uuid });
 
   // Request an embedding from the large language model.
   const embedding = await llm.requestEmbedding(prompt);
@@ -96,7 +93,7 @@ export async function ask({
 
   const archivedFunctions = await archiver.findNearest(embedding);
 
-  const builtPrompt = analyticAugmentation.buildPrompt({
+  const builtPrompt = augmentation.buildPrompt({
     context,
     prompt,
     archivedFunctions,
@@ -104,9 +101,9 @@ export async function ask({
 
   dispatch({ type: "ask_built_prompt", builtPrompt });
 
-  // Augment the prompt with the analytic augmentation and the context.
-  const augmentedPrompt = analyticAugmentationOrder
-    ? analyticAugmentationOrder + builtPrompt
+  // Augment the prompt with the augmentation and the context.
+  const augmentedPrompt = augmentationOrder
+    ? augmentationOrder + builtPrompt
     : prompt;
 
   dispatch({
@@ -119,7 +116,7 @@ export async function ask({
   dispatch({ type: "ask_completion", completion });
 
   // Parse the completion text.
-  const solution = analyticAugmentation.parseCompletion(
+  const solution = augmentation.parseCompletion(
     completion,
     dispatch,
     uuid,
@@ -130,7 +127,7 @@ export async function ask({
   // Evaluate the solution.
   let evaluated: { [key: string]: any } = {};
   if (evaluate) {
-    evaluated = await analyticAugmentation.evaluator(solution, query, archiver);
+    evaluated = await augmentation.evaluator(solution, query, archiver);
   }
 
   const completeSolution = {
@@ -138,7 +135,7 @@ export async function ask({
     ...evaluated,
     originalPrompt: prompt,
     augmentedPrompt,
-    analyticAugmentation,
+    augmentation,
     completion,
     context,
   };

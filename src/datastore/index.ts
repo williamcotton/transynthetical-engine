@@ -1,4 +1,4 @@
-import { ArchivedFunction } from "../analytic-augmentations";
+import { ArchivedFunction } from "../augmentations";
 import { Archive } from "../archive";
 import { Solution } from "../ask";
 

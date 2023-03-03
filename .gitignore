@@ -112,5 +112,5 @@ dist
 # large datasets
 datasets/
 
-# analytic augmentation builds
-src/analytic-augmentations/question-and-answer/build/ 
+# augmentation builds
+src/augmentations/question-and-answer/build/ 

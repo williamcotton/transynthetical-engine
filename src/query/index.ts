@@ -1,4 +1,4 @@
-import { AnalyticAugmentation } from "../analytic-augmentations";
+import { Augmentation } from "../augmentations";
 import { ArchiverFactory } from "../archive";
 import { AskParams, Solution } from "../ask";
 import { Datastore } from "../datastore";
@@ -38,7 +38,7 @@ export function queryFactory({
   queryEngines,
   dispatch,
   llm,
-  analyticAugmentation,
+  augmentation,
   evaluate,
   uuid,
   datastore,
@@ -47,7 +47,7 @@ export function queryFactory({
   queryEngines: QueryEngine[];
   dispatch: Dispatch;
   llm: LLM;
-  analyticAugmentation: AnalyticAugmentation;
+  augmentation: Augmentation;
   evaluate: boolean;
   uuid: string;
   datastore: Datastore;
@@ -83,7 +83,7 @@ export function queryFactory({
       prompt,
       dispatch,
       order: 1,
-      analyticAugmentation,
+      augmentation,
       context: queryContext,
       llm,
       evaluate,

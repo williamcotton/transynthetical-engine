@@ -1,4 +1,4 @@
-import { ArchivedFunction } from "../analytic-augmentations";
+import { ArchivedFunction } from "../augmentations";
 import { Dispatch } from "../dispatch";
 import { LLM } from "../large-language-models";
 import { Datastore } from "../datastore";

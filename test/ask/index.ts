@@ -5,7 +5,7 @@ import { LLM } from "../../src/large-language-models";
 
 import { ask } from "../../src/ask";
 
-import { analyticAugmentation } from "../../src/analytic-augmentations/question-and-answer";
+import { augmentation } from "../../src/augmentations/question-and-answer";
 import { mockDatastore } from "../../src/datastore";
 
 function dispatch() {}
@@ -36,7 +36,7 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
-      analyticAugmentation,
+      augmentation,
       datastore: mockDatastore,
       queryEngines: [],
     });
@@ -61,7 +61,7 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
-      analyticAugmentation,
+      augmentation,
       datastore: mockDatastore,
       queryEngines: [],
     });
@@ -86,7 +86,7 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
-      analyticAugmentation,
+      augmentation,
       datastore: mockDatastore,
       queryEngines: [],
     });
@@ -111,7 +111,7 @@ describe("ask", () => {
       prompt,
       dispatch,
       llm: mockLLM,
-      analyticAugmentation,
+      augmentation,
       datastore: mockDatastore,
       queryEngines: [],
     });

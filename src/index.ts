@@ -7,7 +7,7 @@ import { dispatch } from "./dispatch";
 import { solve } from "./solve";
 import { openAiLLMFactory } from "./large-language-models/openai";
 import { pgDatastoreFactory } from "./datastore/pg";
-import { analyticAugmentation } from "./analytic-augmentations/question-and-answer";
+import { augmentation } from "./augmentations/question-and-answer";
 import { wikipediaQueryEngine } from "./query-engines/wikipedia";
 import { wolframAlphaQueryEngineFactory } from "./query-engines/wolfram-alpha";
 
@@ -63,7 +63,7 @@ solve({
   problem,
   dispatch,
   llm,
-  analyticAugmentation,
+  augmentation,
   order: 3,
   datastore,
   queryEngines,

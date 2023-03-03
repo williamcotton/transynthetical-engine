@@ -1,4 +1,4 @@
-import { AnalyticAugmentation } from "../analytic-augmentations";
+import { Augmentation } from "../augmentations";
 import { ask } from "../ask";
 import { Datastore } from "../datastore";
 import { Dispatch } from "../dispatch";
@@ -19,7 +19,7 @@ export async function solve({
   problem,
   dispatch,
   llm,
-  analyticAugmentation,
+  augmentation,
   order = 3,
   datastore,
   queryEngines,
@@ -27,7 +27,7 @@ export async function solve({
   problem: Problem;
   dispatch: Dispatch;
   llm: LLM;
-  analyticAugmentation: AnalyticAugmentation;
+  augmentation: Augmentation;
   order?: number;
   datastore: Datastore;
   queryEngines: QueryEngine[];
@@ -36,7 +36,7 @@ export async function solve({
     prompt: problem.question,
     dispatch,
     llm,
-    analyticAugmentation,
+    augmentation,
     order,
     datastore,
     queryEngines,
