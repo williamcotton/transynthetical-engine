@@ -75,7 +75,7 @@ describe("ask", () => {
 
     const mockLLM: LLM = {
       requestCompletion: async () => {
-        return '{ "pthunk": "(function (query, dispatch, archive) { const answer = 5 + 7; return { answer, solutions: [], computed: true }; })", "en": "The answer is {answer}" }';
+        return '{ "pthunk": "(function (query, archiver) { const answer = 5 + 7; return { answer, solutions: [], computed: true }; })", "en": "The answer is {answer}" }';
       },
       requestEmbedding: async () => {
         return [0.1, 0.2, 0.3, 0.4, 0.5];

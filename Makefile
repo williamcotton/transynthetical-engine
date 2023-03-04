@@ -8,6 +8,8 @@ all: .env build-augmentations
 
 build-augmentations: clean-augmentations
 		ts-node src/augmentations/build.ts question-and-answer
+		ts-node src/augmentations/build.ts browser-builder
 
 clean-augmentations:
 		rm -rf src/augmentations/question-and-answer/build
+		rm -rf src/augmentations/browser-builder/build

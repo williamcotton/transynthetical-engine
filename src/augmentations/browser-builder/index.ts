@@ -78,7 +78,7 @@ async function evaluator(
 }
 
 export const augmentation: Augmentation = {
-  name: "question-and-answer",
+  name: "browser-builder",
   type: "analytic",
   orders: ["", firstOrder, secondOrder, thirdOrder],
   buildPrompt,

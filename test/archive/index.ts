@@ -28,8 +28,10 @@ describe("archiver", async () => {
       "test",
       t,
       [{ s: "string" }],
+      "test",
       "test"
     );
+    console.log(addedResponse);
     expect(addedResponse).deep.equal({
       name: "test",
       stringFunc: "function t(s) {\n    return s;\n}",
@@ -37,6 +39,7 @@ describe("archiver", async () => {
       solutionUuid: "uuid",
       description: "test",
       descriptionEmbedding: "[0.1,0.2,0.3,0.4,0.5]",
+      demonstration: "test",
     });
   });
 });
