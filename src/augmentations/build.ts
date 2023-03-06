@@ -35,9 +35,10 @@ type CompiledExemplars = {
 const compiledExemplars: CompiledExemplars = {};
 
 orders.forEach((order) => {
-  const orderPath = path.join(__dirname, ".", type, "exemplars", order);
+  const orderPath = path.join(__dirname, ".", type, order);
+  const exemplarsPath = path.join(orderPath, "exemplars");
   const files = fs
-    .readdirSync(orderPath)
+    .readdirSync(exemplarsPath)
     .filter((file) => file.endsWith(".ts"));
 
   const preamblePath = path.join(orderPath, preambleFilename);
@@ -48,7 +49,7 @@ orders.forEach((order) => {
   const exemplars: Exemplar[] = [];
 
   files.forEach((file) => {
-    const filePath = path.join(orderPath, file);
+    const filePath = path.join(exemplarsPath, file);
     const fileContents = fs.readFileSync(filePath, "utf8");
     const match = fileContents.match(pattern);
     const extractedTarget = match ? match[1].trim() : "";

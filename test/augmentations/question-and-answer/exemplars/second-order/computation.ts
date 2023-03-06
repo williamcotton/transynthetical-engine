@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import { expect } from "chai";
 
-import solution from "../../../../../src/augmentations/question-and-answer/exemplars/second-order/computation";
+import solution from "../../../../../src/augmentations/question-and-answer/second-order/exemplars/computation";
 
 describe("Second-order translation example: computation", () => {
   it("should return the expected solution", async () => {

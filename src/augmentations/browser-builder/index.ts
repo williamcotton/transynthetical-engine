@@ -64,8 +64,35 @@ async function evaluator(
         "archiver",
         "document",
         "Math",
+        "Number",
+        "Date",
+        "RegExp",
+        "String",
+        "Array",
+        "Object",
+        "Map",
+        "Set",
+        "JSON",
+        "Promise",
+        "Intl",
         `return ${solution.pthunk}(query, archiver, document)`
-      )(query, archiver, document, Math);
+      )(
+        query,
+        archiver,
+        document,
+        Math,
+        Number,
+        Date,
+        RegExp,
+        String,
+        Array,
+        Object,
+        Map,
+        Set,
+        JSON,
+        Promise,
+        Intl
+      );
     }
   } catch (e) {
     evaluated.error = e;

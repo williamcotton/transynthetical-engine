@@ -5,7 +5,7 @@ export const targetType = `pthunk`;
 
 export const prompt = `draw a small blue circle and a medium sized green circle on a canvas`;
 
-export const context = `<div id="context"><canvas id="canvas" width=512 height=320></canvas></div>`;
+export const context = `<div id="workspace"><canvas id="canvas" width=512 height=320></canvas></div>`;
 
 export const archivedFunctions = `[{ "name": "drawCircle", "arg_types": [{ "canvas": "HTMLCanvasElement" }, { "x": "number" }, { "y": "number" }, { "r": "number" }, { "color": "string" }] }]`;
 

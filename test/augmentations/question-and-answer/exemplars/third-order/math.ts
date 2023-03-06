@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import { expect } from "chai";
 
-import solution from "../../../../../src/augmentations/question-and-answer/exemplars/third-order/math";
+import solution from "../../../../../src/augmentations/question-and-answer/third-order/exemplars/math";
 
 import { archiverFactory } from "../../../../../src/archive";
 import { mockDatastore } from "../../../../../src/datastore";
