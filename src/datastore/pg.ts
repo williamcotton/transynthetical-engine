@@ -13,6 +13,10 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
           [name]
         );
 
+        if (archive.rows.length === 0) {
+          return "() => {}";
+        }
+
         return archive.rows[0].string_func;
       },
       add: async (archive: Archive) => {

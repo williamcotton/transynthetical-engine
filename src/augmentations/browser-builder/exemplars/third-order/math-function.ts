@@ -8,7 +8,8 @@ export const prompt = `write a function that computes standard deviation`;
 // %EXEMPLAR_START%
 async function solution(
   query: any,
-  archiver: Archiver
+  archiver: Archiver,
+  document: Document
 ): Promise<ThunkSolution> {
   function standardDeviation(numbers: number[]) {
     const mean = numbers.reduce((acc, curr) => acc + curr, 0) / numbers.length;

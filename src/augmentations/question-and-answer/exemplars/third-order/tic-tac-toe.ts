@@ -8,7 +8,8 @@ export const prompt = `Write a function that predicts the best move in a game of
 // %EXEMPLAR_START%
 async function solution(
   query: any,
-  archiver: Archiver
+  archiver: Archiver,
+  document: Document
 ): Promise<ThunkSolution> {
   type Player = "X" | "O" | "_";
   type Board = Player[][];

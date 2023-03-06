@@ -8,7 +8,8 @@ export const prompt = `write rot13 and pig latin functions`;
 // %EXEMPLAR_START%
 async function solution(
   query: any,
-  archiver: Archiver
+  archiver: Archiver,
+  document: Document
 ): Promise<ThunkSolution> {
   const sentence = "Hello World";
   function rot13(str: string) {

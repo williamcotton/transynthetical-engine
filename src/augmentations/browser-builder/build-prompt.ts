@@ -17,5 +17,5 @@ export function buildPrompt({
       return `${archivedFunction.name}(${typesString})`;
     })
     .join(" ");
-  return ` Write and Archive: ${prompt}`;
+  return ` Write, Archive and Build: DOM(${context}) EAF(${archivedFunctionsString}) ${prompt} - `;
 }

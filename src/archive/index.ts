@@ -3,7 +3,13 @@ import { Dispatch } from "../dispatch";
 import { LLM } from "../large-language-models";
 import { Datastore } from "../datastore";
 
-export type ArgType = "string" | "number" | "boolean" | "object" | "array";
+export type ArgType =
+  | "string"
+  | "number"
+  | "boolean"
+  | "object"
+  | "array"
+  | "HTMLCanvasElement";
 
 export type ArgTypes = {
   [key: string]: ArgType;

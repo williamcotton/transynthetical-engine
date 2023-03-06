@@ -62,8 +62,10 @@ async function evaluator(
       evaluated = await Function(
         "query",
         "archiver",
-        `return ${solution.pthunk}(query, archiver)`
-      )(query, archiver);
+        "document",
+        "Math",
+        `return ${solution.pthunk}(query, archiver, document)`
+      )(query, archiver, document, Math);
     }
   } catch (e) {
     evaluated.error = e;
