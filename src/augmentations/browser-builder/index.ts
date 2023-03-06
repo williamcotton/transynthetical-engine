@@ -58,6 +58,8 @@ async function evaluator(
       evaluated = await Function(`return ${solution.thunk}()`)();
     } else if (solution.pthunk) {
       // third-order
+      const iframe = document.getElementById("context") as HTMLIFrameElement;
+      const iframeDoc = iframe?.contentDocument;
       dispatch({ type: "evaluator_pthunk", pthunk: solution.pthunk });
       evaluated = await Function(
         "query",
@@ -79,7 +81,7 @@ async function evaluator(
       )(
         query,
         archiver,
-        document,
+        iframeDoc ?? document,
         Math,
         Number,
         Date,
