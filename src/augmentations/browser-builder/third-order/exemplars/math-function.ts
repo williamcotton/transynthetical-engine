@@ -23,7 +23,7 @@ async function solution(
     "standardDeviation",
     standardDeviation,
     [{ number: "array" }],
-    `The function standardDeviation takes an array of numbers as an input and computes the standard deviation of those numbers. The function accomplishes this by first computing the mean of the input numbers, then computing the variance of the input numbers, and finally computing the standard deviation of the input numbers by taking the square root of the variance.`,
+    `The function standardDeviation takes an array of numbers as an input and computes the standard deviation of those numbers.`,
     `// Example array of numbers
 const numbers = [1, 2, 3, 4, 5];
 
