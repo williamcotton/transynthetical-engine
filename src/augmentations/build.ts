@@ -50,14 +50,19 @@ orders.forEach((order) => {
       extractedArchivedFunctions,
     } = compile(extractedTarget, order, fileContents);
 
-    const completion = JSON.stringify(
-      {
-        [extractedTargetType]: preparedTarget,
-        en: extractedEn,
-      },
-      null,
-      2
-    );
+    const completionObject = {
+      [extractedTargetType]: preparedTarget,
+    };
+
+    if (
+      extractedEn &&
+      typeof extractedEn === "string" &&
+      extractedEn.length > 0
+    ) {
+      completionObject["en"] = extractedEn;
+    }
+
+    const completion = JSON.stringify(completionObject, null, 2);
 
     exemplars.push({
       augmentedPrompt: buildPrompt({

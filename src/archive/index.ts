@@ -9,6 +9,7 @@ export type ArgType =
   | "boolean"
   | "object"
   | "array"
+  | "Document"
   | "HTMLCanvasElement";
 
 export type ArgTypes = {

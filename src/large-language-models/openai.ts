@@ -37,8 +37,8 @@ export const openAiLLMFactory = ({ apiKey }: { apiKey: string }): LLM => {
           messages,
         });
         return response.data.choices[0].message?.content || "";
-      } catch (e) {
-        console.error(e);
+      } catch (e: unknown) {
+        console.error((e as unknown as any).toString());
         return "";
       }
     },
@@ -50,9 +50,10 @@ export const openAiLLMFactory = ({ apiKey }: { apiKey: string }): LLM => {
         });
         const [{ embedding }] = response.data.data;
         return embedding;
-      } catch (e) {
-        console.error(e);
-        return [];
+      } catch (e: unknown) {
+        console.error((e as unknown as any).toString());
+        const array = Array.from({ length: 1536 }, () => Math.random() * 2 - 1);
+        return array;
       }
     },
   };

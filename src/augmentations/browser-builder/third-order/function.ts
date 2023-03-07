@@ -1,5 +1,5 @@
-import { Archiver } from "../../../../archive";
-import { ThunkSolution } from "../../../../ask";
+import { Archiver } from "../../../archive";
+import { ThunkSolution } from "../../../ask";
 
 export const targetType = `pthunk`;
 
@@ -11,7 +11,8 @@ async function solution(
   archiver: Archiver,
   document: Document
 ): Promise<ThunkSolution> {
-  const sentence = "Hello World";
+  const contextElement = document.getElementById("context");
+  contextElement.innerHTML = "";
   function rot13(str: string) {
     return str
       .split("")
