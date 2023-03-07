@@ -17,5 +17,5 @@ export function buildPrompt({
       return `${archivedFunction.name}(${typesString})`;
     })
     .join(" ");
-  return ` Q: C(${context}) EAF(${archivedFunctionsString}) ${prompt}`;
+  return `Question: Context(${context}) ExistingArchivedFunctions(${archivedFunctionsString}) ${prompt}`;
 }

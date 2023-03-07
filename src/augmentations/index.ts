@@ -1,6 +1,7 @@
 import { Archiver } from "../archive";
 import { Solution } from "../ask";
 import { Dispatch } from "../dispatch";
+import { Prompt } from "../large-language-models";
 import { Query } from "../query";
 
 export type ArchivedFunction = {
@@ -19,7 +20,7 @@ export type BuildPromptParams = {
 export type Augmentation = {
   name: string;
   type: string;
-  orders: string[];
+  orders: Prompt[];
   buildPrompt: (params: BuildPromptParams) => string;
   evaluator: (
     dispatch: Dispatch,
@@ -33,4 +34,10 @@ export type Augmentation = {
     uuid: string,
     parentSolutionUuid?: string
   ) => Solution;
+};
+
+export const zerothOrder: Prompt = {
+  exemplars: [],
+  preamble: "",
+  augmentedPrompt: "",
 };

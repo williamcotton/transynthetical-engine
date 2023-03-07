@@ -82,9 +82,9 @@ export async function ask({
     ask,
   });
 
-  const augmentationOrder = augmentation.orders[order];
+  const augmentationOrderPrompt = augmentation.orders[order];
 
-  dispatch({ type: "ask", prompt, context, augmentationOrder, uuid });
+  dispatch({ type: "ask", prompt, context, augmentationOrderPrompt, uuid });
 
   // Request an embedding from the large language model.
   const embedding = await llm.requestEmbedding(prompt);
@@ -102,9 +102,9 @@ export async function ask({
   dispatch({ type: "ask_built_prompt", builtPrompt });
 
   // Augment the prompt with the augmentation and the context.
-  const augmentedPrompt = augmentationOrder
-    ? augmentationOrder + builtPrompt
-    : prompt;
+  const augmentedPrompt = augmentationOrderPrompt ? builtPrompt : prompt;
+
+  augmentationOrderPrompt.augmentedPrompt = augmentedPrompt;
 
   dispatch({
     type: "ask_augmented_prompt",
@@ -112,7 +112,7 @@ export async function ask({
   });
 
   // Request a completion from the large language model.
-  const completion = await llm.requestCompletion(augmentedPrompt);
+  const completion = await llm.requestCompletion(augmentationOrderPrompt);
   dispatch({ type: "ask_completion", completion });
 
   // Parse the completion text.

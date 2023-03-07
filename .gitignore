@@ -111,6 +111,3 @@ dist
 
 # large datasets
 datasets/
-
-# augmentation builds
-src/augmentations/question-and-answer/build/ 

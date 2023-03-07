@@ -1,4 +1,4 @@
-import { Augmentation } from "..";
+import { Augmentation, zerothOrder } from "..";
 import { Archiver } from "../../archive";
 import { Solution } from "../../ask";
 import { Dispatch } from "../../dispatch";
@@ -80,7 +80,7 @@ async function evaluator(
 export const augmentation: Augmentation = {
   name: "question-and-answer",
   type: "analytic",
-  orders: ["", firstOrder, secondOrder, thirdOrder],
+  orders: [zerothOrder, firstOrder, secondOrder, thirdOrder],
   buildPrompt,
   evaluator,
   parseCompletion,

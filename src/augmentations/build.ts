@@ -1,6 +1,7 @@
 import { ArchivedFunction, TranslationTarget } from ".";
 import fs from "fs";
 import path from "path";
+import { Exemplar, Prompt } from "../large-language-models";
 
 // get args from command line
 const args = process.argv.slice(2);
@@ -14,25 +15,11 @@ const pattern = /\/\/ %EXEMPLAR_START%([\s\S]*)\/\/ %EXEMPLAR_END%/;
 
 const preambleFilename = "preamble.txt";
 
-type Exemplar = {
-  target: string;
-  en: string;
-  prompt: string;
-  context: string;
-  targetType: TranslationTarget;
-  archivedFunctions: ArchivedFunction[];
+type CompiledPrompts = {
+  [order: string]: Prompt;
 };
 
-type ExemplarsAndPrelude = {
-  exemplars: Exemplar[];
-  preamble: string;
-};
-
-type CompiledExemplars = {
-  [order: string]: ExemplarsAndPrelude;
-};
-
-const compiledExemplars: CompiledExemplars = {};
+const compiledExemplars: CompiledPrompts = {};
 
 orders.forEach((order) => {
   const orderPath = path.join(__dirname, ".", type, order);
@@ -63,46 +50,34 @@ orders.forEach((order) => {
       extractedArchivedFunctions,
     } = compile(extractedTarget, order, fileContents);
 
+    const completion = JSON.stringify(
+      {
+        [extractedTargetType]: preparedTarget,
+        en: extractedEn,
+      },
+      null,
+      2
+    );
+
     exemplars.push({
-      prompt: extractedPrompt,
-      context: extractedContext,
-      target: preparedTarget,
-      en: extractedEn,
-      targetType: extractedTargetType as TranslationTarget,
-      archivedFunctions: extractedArchivedFunctions as ArchivedFunction[],
+      augmentedPrompt: buildPrompt({
+        context: extractedContext,
+        prompt: extractedPrompt,
+        archivedFunctions: extractedArchivedFunctions,
+      }),
+      completion,
     });
   });
   compiledExemplars[order] = {
     exemplars,
     preamble,
+    augmentedPrompt: "",
   };
 });
 
 const firstOrder = compiledExemplars["first-order"];
 const secondOrder = compiledExemplars["second-order"];
 const thirdOrder = compiledExemplars["third-order"];
-
-function exemplarToAnalyticAugmentation(exemplar: Exemplar): string {
-  const jsonTarget = {
-    [exemplar.targetType]: exemplar.target,
-    en: exemplar.en,
-  };
-  const jsonTargetString = JSON.stringify(jsonTarget);
-  return buildPrompt(exemplar) + jsonTargetString;
-}
-
-function exemplarsToAnalyticAugmentations({
-  exemplars,
-  preamble,
-}: ExemplarsAndPrelude): string {
-  return `${preamble} ${exemplars
-    .map((exemplar) => exemplarToAnalyticAugmentation(exemplar))
-    .join("")}`;
-}
-
-const firstOrderString = exemplarsToAnalyticAugmentations(firstOrder);
-const secondOrderString = exemplarsToAnalyticAugmentations(secondOrder);
-const thirdOrderString = exemplarsToAnalyticAugmentations(thirdOrder);
 
 const buildPath = path.join(__dirname, ".", type, "build");
 
@@ -111,13 +86,13 @@ fs.mkdirSync(buildPath, { recursive: true });
 // write as json
 fs.writeFileSync(
   path.join(buildPath, "first-order.json"),
-  JSON.stringify(firstOrderString)
+  JSON.stringify(firstOrder, null, 2)
 );
 fs.writeFileSync(
   path.join(buildPath, "second-order.json"),
-  JSON.stringify(secondOrderString)
+  JSON.stringify(secondOrder, null, 2)
 );
 fs.writeFileSync(
   path.join(buildPath, "third-order.json"),
-  JSON.stringify(thirdOrderString)
+  JSON.stringify(thirdOrder, null, 2)
 );
