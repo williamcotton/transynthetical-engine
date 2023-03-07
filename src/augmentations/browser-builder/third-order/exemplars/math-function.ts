@@ -23,15 +23,7 @@ async function solution(
     "standardDeviation",
     standardDeviation,
     [{ number: "array" }],
-    `The function standardDeviation takes an array of numbers as an input and computes the standard deviation of those numbers.`,
-    `// Example array of numbers
-const numbers = [1, 2, 3, 4, 5];
-
-// Calculate the standard deviation of the numbers
-const sd = standardDeviation(numbers);
-
-// Output the standard deviation
-console.log(sd);`
+    `The function standardDeviation takes an array of numbers as an input and computes the standard deviation of those numbers.`
   );
   return {
     answer: ["standardDeviation"],

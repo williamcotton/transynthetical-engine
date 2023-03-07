@@ -41,14 +41,7 @@ async function solution(
       { r: "number" },
       { color: "string" },
     ],
-    `The function drawCircleOnCanvas takes a canvas, an x coordinate, a y coordinate, a radius, and a color as input and draws a circle of the specified color at the specified coordinates with the specified radius on the canvas.`,
-    `// Example usage:
-const canvas = document.createElement("canvas");
-const transparentLimeGreenColor = "rgba(155, 255, 20, 0.1)";
-drawCircleOnCanvas(canvas, 100, 100, 10, transparentLimeGreenColor);
-
-// Output:
-// A red circle drawn on the canvas`
+    `The function drawCircleOnCanvas takes a canvas, an x coordinate, a y coordinate, a radius, and a color as input and draws a circle of the specified color at the specified coordinates with the specified radius on the canvas.`
   );
   const redColor = "rgba(255, 0, 0, 1)";
   const x = 100;
