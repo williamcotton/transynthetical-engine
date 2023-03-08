@@ -9,7 +9,7 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
     archives: {
       get: async (name: string) => {
         const archive = await database.query(
-          `SELECT * FROM archives WHERE name = $1`,
+          `SELECT * FROM archives WHERE verified = true AND name = $1`,
           [name]
         );
 
