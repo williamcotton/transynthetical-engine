@@ -10,6 +10,8 @@ export type ArgType =
   | "object"
   | "array"
   | "Document"
+  | "Archiver"
+  | "any"
   | "HTMLCanvasElement";
 
 export type ArgTypes = {
