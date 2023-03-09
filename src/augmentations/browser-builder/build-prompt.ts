@@ -11,8 +11,8 @@ export function buildPrompt({
 }): string {
   const archivedFunctionsString = archivedFunctions
     .map((archivedFunction) => {
-      const typesString = archivedFunction.arg_types.map((t) =>
-        Object.values(t)
+      const typesString = archivedFunction.arg_types.map(
+        (t) => Object.values(t) + ":" + Object.keys(t)
       );
       return `${archivedFunction.name}(${typesString})`;
     })

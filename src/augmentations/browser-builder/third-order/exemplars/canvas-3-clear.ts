@@ -3,9 +3,9 @@ import { ThunkSolution } from "../../../../ask";
 
 export const targetType = `pthunk`;
 
-export const prompt = `run the draw blue and green circles application.`;
+export const prompt = `run the draw blue and green circles app`;
 
-export const context = `<div><style></style><div id='context'><canvas id="canvas" width=512 height=320></canvas></div><script></script></div>`;
+export const context = `<div><style></style><div id='context'></div><script></script></div>`;
 
 export const archivedFunctions = `[{ "name": "drawCircleOnCanvas", "arg_types": [{ "canvas": "HTMLCanvasElement" }, { "x": "number" }, { "y": "number" }, { "radius": "number" }, { "color": "string" }] }, { "name": "DrawBlueAndGreenCirclesOnCanvasWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }] }]`;
 
@@ -15,9 +15,6 @@ async function solution(
   archiver: Archiver,
   document: Document
 ): Promise<ThunkSolution> {
-  const contextElement = document.getElementById("context");
-  contextElement.innerHTML = "";
-
   const DrawBlueAndGreenCirclesOnCanvasWebApplication = await archiver.get(
     "DrawBlueAndGreenCirclesOnCanvasWebApplication"
   );
@@ -29,7 +26,7 @@ async function solution(
   );
 
   return {
-    answer: ["reset"],
+    answer: ["DrawBlueAndGreenCirclesOnCanvasWebApplication"],
     solutions: [],
     computed: true,
     query: false,

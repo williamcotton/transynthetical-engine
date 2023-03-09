@@ -60,6 +60,7 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
           return {
             name: archive.name,
             arg_types: JSON.parse(archive.arg_types),
+            description: archive.description,
           };
         });
       },

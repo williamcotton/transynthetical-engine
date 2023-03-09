@@ -6,7 +6,7 @@ export const targetType = `pthunk`;
 export const prompt = `we're making a draw blue and green cricles on a canvas web application. make a 512x320 canvas element. draw a small blue circle and a medium sized green circle on a canvas.`;
 
 // this initial state should have a global state {} and a reset button that resets the global state to {}
-export const context = `<div><style></style><div id='context'></div><script></script>`;
+export const context = `<div><style></style><div id='context'></div><script></script></div>`;
 
 // %EXEMPLAR_START%
 async function solution(

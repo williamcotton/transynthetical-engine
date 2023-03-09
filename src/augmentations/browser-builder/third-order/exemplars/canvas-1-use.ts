@@ -3,9 +3,9 @@ import { ThunkSolution } from "../../../../ask";
 
 export const targetType = `pthunk`;
 
-export const prompt = `draw 10 randomly sized and spaced blue circles`;
+export const prompt = `draw 10 randomly sized and spaced blue circles.`;
 
-export const context = `<div><style></style><div id='context'><canvas id="canvas" width=512 height=320></canvas></div><script></script></div>`;
+export const context = `<div><style></style><div id='context'><div='draw-blue-and-green-circles-on-canvas-web-application'><canvas id="canvas" width=512 height=320></canvas></div></div><script></script></div>`;
 
 export const archivedFunctions = `[{ "name": "drawCircleOnCanvas", "arg_types": [{ "canvas": "HTMLCanvasElement" }, { "x": "number" }, { "y": "number" }, { "radius": "number" }, { "color": "string" }] }, { "name": "DrawBlueAndGreenCirclesOnCanvasWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }] }]`;
 

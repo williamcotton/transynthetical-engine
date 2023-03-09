@@ -7,6 +7,7 @@ import { Query } from "../query";
 export type ArchivedFunction = {
   name: string;
   arg_types: [{ [key: string]: string }];
+  description: string;
 };
 
 export type TranslationTarget = "data" | "thunk" | "pthunk";
