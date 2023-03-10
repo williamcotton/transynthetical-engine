@@ -14,25 +14,30 @@ export type ArgType =
   | "any"
   | "HTMLImageElement"
   | "HTMLElement"
+  | "HTMLInputElement"
   | "HTMLCanvasElement";
 
 export type ArgTypes = {
-  [key: string]: ArgType;
+  [key: string]: ArgType | ArgTypes;
 }[];
 
 export type Archive = {
+  id: number;
   name: string;
   stringFunc: string;
   argTypes: ArgTypes;
-  solutionUuid?: string;
-  description?: string;
-  descriptionEmbedding?: string;
-  demonstration?: string;
+  solutionUuid: string;
+  description: string;
+  descriptionEmbedding: string;
+  demonstration: string;
+  verified: boolean;
 };
 
 export type Archiver = {
   add: ArchiverAdd;
   get: ArchiverGet;
+  update: ArchiverUpdate;
+  getAll: ArchiverGetAll;
   findNearest: ArchiverFindNearest;
 };
 
@@ -45,6 +50,12 @@ export type ArchiverAdd = (
 ) => Promise<Archive>;
 
 export type ArchiverGet = (name: string) => Promise<(...args: any[]) => any>;
+
+export type ArchiverUpdate = (
+  archive: Archive
+) => Promise<{ success: boolean; error?: string; id: number }>;
+
+export type ArchiverGetAll = () => Promise<Archive[]>;
 
 export type ArchiverFindNearest = (
   embedding: number[]
@@ -66,13 +77,14 @@ export const archiverFactory = ({
   llm,
 }: ArchiverFactoryParams): Archiver => {
   return {
-    add: async (name, func, argTypes, description, demonstration) => {
+    add: async (name, func, argTypes, description, demonstration = "") => {
       const stringFunc = typeof func === "string" ? func : func.toString();
 
       const embedding = await llm.requestEmbedding(description);
       const descriptionEmbedding = `[${embedding.toString()}]`;
 
       const archive: Archive = {
+        id: Infinity,
         name,
         stringFunc,
         argTypes,
@@ -80,6 +92,7 @@ export const archiverFactory = ({
         description,
         descriptionEmbedding,
         demonstration,
+        verified: false,
       };
 
       await datastore.archives.add(archive);
@@ -99,6 +112,18 @@ export const archiverFactory = ({
       }
 
       return func;
+    },
+    update: async (archive) => {
+      const response = await datastore.archives.update(archive);
+      dispatch({ type: "archiver_update", archive });
+
+      return response;
+    },
+    getAll: async () => {
+      const archives = await datastore.archives.getAll();
+      dispatch({ type: "archiver_get_all", archives });
+
+      return archives;
     },
     findNearest: datastore.archives.findNearest,
   };

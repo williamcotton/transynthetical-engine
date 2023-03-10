@@ -12,10 +12,10 @@ export function buildPrompt({
   const archivedFunctionsString = archivedFunctions
     .map((archivedFunction) => {
       const typesString = archivedFunction.arg_types.map(
-        (t) => Object.values(t) + ":" + Object.keys(t)
+        (t) => Object.keys(t) + ":" + Object.values(t)
       );
       return `${archivedFunction.name}(${typesString})`;
     })
     .join(" ");
-  return `Write, Archive and Build: DOM(${context}) ExistingArchivedFunctions(${archivedFunctionsString})\n\n${prompt} - `;
+  return `Instructions: DOM(${context}) ExistingArchivedFunctions(${archivedFunctionsString})\n\n${prompt} - `;
 }
