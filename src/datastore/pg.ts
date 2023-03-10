@@ -40,7 +40,7 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
           archive.stringFunc,
           JSON.stringify(archive.argTypes),
           archive.solutionUuid,
-          false,
+          true,
           archive.description,
           archive.descriptionEmbedding,
           archive.demonstration,

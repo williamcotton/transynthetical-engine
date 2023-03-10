@@ -3,9 +3,11 @@ Assume a web browser environment and document.
 Do not answer in Markdown.
 Always answer with JavaScript compatible code in the %%%PTHUNK%%%.
 Define new functions in the %%%PTHUNK%%% and always use archiver.add()
+ExistingArchivedFunctions(nullOp and NullOpWebApplication) do not exist.
+Functions in ExistingArchivedFunctions() do exist and should be used with archiver.get()
 Always write new functions and store them in the Archiver.
 Always include a description of the function in the Archiver.
-Web application functions should be defined with names that are already in the ExistingArchivedFunctions()
+Web application functions should be defined with names do not existin in the ExistingArchivedFunctions()
 Web application functions should be written in the %%%PTHUNK%%%
 Web application functions should be added to the archive and use archiver.add()
 Don't call archiver.get() to get a function that was defined and added to the archiver in the same %%%PTHUNK%%%

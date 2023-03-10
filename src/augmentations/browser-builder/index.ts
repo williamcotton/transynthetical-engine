@@ -111,6 +111,7 @@ async function evaluator(
       );
     }
   } catch (e) {
+    console.error(e);
     evaluated.error = e;
   }
 

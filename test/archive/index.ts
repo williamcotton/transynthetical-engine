@@ -31,7 +31,6 @@ describe("archiver", async () => {
       "test",
       "test"
     );
-    console.log(addedResponse);
     expect(addedResponse).deep.equal({
       name: "test",
       stringFunc: "function t(s) {\n    return s;\n}",

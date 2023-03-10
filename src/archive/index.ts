@@ -12,6 +12,8 @@ export type ArgType =
   | "Document"
   | "Archiver"
   | "any"
+  | "HTMLImageElement"
+  | "HTMLElement"
   | "HTMLCanvasElement";
 
 export type ArgTypes = {
