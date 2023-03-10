@@ -3,12 +3,12 @@ import { ThunkSolution } from "../../../../ask";
 
 export const targetType = `pthunk`;
 
-export const prompt = `we're making a web application to a draw blue and green circles on a canvas. make a 512x320 canvas element. draw a small blue circle and a medium sized green circle on a canvas.`;
+export const prompt = `make a web application to a draw blue and green circles on a canvas. it should make a 512x320 canvas element. it should draw a small blue circle and a medium sized green circle on a canvas.`;
 
 // this initial state should have a global state {} and a reset button that resets the global state to {}
 export const context = `<div><style></style><div id='context'><canvas id="canvas" width=512 height=320></canvas></div><script></script></div>`;
 
-export const archivedFunctions = `[{ "name": "drawCircleOnCanvas", "arg_types": [{ "canvas": "HTMLCanvasElement" }, { "x": "number" }, { "y": "number" }, { "radius": "number" }, { "color": "string" }] }]`;
+export const archivedFunctions = `[{ "name": "drawCircleOnCanvas", "arg_types": [{ "canvas": "HTMLCanvasElement" }, { "x": "number" }, { "y": "number" }, { "radius": "number" }, { "color": "string" }] },{ "name": "doesNothing", "arg_types": [] }, { "name": "DoesNothingWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }] }]`;
 
 // %EXEMPLAR_START%
 async function solution(
@@ -51,7 +51,7 @@ async function solution(
     "DrawBlueAndGreenCirclesOnCanvasWebApplication",
     DrawBlueAndGreenCirclesOnCanvasWebApplication,
     [{ query: "any" }, { archiver: "Archiver" }, { document: "Document" }],
-    `The function DrawBlueAndGreenCirclesOnCanvasWebApplication takes a document as input and draws a small blue circle and a medium sized green circle on a canvas.`
+    `The web application DrawBlueAndGreenCirclesOnCanvasWebApplication takes a document as input and draws a small blue circle and a medium sized green circle on a canvas.`
   );
 
   await DrawBlueAndGreenCirclesOnCanvasWebApplication(

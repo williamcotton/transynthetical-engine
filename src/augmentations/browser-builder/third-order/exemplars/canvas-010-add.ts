@@ -8,6 +8,8 @@ export const prompt = `make a 512x320 canvas element. make a function to draw a 
 // this initial state should have a global state {} and a reset button that resets the global state to {}
 export const context = `<div><style></style><div id='context'></div><script></script></div>`;
 
+export const archivedFunctions = `[{ "name": "doesNothing", "arg_types": [] }, { "name": "DoesNothingWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }] }]`;
+
 // %EXEMPLAR_START%
 async function solution(
   query: any,
