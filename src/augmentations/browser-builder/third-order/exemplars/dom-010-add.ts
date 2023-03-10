@@ -20,12 +20,17 @@ async function solution(
     const inputElement = document.createElement("input");
     inputElement.value = value;
     contextElement.appendChild(inputElement);
+    return inputElement;
   }
   await archiver.add(
     "addInputElement",
     addInputElement,
-    [{ contextElement: "HTMLElement" }, { value: "string" }],
-    `The function addInputElement takes a context element and a value as input and adds an input element with the value to the context element.`
+    [
+      { contextElement: "HTMLElement" },
+      { value: "string" },
+      { return: [{ inputElement: "HTMLInputElement" }] },
+    ],
+    `(function): addInputElement takes a context element and a value as input and adds an input element with the value to the context element.`
   );
 
   const contextElement = document.getElementById("context");

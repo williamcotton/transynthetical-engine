@@ -9,6 +9,8 @@ import firstOrder from "./build/first-order.json";
 import secondOrder from "./build/second-order.json";
 import thirdOrder from "./build/third-order.json";
 
+export const initialContext = `<div id='context'><h1>Context</h1></div>`;
+
 function parseCompletion(
   completion: string,
   dispatch: Dispatch,

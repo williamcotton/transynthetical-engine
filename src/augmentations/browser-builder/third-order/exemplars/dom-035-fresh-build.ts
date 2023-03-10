@@ -14,6 +14,7 @@ async function solution(
   document: Document
 ): Promise<ThunkSolution> {
   const contextElement = document.getElementById("context");
+
   contextElement.innerHTML = ``;
   contextElement.setAttribute("style", "");
 
