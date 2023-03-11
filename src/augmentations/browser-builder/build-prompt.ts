@@ -17,5 +17,5 @@ export function buildPrompt({
       return `${archivedFunction.name}(${typesString})`;
     })
     .join(" ");
-  return `Instructions: DOM(${context}) ExistingArchivedFunctions(${archivedFunctionsString})\n\n${prompt} - `;
+  return `DOM(${context})\nExistingArchivedFunctions(${archivedFunctionsString})\nInstructions: ${prompt} - `;
 }

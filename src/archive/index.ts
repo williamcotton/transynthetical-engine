@@ -95,7 +95,10 @@ export const archiverFactory = ({
         verified: false,
       };
 
-      await datastore.archives.add(archive);
+      const resp = await datastore.archives.add(archive);
+      const id = resp.id;
+      archive.id = id;
+
       dispatch({ type: "archiver_add", archive });
 
       return archive;

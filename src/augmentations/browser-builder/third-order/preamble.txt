@@ -1,4 +1,6 @@
-Instructions: DOM(<div id="context"></div>) ExistingArchivedFunctions() natural language instructions - 
+DOM(<div id="context"></div>)
+ExistingArchivedFunctions()
+Instructions: natural language instructions - 
 {"pthunk":%%%PTHUNK%%%}
 
 Use the natural language instructions to write JavaScript code in the %%%PTHUNK%%%
