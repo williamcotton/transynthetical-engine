@@ -9,11 +9,13 @@ Assume a web browser environment and document.
 Do not answer in Markdown.
 Always answer with JavaScript compatible code in the %%%PTHUNK%%%.
 ExistingArchivedFunctions(nullOp and NullOpWebApplication) do not exist.
-Functions in ExistingArchivedFunctions() do exist and should be used with archiver.get()
-If not in ExistingArchivedFunctions() define new functions and include a description in the %%%PTHUNK%%% and use archiver.add()
-Web application functions should be defined with names do not exist in in the ExistingArchivedFunctions()
-Web application functions should be written in the %%%PTHUNK%%%
-Web application functions should be added to the archive and use archiver.add()
-Don't call archiver.get() to get a function that was defined and added to the archiver in the same %%%PTHUNK%%%
+Functions in ExistingArchivedFunctions() do exist and should be used with await archiver.get() in scope of the %%%PTHUNK%%%
+If not in ExistingArchivedFunctions() define new async functions and include a description in the %%%PTHUNK%%% and use await archiver.add()
+Don't use await archiver.get() to the get the async functions defined and already archived in scope of the %%%PTHUNK%%%
+Web application async functions should be defined with names like ExampleWebApplication(query, archiver, document) if they do not exist in in the ExistingArchivedFunctions()
+Web application async functions should be written in the %%%PTHUNK%%%
+Web application async functions should be added to the archive and use await archiver.add()
+Don't call await archiver.get() to get a async function that was defined and added to the await archiver in the same %%%PTHUNK%%%
+Assume all archived and defined functions are async functions in scope of the %%%PTHUNK%%%
 Always update the Web Browser document (DOM) based on the DOM(HTML context) when given an instruction.
 Always answer with this JSON compatible object form: {"pthunk":%%%PTHUNK%%%}

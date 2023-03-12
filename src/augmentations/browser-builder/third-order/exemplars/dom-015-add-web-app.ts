@@ -3,7 +3,7 @@ import { ThunkSolution } from "../../../../ask";
 
 export const targetType = `pthunk`;
 
-export const prompt = `make a web application to a alert based on user text input. the enter key should trigger the alert.`;
+export const prompt = `define and archive (async web-application): TextAlertWebApplication\n\nbuild all required elements for the TextAlertWebApplication\n\nit should not write a new addInputElement function and it should not expect the addInputElement function to be in the global scope\nit should use the await archiver.get() the get the existing archived function addInputElement\nwhen the user presses enter in the input element, it should alert the value of the input element\n  \nuse the (async function): TextAlertWebApplication do demonstrate in the existing context`;
 
 // this initial state should have a global state {} and a reset button that resets the global state to {}
 export const context = `<div id='context'><input value='512'></div>`;
@@ -34,7 +34,7 @@ async function solution(
     "TextAlertWebApplication",
     TextAlertWebApplication,
     [{ query: "any" }, { archiver: "Archiver" }, { document: "Document" }],
-    `(web-application): TextAlertWebApplication takes a query, an archiver, and a document as input and adds a web application that alerts the text in an input element when the enter key is pressed.`
+    `(async web-application): Alerts the text in an input element when the enter key is pressed.`
   );
 
   await TextAlertWebApplication(query, archiver, document);

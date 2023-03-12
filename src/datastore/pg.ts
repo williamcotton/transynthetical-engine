@@ -40,19 +40,20 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
 
       add: async (archive: Archive) => {
         const query = `
-        INSERT INTO archives (
-          name,
-          string_func,
-          arg_types,
-          solution_uuid,
-          verified,
-          description,
-          description_embedding,
-          demonstration
-        ) VALUES (
-          $1, $2, $3, $4, $5, $6, $7, $8
-        )
-      `;
+          INSERT INTO archives (
+            name,
+            string_func,
+            arg_types,
+            solution_uuid,
+            verified,
+            description,
+            description_embedding,
+            demonstration
+          ) VALUES (
+            $1, $2, $3, $4, $5, $6, $7, $8
+          )
+          RETURNING id
+        `;
 
         const values = [
           archive.name,
@@ -114,7 +115,7 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
       },
 
       findNearest: async (embedding: number[]) => {
-        const minDistance = 0.6;
+        const minDistance = 2;
 
         console.log(
           `SELECT * FROM archives WHERE verified = true AND description_embedding <-> $1 < $2 ORDER BY description_embedding <-> $1 LIMIT 10`,

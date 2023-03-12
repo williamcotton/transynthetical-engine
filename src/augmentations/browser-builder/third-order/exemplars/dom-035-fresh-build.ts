@@ -3,9 +3,9 @@ import { ThunkSolution } from "../../../../ask";
 
 export const targetType = `pthunk`;
 
-export const prompt = `clear the context and add a Context title`;
+export const prompt = `clear the context and add an h1 that says 'Context'`;
 
-export const context = `<div id='context'><input value='234'></div>`;
+export const context = `<div id='context'><input value='23'></div>`;
 
 // %EXEMPLAR_START%
 async function solution(
