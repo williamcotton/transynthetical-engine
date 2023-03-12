@@ -31,6 +31,7 @@ export type Archive = {
   descriptionEmbedding: string;
   demonstration: string;
   verified: boolean;
+  existing: boolean;
 };
 
 export type Archiver = {
@@ -46,7 +47,8 @@ export type ArchiverAdd = (
   func: (...args: any[]) => any | string,
   argTypes: ArgTypes,
   description: string,
-  demonstration?: string
+  demonstration?: string,
+  existing?: boolean
 ) => Promise<Archive>;
 
 export type ArchiverGet = (name: string) => Promise<(...args: any[]) => any>;
@@ -93,13 +95,19 @@ export const archiverFactory = ({
         descriptionEmbedding,
         demonstration,
         verified: false,
+        existing: false,
       };
 
       const resp = await datastore.archives.add(archive);
       const id = resp.id;
       archive.id = id;
 
-      dispatch({ type: "archiver_add", archive });
+      if (typeof resp.existing == "boolean" && resp.existing) {
+        archive.existing = true;
+        dispatch({ type: "archiver_add_existing", archive });
+      } else {
+        dispatch({ type: "archiver_add", archive });
+      }
 
       return archive;
     },

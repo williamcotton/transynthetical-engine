@@ -22,8 +22,8 @@ async function solution(
     document: Document
   ) {
     const contextElement = document.getElementById("context");
-    const addInputElement = await archiver.get("addInputElement");
-    const inputElement = addInputElement(contextElement, "23");
+    const addInputElementInstance = await archiver.get("addInputElement");
+    const inputElement = addInputElementInstance(contextElement, "23");
     inputElement.addEventListener("keyup", function (event) {
       if (event.key === "Enter") {
         alert(inputElement.value);

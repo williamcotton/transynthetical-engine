@@ -6,6 +6,7 @@ export type ArchiveResponse = {
   success: boolean;
   id: number;
   error?: string;
+  existing?: boolean;
 };
 
 export type SolutionResponse = {

@@ -20,9 +20,11 @@ async function solution(
   contextElement.innerHTML = ``;
   contextElement.setAttribute("style", "");
 
-  const TextAlertWebApplication = await archiver.get("TextAlertWebApplication");
+  const TextAlertWebApplicationInstance = await archiver.get(
+    "TextAlertWebApplication"
+  );
 
-  await TextAlertWebApplication(query, archiver, document);
+  await TextAlertWebApplicationInstance(query, archiver, document);
 
   return {
     answer: [],

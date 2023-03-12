@@ -21,7 +21,9 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
       },
 
       getAll: async (): Promise<Archive[]> => {
-        const archives = await database.query(`SELECT * FROM archives`);
+        const archives = await database.query(
+          `SELECT * FROM archives ORDER BY id DESC`
+        );
 
         return archives.rows.map((archive) => {
           return {
@@ -34,6 +36,7 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
             description: archive.description,
             descriptionEmbedding: archive.description_embedding,
             demonstration: archive.demonstration,
+            existing: true,
           };
         });
       },
@@ -66,11 +69,33 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
           archive.demonstration,
         ];
 
-        const resp = await database.query(query, values);
+        let resp;
+        try {
+          resp = await database.query(query, values);
+        } catch (e: any) {
+          const regex = /Key \(name\)=\((.*)\) already exists./;
+          console.log(e.detail);
+          const match = e.detail.match(regex);
+          if (match) {
+            const name = match[1];
+            console.log("name", name);
+            console.log("archive.name", archive.name);
+            try {
+              const existing = await database.query(
+                `SELECT * FROM archives WHERE name = $1`,
+                [name]
+              );
+              return { success: true, id: existing.rows[0].id, existing: true };
+            } catch (e) {
+              console.log("eeeeeeeeeeeee", e);
+              return { success: false, id: -Infinity, existing: false };
+            }
+          }
+        }
 
         const id = resp?.rows[0]?.id || 0;
 
-        return { success: true, id };
+        return { success: true, id, existing: false };
       },
 
       update: async (archive: Archive) => {
