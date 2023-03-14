@@ -32,6 +32,7 @@ describe("archiver", async () => {
       "test"
     );
     expect(addedResponse).deep.equal({
+      id: 1,
       name: "test",
       stringFunc: "function t(s) {\n    return s;\n}",
       argTypes: [{ s: "string" }],
@@ -39,6 +40,8 @@ describe("archiver", async () => {
       description: "test",
       descriptionEmbedding: "[0.1,0.2,0.3,0.4,0.5]",
       demonstration: "test",
+      verified: false,
+      existing: false,
     });
   });
 });
