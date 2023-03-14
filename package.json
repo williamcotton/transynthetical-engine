@@ -1,15 +1,7 @@
 {
   "name": "transynthetical-engine",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Applying the methods of synthetic and analytical augmentation to build a transynthetical engine that maintains and build a stateful archive of all JS functions generated.",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "ts-node-test test/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/williamcotton/transynthetical-engine.git"
-  },
   "keywords": [
     "llm",
     "gpt",
@@ -21,31 +13,58 @@
     "synthetic",
     "transynthetical",
     "translator",
-    "synthesizer"
+    "synthesizer",
+    "preamble",
+    "exemplar"
   ],
-  "author": "William Cotton",
-  "license": "MIT License",
+  "engines": {
+    "node": ">=v19.0.0"
+  },
+  "homepage": "https://github.com/williamcotton/transynthetical-engine#readme",
   "bugs": {
     "url": "https://github.com/williamcotton/transynthetical-engine/issues"
   },
-  "homepage": "https://github.com/williamcotton/transynthetical-engine#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/williamcotton/transynthetical-engine.git"
+  },
+  "license": "MIT License",
+  "author": {
+    "name": "William Cotton",
+    "url": "https://github.com/williamcotton"
+  },
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "ts-node-test test/",
+    "build-augmentations": "make build-augmentations",
+    "update-packages": "ncu -u"
+  },
   "devDependencies": {
     "@types/chai": "^4.3.4",
-    "@types/node": "^18.14.0",
+    "@types/node": "^18.15.3",
     "@types/pg": "^8.6.6",
     "@types/uuid": "^9.0.1",
     "chai": "^4.3.7",
+    "npm-check-updates": "^16.7.12",
     "ts-node-test": "^0.3.0"
   },
   "dependencies": {
-    "chatgpt": "^4.7.1",
     "dotenv": "^16.0.3",
     "gpt-3-encoder": "^1.1.4",
     "openai": "^3.2.1",
-    "pg": "^8.9.0",
+    "pg": "^8.10.0",
     "typescript": "^4.9.5",
     "uuid": "^9.0.0",
-    "wikipedia": "^1.2.0",
+    "wikipedia": "^2.0.0",
     "wolfram-alpha-node": "^0.0.3"
-  }
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ]
 }
