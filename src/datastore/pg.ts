@@ -74,12 +74,9 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
           resp = await database.query(query, values);
         } catch (e: any) {
           const regex = /Key \(name\)=\((.*)\) already exists./;
-          console.log(e.detail);
           const match = e.detail.match(regex);
           if (match) {
             const name = match[1];
-            console.log("name", name);
-            console.log("archive.name", archive.name);
             try {
               const existing = await database.query(
                 `SELECT * FROM archives WHERE name = $1`,
@@ -87,7 +84,6 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
               );
               return { success: true, id: existing.rows[0].id, existing: true };
             } catch (e) {
-              console.log("eeeeeeeeeeeee", e);
               return { success: false, id: -Infinity, existing: false };
             }
           }
