@@ -31,6 +31,8 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
             name: archive.name,
             stringFunc: archive.string_func,
             argTypes: JSON.parse(archive.arg_types),
+            returnType: archive.return_type,
+            isApplication: archive.is_application,
             solutionUuid: archive.solution_uuid,
             verified: archive.verified,
             description: archive.description,
@@ -52,8 +54,10 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
             description,
             description_embedding,
             demonstration
+            return_type,
+            is_application
           ) VALUES (
-            $1, $2, $3, $4, $5, $6, $7, $8
+            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
           )
           RETURNING id
         `;
@@ -67,6 +71,8 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
           archive.description,
           archive.descriptionEmbedding,
           archive.demonstration,
+          archive.returnType,
+          archive.isApplication,
         ];
 
         let resp;
@@ -74,7 +80,7 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
           resp = await database.query(query, values);
         } catch (e: any) {
           const regex = /Key \(name\)=\((.*)\) already exists./;
-          const match = e.detail.match(regex);
+          const match = e?.detail?.match(regex);
           if (match) {
             const name = match[1];
             try {

@@ -33,6 +33,8 @@ export type Archive = {
   name: string;
   stringFunc: string;
   argTypes: ArgTypes;
+  returnType: ArgType;
+  isApplication: boolean;
   solutionUuid: string;
   description: string;
   descriptionEmbedding: string;
@@ -53,9 +55,12 @@ export type ArchiverAdd = (
   name: string,
   func: (...args: any[]) => any | string,
   argTypes: ArgTypes,
+  returnType: ArgType,
   description: string,
+  isApplication: boolean,
   demonstration?: string,
-  existing?: boolean
+  existing?: boolean,
+  previousVersion?: number
 ) => Promise<Archive>;
 
 export type ArchiverGet = (name: string) => Promise<(...args: any[]) => any>;
@@ -79,6 +84,8 @@ export type ArchiverFactoryParams = {
   datastore: Datastore;
 };
 
+const cache: Archive[] = [];
+
 export const archiverFactory = ({
   datastore,
   solutionUuid,
@@ -86,7 +93,17 @@ export const archiverFactory = ({
   llm,
 }: ArchiverFactoryParams): Archiver => {
   return {
-    add: async (name, func, argTypes, description, demonstration = "") => {
+    add: async (
+      name,
+      func,
+      argTypes,
+      returnType,
+      description,
+      isApplication = false,
+      demonstration = "",
+      existing = false,
+      previousVersion
+    ) => {
       const stringFunc = typeof func === "string" ? func : func.toString();
 
       const embedding = await llm.requestEmbedding(description);
@@ -97,6 +114,8 @@ export const archiverFactory = ({
         name,
         stringFunc,
         argTypes,
+        returnType,
+        isApplication,
         solutionUuid,
         description,
         descriptionEmbedding,
@@ -109,6 +128,8 @@ export const archiverFactory = ({
       const id = resp.id;
       archive.id = id;
 
+      cache.push(archive);
+
       if (typeof resp.existing == "boolean" && resp.existing) {
         archive.existing = true;
         dispatch({ type: "archiver_add_existing", archive });
@@ -119,8 +140,23 @@ export const archiverFactory = ({
       return archive;
     },
     get: async (name) => {
-      const stringFunc = await datastore.archives.get(name);
-      dispatch({ type: "archiver_get", name, stringFunc });
+      // Try to find the archive in the cache
+      const cachedArchive = cache.find((archive) => archive.name === name);
+
+      let stringFunc: string;
+      let dispatchType: string;
+
+      if (cachedArchive) {
+        // If the archive is found in the cache, use the cached version
+        stringFunc = cachedArchive.stringFunc;
+        dispatchType = "archiver_get_cache";
+      } else {
+        // If the archive is not found in the cache, get it from the datastore
+        stringFunc = await datastore.archives.get(name);
+        dispatchType = "archiver_get_datastore";
+      }
+
+      dispatch({ type: dispatchType, name, stringFunc });
 
       let func: (...args: any[]) => any;
       try {

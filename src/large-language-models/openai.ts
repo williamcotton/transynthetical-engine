@@ -32,7 +32,7 @@ export const openAiLLMFactory = ({ apiKey }: { apiKey: string }): LLM => {
         ];
 
         const response = await openai.createChatCompletion({
-          model: "gpt-3.5-turbo",
+          model: "gpt-4",
           temperature: 0.7,
           messages,
         });

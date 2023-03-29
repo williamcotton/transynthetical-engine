@@ -32,11 +32,14 @@ async function solution(
       })
       .join("");
   }
+  const rot13ReturnType = "string";
   await archiver.add(
     "compute_rot13",
     compute_rot13,
     [{ str: "string" }],
-    `The function compute_rot13 takes a string as an input and applies the ROT13 encryption algorithm to it. This algorithm shifts each letter in the input string by 13 positions in the alphabet while preserving the case and ignoring non-letter characters. For example, the letter "a" would be transformed into "n", "b" into "o", and so on. The function accomplishes this by splitting the input string into an array of individual characters, mapping each character to its ROT13 equivalent using a combination of character codes and modulo arithmetic, and then rejoining the resulting array of transformed characters into a single string.`
+    rot13ReturnType,
+    `The function compute_rot13 takes a string as an input and applies the ROT13 encryption algorithm to it. This algorithm shifts each letter in the input string by 13 positions in the alphabet while preserving the case and ignoring non-letter characters. For example, the letter "a" would be transformed into "n", "b" into "o", and so on. The function accomplishes this by splitting the input string into an array of individual characters, mapping each character to its ROT13 equivalent using a combination of character codes and modulo arithmetic, and then rejoining the resulting array of transformed characters into a single string.`,
+    false
   );
   function compute_pig_latin(word: string) {
     const vowels = ["a", "e", "i", "o", "u"];
@@ -50,11 +53,14 @@ async function solution(
     }
     return word + "ay";
   }
+  const pigLatinReturnType = "string";
   await archiver.add(
     "compute_pig_latin",
     compute_pig_latin,
     [{ word: "string" }],
-    `The function compute_pig_latin takes a string as an input and applies the Pig Latin algorithm to it. This algorithm takes the first consonant (or consonant cluster) of an English word, moves it to the end of the word and suffixes an "ay". If a word begins with a vowel you just add "way" to the end. For example, the word "computer" becomes "omputercay" and "algorithm" becomes "algorithmway". The function accomplishes this by checking if the first letter of the input string is a vowel, and if not, it iterates through the remaining letters of the string until it finds a vowel. It then returns the substring of the input string starting at the first vowel, followed by the substring of the input string starting at the first letter and ending at the first vowel, followed by the string "ay". If the first letter of the input string is a vowel, it simply returns the input string followed by the string "way".`
+    pigLatinReturnType,
+    `The function compute_pig_latin takes a string as an input and applies the Pig Latin algorithm to it. This algorithm takes the first consonant (or consonant cluster) of an English word, moves it to the end of the word and suffixes an "ay". If a word begins with a vowel you just add "way" to the end. For example, the word "computer" becomes "omputercay" and "algorithm" becomes "algorithmway". The function accomplishes this by checking if the first letter of the input string is a vowel, and if not, it iterates through the remaining letters of the string until it finds a vowel. It then returns the substring of the input string starting at the first vowel, followed by the substring of the input string starting at the first letter and ending at the first vowel, followed by the string "ay". If the first letter of the input string is a vowel, it simply returns the input string followed by the string "way".`,
+    false
   );
   const pigLatin = sentence.split(" ").map(compute_pig_latin).join(" ");
   const rot13 = compute_rot13(pigLatin);

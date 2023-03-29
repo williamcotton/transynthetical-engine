@@ -28,18 +28,22 @@ describe("archiver", async () => {
       "test",
       t,
       [{ s: "string" }],
-      "test",
-      "test"
+      "string",
+      "test description",
+      false,
+      "test demo"
     );
     expect(addedResponse).deep.equal({
       id: 1,
       name: "test",
       stringFunc: "function t(s) {\n    return s;\n}",
       argTypes: [{ s: "string" }],
+      returnType: "string",
+      isApplication: false,
       solutionUuid: "uuid",
-      description: "test",
+      description: "test description",
       descriptionEmbedding: "[0.1,0.2,0.3,0.4,0.5]",
-      demonstration: "test",
+      demonstration: "test demo",
       verified: false,
       existing: false,
     });

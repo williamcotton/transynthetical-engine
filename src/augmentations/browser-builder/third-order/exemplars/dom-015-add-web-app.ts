@@ -20,7 +20,7 @@ async function solution(
     query: any,
     archiver: Archiver,
     document: Document
-  ) {
+  ): Promise<void> {
     const contextElement = document.getElementById("context");
     const addInputElementInstance = await archiver.get("addInputElement");
     const inputElement = await addInputElementInstance(contextElement, "23");
@@ -30,21 +30,18 @@ async function solution(
       }
     });
   }
+  const TextAlertWebApplicationReturnType = "undefined";
+  const isApplication = true;
   await archiver.add(
     "TextAlertWebApplication",
     TextAlertWebApplication,
-    [
-      { query: "any" },
-      { archiver: "Archiver" },
-      { document: "Document" },
-      { return: "undefined" },
-    ],
-    `(async web-application): Alerts the text in an input element when the enter key is pressed.`
+    [{ query: "any" }, { archiver: "Archiver" }, { document: "Document" }],
+    TextAlertWebApplicationReturnType,
+    `This application alerts the text in an input element when the enter key is pressed.`,
+    isApplication
   );
-  console.log("Just added TextAlertWebApplication to the archive.");
 
   await TextAlertWebApplication(query, archiver, document);
-  console.log("TextAlertWebApplication executed");
 
   return {
     answer: ["TextAlertWebApplication"],

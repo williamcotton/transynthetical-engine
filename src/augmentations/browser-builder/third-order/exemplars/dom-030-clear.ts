@@ -25,7 +25,6 @@ async function solution(
   );
 
   await TextAlertWebApplicationInstance(query, archiver, document);
-  console.log("TextAlertWebApplicationInstance executed");
 
   return {
     answer: [],
