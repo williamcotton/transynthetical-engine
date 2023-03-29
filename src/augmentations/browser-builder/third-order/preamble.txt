@@ -8,7 +8,6 @@ Use standard JavaScript Math, Number, Date, RegExp, String, Array, Object, Map, 
 Assume a web browser environment and document.
 Do not answer in Markdown.
 Always answer with JavaScript compatible code in the %%%PTHUNK%%%.
-ExistingArchivedFunctions(nullOp and NullOpWebApplication) do not exist.
 Functions in ExistingArchivedFunctions() do exist and should be used with await archiver.get() in scope of the %%%PTHUNK%%%
 If not in ExistingArchivedFunctions() define new async functions and include a description in the %%%PTHUNK%%% and use await archiver.add()
 Don't use await archiver.get() to the get the async functions defined and already archived in scope of the %%%PTHUNK%%%

@@ -11,6 +11,18 @@ import thirdOrder from "./build/third-order.json";
 
 export const initialContext = `<div id='context'><h1>Context</h1></div>`;
 
+async function nullOp() {
+  return null;
+}
+
+async function NullOpWebApplication(
+  query: Query,
+  archiver: Archiver,
+  document: Document
+) {
+  return null;
+}
+
 function parseCompletion(
   completion: string,
   dispatch: Dispatch,
@@ -93,6 +105,8 @@ async function evaluator(
         "JSON",
         "Promise",
         "Intl",
+        "nullOp",
+        "NullOpWebApplication",
         `return ${solution.pthunk}(query, archiver, document)`
       )(
         query,
@@ -109,7 +123,9 @@ async function evaluator(
         Set,
         JSON,
         Promise,
-        Intl
+        Intl,
+        nullOp,
+        NullOpWebApplication
       );
     }
   } catch (e) {
