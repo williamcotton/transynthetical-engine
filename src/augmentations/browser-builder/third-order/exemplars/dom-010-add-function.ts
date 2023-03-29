@@ -8,7 +8,7 @@ export const prompt = `define and archive (async function): addInputElement\n  i
 // this initial state should have a global state {} and a reset button that resets the global state to {}
 export const context = `<div id='context'></div>`;
 
-export const archivedFunctions = `[{ "name": "nullOp", "arg_types": [] }, { "name": "NullOpWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }] }]`;
+export const archivedFunctions = `[{ "name": "nullOp", "arg_types": [{ "return": "null" }] }, { "name": "NullOpWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document", "return": "null" }] }]`;
 
 // %EXEMPLAR_START%
 async function solution(
@@ -28,10 +28,11 @@ async function solution(
     [
       { contextElement: "HTMLElement" },
       { value: "string" },
-      { return: [{ inputElement: "HTMLInputElement" }] },
+      { return: "HTMLInputElement" },
     ],
     `(async function): addInputElement takes a context element and a value as input and adds an input element with the value to the context element.`
   );
+  console.log("Just added addInputElement to the archive.");
 
   const contextElement = document.getElementById("context");
 

@@ -7,7 +7,7 @@ export const prompt = `reset and load the text alert app`;
 
 export const context = `<div id='context'><input value='23'></div>`;
 
-export const archivedFunctions = `[{ "name": "nullOp", "arg_types": [] }, { "name": "NullOpWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }] }, { "name": "addInputElement", "arg_types": [{ "contextElement": "HTMLElement" }, { "value": "string" }, { "return": [{ "inputElement": "HTMLInputElement" }] }] }, { "name": "TextAlertWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }] }]`;
+export const archivedFunctions = `[{ "name": "nullOp", "arg_types": [{ "return": "null" }] }, { "name": "NullOpWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }, { "return": "null" }] }, { "name": "addInputElement", "arg_types": [{ "contextElement": "HTMLElement" }, { "value": "string" }, { "return": "HTMLInputElement" }] }, { "name": "TextAlertWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }, { "return": "undefined" }] }]`;
 
 // %EXEMPLAR_START%
 async function solution(
@@ -25,6 +25,7 @@ async function solution(
   );
 
   await TextAlertWebApplicationInstance(query, archiver, document);
+  console.log("TextAlertWebApplicationInstance executed");
 
   return {
     answer: [],
