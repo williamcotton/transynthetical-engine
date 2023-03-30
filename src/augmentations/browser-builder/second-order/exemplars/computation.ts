@@ -2,21 +2,21 @@ import { ThunkSolution } from "../../../../ask";
 
 export const targetType = `thunk`;
 
-export const prompt = `4 days a week, Laura practices martial arts for 1.5 hours. Considering a week is 7 days, what is her average practice time per day each week?`;
+export const prompt = `A function that computes the standard deviation of a list of numbers.`;
 
-export const en = `Laura practices an average of {answer} hours per day.`;
-
-export const context = ``;
+export const context = `async function standardDeviation(numbers: number[]): Promise<number>`;
 
 // %EXEMPLAR_START%
 async function solution(): Promise<ThunkSolution> {
-  const daysPracticedInAWeek = 4;
-  const hoursPracticedInADay = 1.5;
-  const daysInAWeek = 7;
-  const totalHoursPracticedInAWeek =
-    daysPracticedInAWeek * hoursPracticedInADay;
-  const averagePracticeTimePerDay = totalHoursPracticedInAWeek / daysInAWeek;
-  return { answer: averagePracticeTimePerDay, solutions: [], computed: true };
+  async function standardDeviation(numbers: number[]): Promise<number> {
+    const mean = numbers.reduce((acc, curr) => acc + curr, 0) / numbers.length;
+    const variance =
+      numbers.reduce((acc, curr) => acc + Math.pow(curr - mean, 2), 0) /
+      numbers.length;
+    const standardDeviation = Math.sqrt(variance);
+    return standardDeviation;
+  }
+  return { answer: standardDeviation, solutions: [], computed: true };
 }
 // %EXEMPLAR_END%
 

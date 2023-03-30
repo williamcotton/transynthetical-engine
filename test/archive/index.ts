@@ -3,6 +3,7 @@ import { expect } from "chai";
 
 import { archiverFactory } from "../../src/archive";
 import { mockDatastore } from "../../src/datastore";
+import { augmentation } from "../../src/augmentations/question-and-answer";
 
 function dispatch() {}
 
@@ -23,6 +24,7 @@ describe("archiver", async () => {
       dispatch,
       llm,
       datastore: mockDatastore,
+      augmentation,
     });
     const addedResponse = await archiver.add(
       "test",

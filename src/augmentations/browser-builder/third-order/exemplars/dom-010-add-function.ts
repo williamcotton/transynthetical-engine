@@ -16,31 +16,15 @@ async function solution(
   archiver: Archiver,
   document: Document
 ): Promise<ThunkSolution> {
-  async function addInputElement(
-    contextElement: HTMLElement,
-    value: string
-  ): Promise<HTMLInputElement> {
-    const inputElement = document.createElement("input");
-    inputElement.value = value;
-    contextElement.appendChild(inputElement);
-    return inputElement;
-  }
-  const addInputElementReturnType = "HTMLInputElement";
-  const isFunction = true;
-  const isApplication = !isFunction;
-  await archiver.add(
-    "addInputElement",
-    addInputElement,
-    [{ contextElement: "HTMLElement" }, { value: "string" }],
-    addInputElementReturnType,
-    `The addInputElement function takes a context element and a value as input and adds an input element with the value to the context element.`,
-    isApplication
-  );
+  const addInputElement = await archiver.build({
+    name: "addInputElement",
+    argTypes: [{ contextElement: "HTMLElement" }, { value: "string" }],
+    returnType: "HTMLInputElement",
+    description: `The addInputElement function takes a context element and a value as input and adds an input element with the value to the context element.`,
+    isApplication: false,
+  });
 
   const contextElement = document.getElementById("context");
-
-  contextElement.innerHTML = ``;
-  contextElement.setAttribute("style", "");
 
   await addInputElement(contextElement, "512");
 

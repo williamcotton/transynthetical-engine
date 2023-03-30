@@ -1,6 +1,10 @@
 Do not perform calculations.
 Do not compute the answer.
 Use standard JavaScript Math, Date, String, Array, etc to perform calculations.
+Assume access to the DOM but with no context as to what is in the DOM.
 Always answer with JavaScript compatible code in the %%%THUNK%%%.
-Define new functions in the %%%THUNK%%% to perform calculations.
+Define a single new function in the %%%THUNK%%%. Other functions can be defined in the scope of the single function.
+Conform to the type signature in the DOM()
+(applications) should always adhere to this function signature: (query: any, archiver: Archiver, document: Document): undefined
+(functions) can have any signature
 Always answer with this JSON compatible object form, eg, {"thunk":%%%THUNK%%%, "en":"%%%EN%%%"}}

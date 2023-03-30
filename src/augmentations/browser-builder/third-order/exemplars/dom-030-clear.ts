@@ -15,11 +15,6 @@ async function solution(
   archiver: Archiver,
   document: Document
 ): Promise<ThunkSolution> {
-  const contextElement = document.getElementById("context");
-
-  contextElement.innerHTML = ``;
-  contextElement.setAttribute("style", "");
-
   const TextAlertWebApplicationInstance = await archiver.get(
     "TextAlertWebApplication"
   );

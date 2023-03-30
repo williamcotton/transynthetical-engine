@@ -1,11 +1,13 @@
-import { ArchivedFunction } from "../augmentations";
+import { ArchivedFunction, Augmentation } from "../augmentations";
 import { Dispatch } from "../dispatch";
 import { LLM } from "../large-language-models";
 import { Datastore } from "../datastore";
+import { ask } from "../ask";
 
 export type ArgType =
   | "string"
   | "number"
+  | "number[]"
   | "boolean"
   | "object"
   | "array"
@@ -22,7 +24,8 @@ export type ArgType =
   | "HTMLImageElement"
   | "HTMLElement"
   | "HTMLInputElement"
-  | "HTMLCanvasElement";
+  | "HTMLCanvasElement"
+  | "CanvasRenderingContext2D";
 
 export type ArgTypes = {
   [key: string]: ArgType | ArgTypes;
@@ -32,6 +35,7 @@ export type Archive = {
   id: number;
   name: string;
   stringFunc: string;
+  func?: Func;
   argTypes: ArgTypes;
   returnType: ArgType;
   isApplication: boolean;
@@ -42,18 +46,25 @@ export type Archive = {
   verified: boolean;
   existing: boolean;
 };
+export type NewArchive = Pick<
+  Archive,
+  "name" | "argTypes" | "returnType" | "isApplication" | "description"
+>;
 
 export type Archiver = {
   add: ArchiverAdd;
   get: ArchiverGet;
   update: ArchiverUpdate;
+  build: ArchiverBuild;
   getAll: ArchiverGetAll;
   findNearest: ArchiverFindNearest;
 };
 
+export type Func = (...args: any[]) => any | string;
+
 export type ArchiverAdd = (
   name: string,
-  func: (...args: any[]) => any | string,
+  func: Func,
   argTypes: ArgTypes,
   returnType: ArgType,
   description: string,
@@ -63,7 +74,9 @@ export type ArchiverAdd = (
   previousVersion?: number
 ) => Promise<Archive>;
 
-export type ArchiverGet = (name: string) => Promise<(...args: any[]) => any>;
+export type ArchiverGet = (name: string) => Promise<Func>;
+
+export type ArchiverBuild = (archive: NewArchive) => Promise<Func>;
 
 export type ArchiverUpdate = (
   archive: Archive
@@ -82,6 +95,7 @@ export type ArchiverFactoryParams = {
   dispatch: Dispatch;
   llm: LLM;
   datastore: Datastore;
+  augmentation: Augmentation;
 };
 
 const cache: Archive[] = [];
@@ -91,8 +105,9 @@ export const archiverFactory = ({
   solutionUuid,
   dispatch,
   llm,
+  augmentation,
 }: ArchiverFactoryParams): Archiver => {
-  return {
+  const archiverInstance: Archiver = {
     add: async (
       name,
       func,
@@ -167,6 +182,61 @@ export const archiverFactory = ({
 
       return func;
     },
+    build: async (newArchive: NewArchive) => {
+      const { name, argTypes, returnType, description, isApplication } =
+        newArchive;
+
+      let argString = "";
+      for (let i = 0; i < argTypes.length; i++) {
+        const key = Object.keys(argTypes[i])[0];
+        const value = argTypes[i][key];
+        argString += `${key}: ${value}`;
+        if (i !== argTypes.length - 1) {
+          argString += ", ";
+        }
+      }
+
+      const context = `(${
+        isApplication ? "application" : "function"
+      }) async function ${name}(${argString}): ${returnType}`;
+
+      const solution = await ask({
+        prompt: description,
+        dispatch,
+        order: 2,
+        augmentation,
+        context,
+        llm,
+        evaluate: true,
+        parentSolutionUuid: solutionUuid,
+        datastore,
+        queryEngines: [],
+      });
+
+      dispatch({
+        type: "archiver_build_solution",
+        solution,
+      });
+
+      const func = solution.answer as Func;
+
+      dispatch({
+        type: "archiver_build_func",
+        name,
+        stringFunc: func.toString(),
+      });
+
+      await archiverInstance.add(
+        name,
+        func,
+        argTypes,
+        returnType,
+        description,
+        isApplication
+      );
+
+      return func;
+    },
     update: async (archive) => {
       const response = await datastore.archives.update(archive);
       dispatch({ type: "archiver_update", archive });
@@ -181,4 +251,5 @@ export const archiverFactory = ({
     },
     findNearest: datastore.archives.findNearest,
   };
+  return archiverInstance;
 };

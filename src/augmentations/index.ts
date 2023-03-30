@@ -16,6 +16,7 @@ export type BuildPromptParams = {
   context: string;
   prompt: string;
   archivedFunctions: ArchivedFunction[];
+  data?: unknown;
 };
 
 export type Augmentation = {

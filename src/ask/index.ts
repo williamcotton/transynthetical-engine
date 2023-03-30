@@ -66,6 +66,7 @@ export async function ask({
   const uuid = uuidv4();
 
   const archiver = archiverFactory({
+    augmentation,
     datastore,
     dispatch,
     llm,

@@ -44,6 +44,7 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
       },
 
       add: async (archive: Archive) => {
+        // console.log("ADD", archive);
         const query = `
           INSERT INTO archives (
             name,
@@ -53,7 +54,7 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
             verified,
             description,
             description_embedding,
-            demonstration
+            demonstration,
             return_type,
             is_application
           ) VALUES (
@@ -78,7 +79,9 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
         let resp;
         try {
           resp = await database.query(query, values);
+          console.log("QUERY RESP", resp);
         } catch (e: any) {
+          console.log("QUERY ERROR", e);
           const regex = /Key \(name\)=\((.*)\) already exists./;
           const match = e?.detail?.match(regex);
           if (match) {

@@ -2,32 +2,26 @@ import { ThunkSolution } from "../../../../ask";
 
 export const targetType = `thunk`;
 
-export const prompt = `What's the rot13 of "Hello World"?`;
+export const prompt = `A function that takes's a canvas context, x, y, radius, color and draws a circle.`;
 
-export const en = `The rot13 of 'Hello World' is {answer}.`;
-
-export const context = ``;
+export const context = `async function drawCircle(canvasContext: CanvasRenderingContext2D, x: number, y: number, radius: number, color): Promise<void>`;
 
 // %EXEMPLAR_START%
 async function solution(): Promise<ThunkSolution> {
-  const sentence = "Hello World";
-  function compute_rot13(str: string) {
-    return str
-      .split("")
-      .map((char) => {
-        const charCode = char.charCodeAt(0);
-        if (charCode >= 65 && charCode <= 90) {
-          return String.fromCharCode(((charCode - 65 + 13) % 26) + 65);
-        } else if (charCode >= 97 && charCode <= 122) {
-          return String.fromCharCode(((charCode - 97 + 13) % 26) + 97);
-        } else {
-          return char;
-        }
-      })
-      .join("");
+  async function drawCircle(
+    canvasContext: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    radius: number,
+    color: string
+  ): Promise<void> {
+    canvasContext.beginPath();
+    canvasContext.arc(x, y, radius, 0, 2 * Math.PI);
+    canvasContext.fillStyle = color;
+    canvasContext.fill();
+    canvasContext.closePath();
   }
-  const rot13 = compute_rot13(sentence);
-  return { answer: rot13, solutions: [], computed: true };
+  return { answer: drawCircle, solutions: [], computed: true };
 }
 // %EXEMPLAR_END%
 
