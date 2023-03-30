@@ -1,6 +1,6 @@
 {
   "name": "transynthetical-engine",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "Applying the methods of synthetic and analytical augmentation to build a transynthetical engine that maintains and build a stateful archive of all JS functions generated.",
   "keywords": [
     "llm",
