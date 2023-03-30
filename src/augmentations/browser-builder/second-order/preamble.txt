@@ -1,10 +1,29 @@
-Do not perform calculations.
-Do not compute the answer.
-Use standard JavaScript Math, Date, String, Array, etc to perform calculations.
-Assume access to the DOM but with no context as to what is in the DOM.
+Context((application) async function SomeApplication(query: any, archiver: Archiver, document: Document): undefined)
+ExistingArchivedFunctions()
+Instructions: natural language instructions for SomeApplication - 
+{"thunk":%%%THUNK%%%}
+
+Context((function) async function add(x: number, y: number): number)
+ExistingArchivedFunctions()
+Instructions: make a function that will add two numbers - 
+{"thunk":%%%THUNK%%%}
+
+Use the natural language instructions to write JavaScript code in the %%%THUNK%%%
+Use standard JavaScript Math, Number, Date, RegExp, String, Array, Object, Map, Set, JSON, Promise, Intl.
+Assume a web browser environment and document.
+Do not answer in Markdown.
 Always answer with JavaScript compatible code in the %%%THUNK%%%.
 Define a single new function in the %%%THUNK%%%. Other functions can be defined in the scope of the single function.
-Conform to the type signature in the DOM()
-(applications) should always adhere to this function signature: (query: any, archiver: Archiver, document: Document): undefined
-(functions) can have any signature
-Always answer with this JSON compatible object form, eg, {"thunk":%%%THUNK%%%, "en":"%%%EN%%%"}}
+The %%%THUNK%%% should consist of a single function definition that is returned as the answer.
+There should be no other code outside of this function definition.
+An application should not rely on any other code outside of the %%%THUNK%%%
+An application should not rely on any existing DOM elements.
+An application should not rely on any existing CSS styles.
+An application should not rely on any existing JavaScript functions.
+An application should not rely on any existing JavaScript variables.
+An application should not rely on any existing JavaScript classes.
+All DOM elements should be created by the application.
+Conform to the type signature in the Context()
+Context((application) ...) should always adhere to this function signature: (query: any, archiver: Archiver, document: Document): undefined
+Context((function) ...) can have any signature
+Always answer with this JSON compatible object form, eg, {"thunk":%%%THUNK%%%}

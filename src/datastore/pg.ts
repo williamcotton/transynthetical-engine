@@ -44,7 +44,17 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
       },
 
       add: async (archive: Archive) => {
-        // console.log("ADD", archive);
+        console.log({
+          name: archive.name,
+          stringFunc: archive.stringFunc,
+          argTypes: archive.argTypes,
+          returnType: archive.returnType,
+          isApplication: archive.isApplication,
+          solutionUuid: archive.solutionUuid,
+          verified: archive.verified,
+          description: archive.description,
+          demonstration: archive.demonstration,
+        });
         const query = `
           INSERT INTO archives (
             name,
@@ -76,12 +86,25 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
           archive.isApplication,
         ];
 
+        const valuesWithoutEmbedding = [
+          archive.name,
+          archive.stringFunc,
+          JSON.stringify(archive.argTypes),
+          archive.solutionUuid,
+          false,
+          archive.description,
+          null,
+          archive.demonstration,
+          archive.returnType,
+          archive.isApplication,
+        ];
+
+        console.log(query, valuesWithoutEmbedding);
+
         let resp;
         try {
           resp = await database.query(query, values);
-          console.log("QUERY RESP", resp);
         } catch (e: any) {
-          console.log("QUERY ERROR", e);
           const regex = /Key \(name\)=\((.*)\) already exists./;
           const match = e?.detail?.match(regex);
           if (match) {

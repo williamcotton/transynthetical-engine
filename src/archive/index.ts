@@ -46,10 +46,23 @@ export type Archive = {
   verified: boolean;
   existing: boolean;
 };
-export type NewArchive = Pick<
+export type BuildNewArchive = Pick<
   Archive,
   "name" | "argTypes" | "returnType" | "isApplication" | "description"
->;
+> & {
+  prompt: string;
+};
+
+export type NewArchive = Pick<
+  Archive,
+  "name" | "argTypes" | "returnType" | "description"
+> & {
+  func: Func;
+  isApplication?: boolean;
+  demonstration?: string;
+  existing?: boolean;
+  previousVersion?: Archive;
+};
 
 export type Archiver = {
   add: ArchiverAdd;
@@ -62,21 +75,11 @@ export type Archiver = {
 
 export type Func = (...args: any[]) => any | string;
 
-export type ArchiverAdd = (
-  name: string,
-  func: Func,
-  argTypes: ArgTypes,
-  returnType: ArgType,
-  description: string,
-  isApplication: boolean,
-  demonstration?: string,
-  existing?: boolean,
-  previousVersion?: number
-) => Promise<Archive>;
+export type ArchiverAdd = (newArchive: NewArchive) => Promise<Archive>;
 
 export type ArchiverGet = (name: string) => Promise<Func>;
 
-export type ArchiverBuild = (archive: NewArchive) => Promise<Func>;
+export type ArchiverBuild = (archive: BuildNewArchive) => Promise<Func>;
 
 export type ArchiverUpdate = (
   archive: Archive
@@ -108,7 +111,7 @@ export const archiverFactory = ({
   augmentation,
 }: ArchiverFactoryParams): Archiver => {
   const archiverInstance: Archiver = {
-    add: async (
+    add: async ({
       name,
       func,
       argTypes,
@@ -117,8 +120,8 @@ export const archiverFactory = ({
       isApplication = false,
       demonstration = "",
       existing = false,
-      previousVersion
-    ) => {
+      previousVersion,
+    }) => {
       const stringFunc = typeof func === "string" ? func : func.toString();
 
       const embedding = await llm.requestEmbedding(description);
@@ -182,7 +185,7 @@ export const archiverFactory = ({
 
       return func;
     },
-    build: async (newArchive: NewArchive) => {
+    build: async (newArchive: BuildNewArchive) => {
       const { name, argTypes, returnType, description, isApplication } =
         newArchive;
 
@@ -201,7 +204,7 @@ export const archiverFactory = ({
       }) async function ${name}(${argString}): ${returnType}`;
 
       const solution = await ask({
-        prompt: description,
+        prompt: newArchive.prompt,
         dispatch,
         order: 2,
         augmentation,
@@ -226,14 +229,23 @@ export const archiverFactory = ({
         stringFunc: func.toString(),
       });
 
-      await archiverInstance.add(
+      console.log("await archiverInstance.add", {
         name,
         func,
         argTypes,
         returnType,
         description,
-        isApplication
-      );
+        isApplication,
+      });
+      await archiverInstance.add({
+        name,
+        func,
+        argTypes,
+        returnType,
+        description,
+        isApplication,
+      });
+      console.log("done await archiverInstance.add");
 
       return func;
     },

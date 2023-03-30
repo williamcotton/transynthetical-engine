@@ -26,15 +26,17 @@ describe("archiver", async () => {
       datastore: mockDatastore,
       augmentation,
     });
-    const addedResponse = await archiver.add(
-      "test",
-      t,
-      [{ s: "string" }],
-      "string",
-      "test description",
-      false,
-      "test demo"
-    );
+
+    const addedResponse = await archiver.add({
+      name: "test",
+      func: t,
+      argTypes: [{ s: "string" }],
+      returnType: "string",
+      description: "test description",
+      isApplication: false,
+      demonstration: "test demo",
+    });
+
     expect(addedResponse).deep.equal({
       id: 1,
       name: "test",

@@ -1,4 +1,4 @@
-DOM(<div id="context"></div>)
+Context(<div id="context"></div>)
 ExistingArchivedFunctions()
 Instructions: natural language instructions - 
 {"pthunk":%%%PTHUNK%%%}
@@ -12,5 +12,5 @@ Functions in ExistingArchivedFunctions() do exist and should be used with await 
 If not in ExistingArchivedFunctions() build new async functions and include a description in the %%%PTHUNK%%% and use await archiver.build()
 Web application async functions should have the isApplication flag set to true when added to the archive with await archiver.build()
 Assume all archived and defined functions are async functions in scope of the %%%PTHUNK%%%
-Always update the Web Browser document (DOM) based on the DOM(HTML context) when given an instruction.
+Always update the Web Browser document (DOM) based on the Context(HTML context) when given an instruction.
 Always answer with this JSON compatible object form: {"pthunk":%%%PTHUNK%%%}

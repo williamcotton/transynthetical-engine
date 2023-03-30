@@ -13,6 +13,7 @@ export type ArchivedFunction = {
 export type TranslationTarget = "data" | "thunk" | "pthunk";
 
 export type BuildPromptParams = {
+  order: number;
   context: string;
   prompt: string;
   archivedFunctions: ArchivedFunction[];

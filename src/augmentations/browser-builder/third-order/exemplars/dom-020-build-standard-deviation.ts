@@ -8,7 +8,7 @@ export const prompt = `build and archive a standard deviation function. use it t
 // this initial state should have a global state {} and a reset button that resets the global state to {}
 export const context = `<div id='context'><input value='512'></div>`;
 
-export const archivedFunctions = `[{ "name": "nullOp", "arg_types": [{ "return": "null" }] }, { "name": "NullOpWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }, { "return": "null" }] }, { "name": "addInputElement", "arg_types": [{ "contextElement": "HTMLElement" }, { "value": "string" }, { "return": "HTMLInputElement" }] } ]`;
+export const archivedFunctions = `[{ "name": "nullOp", "arg_types": [] }, { "name": "NullOpWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }] }, { "name": "addInputElement", "arg_types": [{ "contextElement": "HTMLElement" }, { "value": "string" }] } ]`;
 
 // %EXEMPLAR_START%
 async function solution(
@@ -17,6 +17,8 @@ async function solution(
   document: Document
 ): Promise<ThunkSolution> {
   const standardDeviation = await archiver.build({
+    prompt:
+      "build and archive a standard deviation function. use it to compute the standard deviation of a list of numbers entered by the user in a text input element.",
     name: "standardDeviation",
     argTypes: [
       {
@@ -28,26 +30,22 @@ async function solution(
     isApplication: false,
   });
 
-  const ComputeStandardDeviationInputElement = await archiver.build({
-    name: "ComputeStandardDeviationInputElement",
+  const ComputeStandardDeviationApplication = await archiver.build({
+    prompt:
+      "build and archive a standard deviation function. use it to compute the standard deviation of a list of numbers entered by the user in a text input element.",
+    name: "ComputeStandardDeviationApplication",
     argTypes: [
-      {
-        standardDeviation: "function",
-      },
-      {
-        contextElement: "HTMLElement",
-      },
+      { query: "any" },
+      { archiver: "Archiver" },
+      { document: "Document" },
     ],
-    returnType: "HTMLInputElement",
+    returnType: "undefined",
     description:
       "adds an input element to the context element that computes a standard deviation of a list of numbers when the user presses enter",
     isApplication: true,
   });
 
-  await ComputeStandardDeviationInputElement(
-    standardDeviation,
-    document.getElementById("context")
-  );
+  await ComputeStandardDeviationApplication(query, archiver, document);
 
   return {
     answer: ["standardDeviation"],

@@ -8,7 +8,7 @@ export const prompt = `define and archive addInputElement\n  it takes a context 
 // this initial state should have a global state {} and a reset button that resets the global state to {}
 export const context = `<div id='context'></div>`;
 
-export const archivedFunctions = `[{ "name": "nullOp", "arg_types": [], "return_type": "null" }, { "name": "NullOpWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }], "return_type": "null" }]`;
+export const archivedFunctions = `[{ "name": "nullOp", "arg_types": [] }, { "name": "NullOpWebApplication", "arg_types":[{ "query": "any" }, { "archiver": "Archiver" }, { "document": "Document" }] }]`;
 
 // %EXEMPLAR_START%
 async function solution(
@@ -18,6 +18,8 @@ async function solution(
 ): Promise<ThunkSolution> {
   const addInputElement = await archiver.build({
     name: "addInputElement",
+    prompt:
+      "define and archive addInputElement\n  it takes a context element and a value as input\n  it adds an input element with the value to the context element\n  it returns the input element\n\nuse the (async function): addInputElement to add an input element with the value '512' to the context",
     argTypes: [{ contextElement: "HTMLElement" }, { value: "string" }],
     returnType: "HTMLInputElement",
     description: `The addInputElement function takes a context element and a value as input and adds an input element with the value to the context element.`,

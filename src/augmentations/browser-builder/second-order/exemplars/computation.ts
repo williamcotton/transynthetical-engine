@@ -4,7 +4,7 @@ export const targetType = `thunk`;
 
 export const prompt = `A function that computes the standard deviation of a list of numbers.`;
 
-export const context = `async function standardDeviation(numbers: number[]): Promise<number>`;
+export const context = `(function) async function standardDeviation(numbers: number[]): Promise<number>`;
 
 // %EXEMPLAR_START%
 async function solution(): Promise<ThunkSolution> {

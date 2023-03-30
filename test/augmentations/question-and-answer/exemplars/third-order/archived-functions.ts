@@ -5,6 +5,7 @@ import solution from "../../../../../src/augmentations/question-and-answer/third
 
 import { archiverFactory } from "../../../../../src/archive";
 import { mockDatastore } from "../../../../../src/datastore";
+import { augmentation } from "../../../../../src/augmentations/question-and-answer";
 
 const query = async (query: any): Promise<any> => {
   return {
@@ -53,6 +54,7 @@ mockDatastore.archives.get = async (name: string) => {
 };
 
 const archive = archiverFactory({
+  augmentation,
   solutionUuid: "uuid",
   dispatch: () => {},
   llm: {

@@ -11,6 +11,20 @@ const { compile } = require(`./${type}/compile.ts`);
 const { buildPrompt } = require(`./${type}/build-prompt.ts`);
 
 const orders = ["first-order", "second-order", "third-order"];
+
+function orderStringToNumber(order: string): number {
+  switch (order) {
+    case "first-order":
+      return 1;
+    case "second-order":
+      return 2;
+    case "third-order":
+      return 3;
+    default:
+      return 0;
+  }
+}
+
 const pattern = /\/\/ %EXEMPLAR_START%([\s\S]*)\/\/ %EXEMPLAR_END%/;
 
 const preambleFilename = "preamble.txt";
@@ -66,6 +80,7 @@ orders.forEach((order) => {
 
     exemplars.push({
       augmentedPrompt: buildPrompt({
+        order: orderStringToNumber(order),
         context: extractedContext,
         prompt: extractedPrompt,
         archivedFunctions: extractedArchivedFunctions,

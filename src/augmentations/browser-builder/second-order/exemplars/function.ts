@@ -4,7 +4,7 @@ export const targetType = `thunk`;
 
 export const prompt = `A function that takes's a canvas context, x, y, radius, color and draws a circle.`;
 
-export const context = `async function drawCircle(canvasContext: CanvasRenderingContext2D, x: number, y: number, radius: number, color): Promise<void>`;
+export const context = `(function) async function drawCircle(canvasContext: CanvasRenderingContext2D, x: number, y: number, radius: number, color): Promise<void>`;
 
 // %EXEMPLAR_START%
 async function solution(): Promise<ThunkSolution> {

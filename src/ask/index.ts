@@ -95,6 +95,7 @@ export async function ask({
   const archivedFunctions = await archiver.findNearest(embedding);
 
   const builtPrompt = augmentation.buildPrompt({
+    order,
     context,
     prompt,
     archivedFunctions,
