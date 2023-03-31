@@ -47,6 +47,7 @@ export type AskParams = {
   parentSolutionUuid?: string;
   datastore: Datastore;
   queryEngines: QueryEngine[];
+  model?: string;
 };
 
 export type Ask = (params: AskParams) => Promise<Solution>;
@@ -62,6 +63,7 @@ export async function ask({
   parentSolutionUuid,
   datastore,
   queryEngines,
+  model,
 }: AskParams): Promise<Solution> {
   const uuid = uuidv4();
 
@@ -112,6 +114,8 @@ export async function ask({
     type: "ask_augmented_prompt",
     augmentedPrompt,
   });
+
+  augmentationOrderPrompt.model = model;
 
   // Request a completion from the large language model.
   const completion = await llm.requestCompletion(augmentationOrderPrompt);

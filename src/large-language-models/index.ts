@@ -7,6 +7,7 @@ export type Prompt = {
   preamble: string;
   exemplars: Exemplar[];
   augmentedPrompt: string;
+  model?: string | undefined;
 };
 
 export type LLM = {
