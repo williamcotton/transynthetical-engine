@@ -53,6 +53,10 @@ export type BuildNewArchive = Pick<
   prompt: string;
 };
 
+export type RebuildArchive = Pick<Archive, "name"> & {
+  prompt: string;
+};
+
 export type NewArchive = Pick<
   Archive,
   "name" | "argTypes" | "returnType" | "description"
@@ -69,6 +73,7 @@ export type Archiver = {
   get: ArchiverGet;
   update: ArchiverUpdate;
   build: ArchiverBuild;
+  rebuild: ArchiverRebuild;
   getAll: ArchiverGetAll;
   findNearest: ArchiverFindNearest;
 };
@@ -80,6 +85,8 @@ export type ArchiverAdd = (newArchive: NewArchive) => Promise<Archive>;
 export type ArchiverGet = (name: string) => Promise<Func>;
 
 export type ArchiverBuild = (archive: BuildNewArchive) => Promise<Func>;
+
+export type ArchiverRebuild = (rebuildArchive: RebuildArchive) => Promise<Func>;
 
 export type ArchiverUpdate = (
   archive: Archive
@@ -247,6 +254,57 @@ export const archiverFactory = ({
         isApplication,
       });
       console.log("done await archiverInstance.add");
+
+      return func;
+    },
+    rebuild: async (rebuildArchive: RebuildArchive) => {
+      const existingArchive = await datastore.archives.getComplete(
+        rebuildArchive.name
+      );
+
+      if (!existingArchive) {
+        return () => null;
+      }
+
+      const context = `Rebuild: %%%${existingArchive.stringFunc}%%%`;
+
+      const solution = await ask({
+        model: "gpt-4",
+        prompt: rebuildArchive.prompt,
+        dispatch,
+        order: 2,
+        augmentation,
+        context,
+        llm,
+        evaluate: true,
+        parentSolutionUuid: solutionUuid,
+        datastore,
+        queryEngines: [],
+      });
+
+      dispatch({
+        type: "archiver_rebuild_solution",
+        solution,
+      });
+
+      const func = solution.answer as Func;
+
+      dispatch({
+        type: "archiver_rebuild_func",
+        stringFunc: func.toString(),
+      });
+
+      await archiverInstance.add({
+        name: solution.en_answer || rebuildArchive.name + "_v0_0_1",
+        func,
+        argTypes: existingArchive.argTypes,
+        returnType: existingArchive.returnType,
+        description: existingArchive.description,
+        isApplication: existingArchive.isApplication,
+        demonstration: existingArchive.demonstration,
+        existing: true,
+        previousVersion: existingArchive,
+      });
 
       return func;
     },

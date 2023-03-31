@@ -18,6 +18,7 @@ export type SolutionResponse = {
 export type Datastore = {
   archives: {
     get: (name: string) => Promise<string>;
+    getComplete: (name: string) => Promise<Archive | void>;
     add: (archive: Archive) => Promise<ArchiveResponse>;
     update: (archive: Archive) => Promise<ArchiveResponse>;
     delete: (id: number) => Promise<ArchiveResponse>;
@@ -33,6 +34,22 @@ export const mockDatastore: Datastore = {
   archives: {
     get: async (name: string) => {
       return "function () { return 1; }";
+    },
+    getComplete: async (name: string) => {
+      return {
+        id: 1,
+        name: "test",
+        stringFunc: "function () { return 1; }",
+        argTypes: [],
+        returnType: "number",
+        isApplication: false,
+        solutionUuid: "uuid",
+        verified: true,
+        description: "test",
+        descriptionEmbedding: "[0, 0, 0]",
+        demonstration: "test",
+        existing: true,
+      };
     },
     getAll: async () => {
       return [];

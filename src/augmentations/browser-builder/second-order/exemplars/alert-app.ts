@@ -8,7 +8,7 @@ export const prompt = `make a simple app called AlertApp and archive it and then
 export const context = `(application) async function AlertApp(query: any, archiver: Archiver, document: Document): undefined`;
 
 // %EXEMPLAR_START%
-async function solution() {
+async function solution(): Promise<ThunkSolution> {
   async function AlertApp(query: any, archiver: Archiver, document: Document) {
     const body = document.body;
     const input = document.createElement("input");
@@ -19,7 +19,12 @@ async function solution() {
     button.onclick = () => alert(`hello ${input.value}`);
     body.appendChild(button);
   }
-  return { answer: AlertApp, solutions: [], computed: true };
+  return {
+    answer: AlertApp,
+    en_answer: "AlertApp",
+    solutions: [],
+    computed: true,
+  };
 }
 // %EXEMPLAR_END%
 

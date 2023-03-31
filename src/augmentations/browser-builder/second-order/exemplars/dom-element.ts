@@ -17,7 +17,12 @@ async function solution(): Promise<ThunkSolution> {
     contextElement.appendChild(inputElement);
     return inputElement;
   }
-  return { answer: addInputElement, solutions: [], computed: true };
+  return {
+    answer: addInputElement,
+    en_answer: "addInputElement",
+    solutions: [],
+    computed: true,
+  };
 }
 // %EXEMPLAR_END%
 

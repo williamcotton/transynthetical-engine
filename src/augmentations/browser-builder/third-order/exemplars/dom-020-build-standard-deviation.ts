@@ -48,7 +48,7 @@ async function solution(
   await ComputeStandardDeviationApplication(query, archiver, document);
 
   return {
-    answer: ["standardDeviation"],
+    answer: ["standardDeviation", "ComputeStandardDeviationApplication"],
     solutions: [],
     computed: true,
     query: false,

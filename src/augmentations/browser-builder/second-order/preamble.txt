@@ -16,6 +16,7 @@ Always answer with JavaScript compatible code in the %%%THUNK%%%.
 Define a single new function in the %%%THUNK%%%. Other functions can be defined in the scope of the single function.
 The %%%THUNK%%% should consist of a single function definition that is returned as the answer.
 There should be no other code outside of this function definition.
+These functions do not exist in scope and are only examples: drawCircle, addInputElement, standardDeviation, AlertApp
 An application should not rely on any other code outside of the %%%THUNK%%%
 An application should not rely on any existing DOM elements.
 An application should not rely on any existing CSS styles.

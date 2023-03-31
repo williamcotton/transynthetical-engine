@@ -4,6 +4,23 @@ import { Datastore } from ".";
 import { Archive } from "../archive";
 import { Solution } from "../ask";
 
+// getComplete: async (name: string) => {
+//   return {
+//     id: 1,
+//     name: "test",
+//     stringFunc: "function () { return 1; }",
+//     argTypes: [],
+//     returnType: "number",
+//     isApplication: false,
+//     solutionUuid: "uuid",
+//     verified: true,
+//     description: "test",
+//     descriptionEmbedding: "[0, 0, 0]",
+//     demonstration: "test",
+//     existing: true,
+//   };
+// },
+
 export const pgDatastoreFactory = (database: Pool): Datastore => {
   return {
     archives: {
@@ -19,7 +36,31 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
 
         return archive.rows[0].string_func;
       },
+      getComplete: async (name: string) => {
+        const archive = await database.query(
+          `SELECT * FROM archives WHERE name = $1`,
+          [name]
+        );
 
+        if (archive.rows.length === 0) {
+          return undefined;
+        }
+
+        return {
+          id: archive.rows[0].id,
+          name: archive.rows[0].name,
+          stringFunc: archive.rows[0].string_func,
+          argTypes: JSON.parse(archive.rows[0].arg_types),
+          returnType: archive.rows[0].return_type,
+          isApplication: archive.rows[0].is_application,
+          solutionUuid: archive.rows[0].solution_uuid,
+          verified: archive.rows[0].verified,
+          description: archive.rows[0].description,
+          descriptionEmbedding: archive.rows[0].description_embedding,
+          demonstration: archive.rows[0].demonstration,
+          existing: true,
+        };
+      },
       getAll: async (): Promise<Archive[]> => {
         const archives = await database.query(
           `SELECT * FROM archives ORDER BY id DESC`

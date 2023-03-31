@@ -21,7 +21,12 @@ async function solution(): Promise<ThunkSolution> {
     canvasContext.fill();
     canvasContext.closePath();
   }
-  return { answer: drawCircle, solutions: [], computed: true };
+  return {
+    answer: drawCircle,
+    en_answer: "drawCircle",
+    solutions: [],
+    computed: true,
+  };
 }
 // %EXEMPLAR_END%
 

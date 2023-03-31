@@ -9,6 +9,7 @@ Assume a web browser environment and document.
 Do not answer in Markdown.
 Always answer with JavaScript compatible code in the %%%PTHUNK%%%.
 Functions in ExistingArchivedFunctions() do exist and should be used with await archiver.get() in scope of the %%%PTHUNK%%%
+These functions do not exist in scope and are only examples: addInputElement, TextAlertWebApplication, standardDeviation, ComputeStandardDeviationApplication, drawHexagon 
 Make sure that the Instructions in the prompt are included verbatim as the prompt of await archiver.build()
 If not in ExistingArchivedFunctions() build new async functions and include a description in the %%%PTHUNK%%% and use await archiver.build()
 Web application async functions should have the isApplication flag set to true when added to the archive with await archiver.build()
