@@ -23,15 +23,14 @@ async function solution(
     const standardDeviation = Math.sqrt(variance);
     return standardDeviation;
   }
-  const standardDeviationReturnType = "number";
-  await archiver.add(
-    "compute_standard_deviation",
-    compute_standard_deviation,
-    [{ number: "array" }],
-    standardDeviationReturnType,
-    `The function compute_standard_deviation takes an array of numbers as an input and computes the standard deviation of those numbers. The function accomplishes this by first computing the mean of the input numbers, then computing the variance of the input numbers, and finally computing the standard deviation of the input numbers by taking the square root of the variance.`,
-    false
-  );
+  await archiver.add({
+    name: "compute_standard_deviation",
+    func: compute_standard_deviation,
+    argTypes: [{ numbers: "number[]" }],
+    returnType: "number",
+    description: `The function compute_standard_deviation takes an array of numbers as an input and computes the standard deviation of those numbers. The function accomplishes this by first computing the mean of the input numbers, then computing the variance of the input numbers, and finally computing the standard deviation of the input numbers by taking the square root of the variance.`,
+    isApplication: false,
+  });
   const standardDeviationOfNumbers = compute_standard_deviation(numbers);
   return {
     answer: standardDeviationOfNumbers,
