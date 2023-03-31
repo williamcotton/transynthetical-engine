@@ -201,9 +201,10 @@ export const archiverFactory = ({
 
       const context = `(${
         isApplication ? "application" : "function"
-      }) async function ${name}(${argString}): ${returnType}`;
+      }) async function ${name}(${argString}): ${returnType} [${description}]`;
 
       const solution = await ask({
+        model: "gpt-4",
         prompt: newArchive.prompt,
         dispatch,
         order: 2,
