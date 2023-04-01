@@ -11,9 +11,10 @@ export const wolframAlphaQueryEngineFactory = ({
   return {
     name: "wolfram",
     weight: 2,
-    getContext: async ({ prompt, topic, target, type }) => {
+    getContext: async ({ prompt, topic, target, type, dispatch }) => {
       let context = "";
       const wolfromAlphaQuery = await wolframAlpha.getFull(prompt);
+      if (dispatch) dispatch({ type: "query_wolfram", wolfromAlphaQuery });
       if (wolfromAlphaQuery.pods) {
         context = JSON.stringify(
           wolfromAlphaQuery.pods.map((p: any) => ({

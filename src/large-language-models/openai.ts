@@ -36,7 +36,7 @@ export const openAiLLMFactory = ({ apiKey }: { apiKey: string }): LLM => {
           temperature: 0.7,
           messages,
         });
-        console.log(response);
+        // console.log(response);
         return response.data.choices[0].message?.content || "";
       } catch (e: unknown) {
         console.error((e as unknown as any).toString());

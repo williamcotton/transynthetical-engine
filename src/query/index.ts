@@ -17,6 +17,7 @@ export type QueryParams = {
   topic: string;
   target: string;
   type: string;
+  dispatch?: Dispatch;
 };
 
 export type QuerySolution = {
@@ -61,7 +62,7 @@ export function queryFactory({
   }: QueryParams): Promise<QuerySolution> => {
     const queryEngineContexts = await Promise.all(
       queryEngines.map((queryEngine) =>
-        queryEngine.getContext({ prompt, topic, target, type })
+        queryEngine.getContext({ prompt, topic, target, type, dispatch })
       )
     );
 

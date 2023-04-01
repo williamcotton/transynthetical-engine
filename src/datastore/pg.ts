@@ -85,17 +85,6 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
       },
 
       add: async (archive: Archive) => {
-        console.log({
-          name: archive.name,
-          stringFunc: archive.stringFunc,
-          argTypes: archive.argTypes,
-          returnType: archive.returnType,
-          isApplication: archive.isApplication,
-          solutionUuid: archive.solutionUuid,
-          verified: archive.verified,
-          description: archive.description,
-          demonstration: archive.demonstration,
-        });
         const query = `
           INSERT INTO archives (
             name,
@@ -139,8 +128,6 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
           archive.returnType,
           archive.isApplication,
         ];
-
-        console.log(query, valuesWithoutEmbedding);
 
         let resp;
         try {
@@ -210,11 +197,6 @@ export const pgDatastoreFactory = (database: Pool): Datastore => {
 
       findNearest: async (embedding: number[]) => {
         const minDistance = 2;
-
-        console.log(
-          `SELECT * FROM archives WHERE verified = true AND description_embedding <-> $1 < $2 ORDER BY description_embedding <-> $1 LIMIT 10`,
-          [`[${[1, 2, 3]}]`, minDistance]
-        );
 
         const archives = await database.query(
           `SELECT * FROM archives WHERE verified = true AND description_embedding <-> $1 < $2 ORDER BY description_embedding <-> $1 LIMIT 10`,

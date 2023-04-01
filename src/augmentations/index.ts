@@ -37,6 +37,7 @@ export type Augmentation = {
     uuid: string,
     parentSolutionUuid?: string
   ) => Solution;
+  initialContext: string;
 };
 
 export const zerothOrder: Prompt = {

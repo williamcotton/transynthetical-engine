@@ -84,4 +84,5 @@ export const augmentation: Augmentation = {
   buildPrompt,
   evaluator,
   parseCompletion,
+  initialContext: "",
 };
