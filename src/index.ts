@@ -6,6 +6,7 @@ dotenv.config();
 import { dispatch } from "./dispatch";
 import { solve } from "./solve";
 import { openAiLLMFactory } from "./large-language-models/openai";
+import { llamaCppLLMFactory } from "./large-language-models/llama.cpp";
 import { pgDatastoreFactory } from "./datastore/pg";
 import { augmentation } from "./augmentations/question-and-answer";
 import { wikipediaQueryEngine } from "./query-engines/wikipedia";
@@ -34,7 +35,11 @@ const database = new Pool({
   port: 5432,
 });
 
-const llm = openAiLLMFactory({ apiKey: process.env.OPENAI_API_KEY || "" });
+const llm2 = openAiLLMFactory({ apiKey: process.env.OPENAI_API_KEY || "" });
+const llm = llamaCppLLMFactory({
+  rootDir: process.env.LLAMA_CPP_ROOT_DIR || "",
+  apiKey: process.env.OPENAI_API_KEY || "",
+});
 
 const datastore = pgDatastoreFactory(database);
 
@@ -57,7 +62,7 @@ const queryEngines = [
 // addition[5]
 // "The hobby store normally sells 10,576 trading cards per month. In June, the hobby store sold 15,498 more trading cards than normal. In total, how many trading cards did the hobby store sell in June?";
 
-const problem = trivia[10];
+const problem = trivia[7];
 
 solve({
   problem,
