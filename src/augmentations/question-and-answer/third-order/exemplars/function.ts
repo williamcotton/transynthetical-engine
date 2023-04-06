@@ -32,7 +32,7 @@ async function solution(
       })
       .join("");
   }
-  await archiver.add({
+  const computer_13_promise = archiver.add({
     name: "compute_rot13",
     func: compute_rot13,
     argTypes: [{ str: "string" }],
@@ -52,7 +52,7 @@ async function solution(
     }
     return word + "ay";
   }
-  await archiver.add({
+  const compute_pig_latin_promise = archiver.add({
     name: "compute_pig_latin",
     func: compute_pig_latin,
     argTypes: [{ word: "string" }],
@@ -60,6 +60,7 @@ async function solution(
     description: `The function compute_pig_latin takes a string as an input and applies the Pig Latin algorithm to it. This algorithm takes the first consonant (or consonant cluster) of an English word, moves it to the end of the word and suffixes an "ay". If a word begins with a vowel you just add "way" to the end. For example, the word "computer" becomes "omputercay" and "algorithm" becomes "algorithmway". The function accomplishes this by checking if the first letter of the input string is a vowel, and if not, it iterates through the remaining letters of the string until it finds a vowel. It then returns the substring of the input string starting at the first vowel, followed by the substring of the input string starting at the first letter and ending at the first vowel, followed by the string "ay". If the first letter of the input string is a vowel, it simply returns the input string followed by the string "way".`,
     isApplication: false,
   });
+  await Promise.all([computer_13_promise, compute_pig_latin_promise]);
   const pigLatin = sentence.split(" ").map(compute_pig_latin).join(" ");
   const rot13 = compute_rot13(pigLatin);
   return { answer: rot13, solutions: [], computed: true, query: false };

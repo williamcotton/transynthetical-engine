@@ -3,7 +3,7 @@ import { ThunkSolution } from "../../../../ask";
 
 export const targetType = `pthunk`;
 
-export const prompt = `What is twice the population of Albequerque, New Mexico?`;
+export const prompt = `What is twice the population of Albequerque, New Mexico added to the population of Denver, CO?`;
 
 export const en = `The population of Albequerque, New Mexico is {answer}.`;
 
@@ -18,17 +18,26 @@ async function solution(
   query: any,
   archiver: Archiver
 ): Promise<ThunkSolution> {
-  const populationOfAlbequerque = await query({
-    prompt: "What is the population of Albequerque, New Mexico?",
-    topic: "Albequerque, New Mexico",
-    target: "population",
-    type: "number",
-  });
-  const populationOfAlbequerqueTimesTwo =
-    (populationOfAlbequerque.answer as number) * 2;
+  const [populationOfDenver, populationOfAlbequerque] = await Promise.all([
+    query({
+      prompt: "What is the population of Denver, Colorado?",
+      topic: "Denver, Colorado",
+      target: "population",
+      type: "number",
+    }),
+    query({
+      prompt: "What is the population of Albequerque, New Mexico?",
+      topic: "Albequerque, New Mexico",
+      target: "population",
+      type: "number",
+    }),
+  ]);
+  const populationOfAlbequerqueTimesTwoPlusDenver =
+    (populationOfAlbequerque.answer as number) * 2 +
+    (populationOfDenver.answer as number);
   return {
-    answer: populationOfAlbequerqueTimesTwo,
-    solutions: [...populationOfAlbequerque.solutions],
+    answer: populationOfAlbequerqueTimesTwoPlusDenver,
+    solutions: [],
     computed: true,
     query: true,
   };
