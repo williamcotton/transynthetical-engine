@@ -152,7 +152,7 @@ export async function ask({
   };
 
   await datastore.solutions.add(completeSolution);
-  dispatch({ type: "ask_complete", ...completeSolution });
+  dispatch({ ...completeSolution, type: "ask_complete" });
 
   return completeSolution;
 }
