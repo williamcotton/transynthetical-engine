@@ -1,6 +1,6 @@
 {
   "name": "transynthetical-engine",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Applying the methods of synthetic and analytical augmentation to build a transynthetical engine that maintains and build a stateful archive of all JS functions generated.",
   "keywords": [
     "llm",
@@ -43,9 +43,10 @@
     "@types/chai": "^4.3.4",
     "@types/node": "^18.15.11",
     "@types/pg": "^8.6.6",
+    "@types/shelljs": "^0.8.11",
     "@types/uuid": "^9.0.1",
     "chai": "^4.3.7",
-    "npm-check-updates": "^16.8.2",
+    "npm-check-updates": "^16.10.7",
     "ts-node-test": "^0.4.1"
   },
   "dependencies": {
@@ -53,9 +54,10 @@
     "gpt-3-encoder": "^1.1.4",
     "openai": "^3.2.1",
     "pg": "^8.10.0",
-    "typescript": "^5.0.2",
+    "shelljs": "^0.8.5",
+    "typescript": "^5.0.3",
     "uuid": "^9.0.0",
-    "wikipedia": "^2.0.0",
+    "wikipedia": "^1.2.0",
     "wolfram-alpha-node": "^0.0.3"
   },
   "os": [
