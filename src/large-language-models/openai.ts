@@ -1,12 +1,19 @@
 import { Configuration, OpenAIApi } from "openai";
 
 import { LLM, Prompt } from ".";
+import { Dispatch } from "../dispatch";
 
 export const openAiLLMFactory = ({ apiKey }: { apiKey: string }): LLM => {
   const configuration = new Configuration({ apiKey });
   const openai = new OpenAIApi(configuration);
   return {
-    requestCompletion: async (prompt: Prompt) => {
+    requestCompletion: async ({
+      prompt,
+      dispatch,
+    }: {
+      prompt: Prompt;
+      dispatch: Dispatch;
+    }) => {
       try {
         const exemplarMessages = prompt.exemplars
           .map((exemplar) => {
@@ -36,7 +43,8 @@ export const openAiLLMFactory = ({ apiKey }: { apiKey: string }): LLM => {
           temperature: 0.7,
           messages,
         });
-        // console.log(response);
+        console.log(response);
+        dispatch({ type: "openai_repsonse", payload: response });
         return response.data.choices[0].message?.content || "";
       } catch (e: unknown) {
         console.error((e as unknown as any).toString());

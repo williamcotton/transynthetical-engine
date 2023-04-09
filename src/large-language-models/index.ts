@@ -1,3 +1,5 @@
+import { Dispatch } from "../dispatch";
+
 export type Exemplar = {
   augmentedPrompt: string;
   completion: string;
@@ -11,6 +13,12 @@ export type Prompt = {
 };
 
 export type LLM = {
-  requestCompletion: (prompt: Prompt) => Promise<string>;
+  requestCompletion: ({
+    prompt,
+    dispatch,
+  }: {
+    prompt: Prompt;
+    dispatch: Dispatch;
+  }) => Promise<string>;
   requestEmbedding: (text: string) => Promise<number[]>;
 };

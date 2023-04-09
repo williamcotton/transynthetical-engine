@@ -2,6 +2,7 @@ import { Configuration, OpenAIApi } from "openai";
 
 import { LLM, Prompt } from ".";
 import shell from "shelljs";
+import { Dispatch } from "../dispatch";
 const { spawn } = require("child_process");
 
 function escapeShellArg(arg: any) {
@@ -18,7 +19,13 @@ export const llamaCppLLMFactory = ({
   const configuration = new Configuration({ apiKey });
   const openai = new OpenAIApi(configuration);
   return {
-    requestCompletion: async (prompt: Prompt) => {
+    requestCompletion: async ({
+      prompt,
+      dispatch,
+    }: {
+      prompt: Prompt;
+      dispatch: Dispatch;
+    }) => {
       const exemplarMessages = prompt.exemplars
         .map((exemplar) => {
           return `${exemplar.augmentedPrompt}\n${exemplar.completion}\n`;

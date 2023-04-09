@@ -11,6 +11,7 @@ import { pgDatastoreFactory } from "./datastore/pg";
 import { augmentation } from "./augmentations/question-and-answer";
 import { wikipediaQueryEngine } from "./query-engines/wikipedia";
 import { wolframAlphaQueryEngineFactory } from "./query-engines/wolfram-alpha";
+import { duckDuckGoQueryEngineFactory } from "./query-engines/duck-duck-go";
 
 import {
   trivia,
@@ -35,11 +36,11 @@ const database = new Pool({
   port: 5432,
 });
 
-const llm2 = openAiLLMFactory({ apiKey: process.env.OPENAI_API_KEY || "" });
-const llm = llamaCppLLMFactory({
-  rootDir: process.env.LLAMA_CPP_ROOT_DIR || "",
-  apiKey: process.env.OPENAI_API_KEY || "",
-});
+const llm = openAiLLMFactory({ apiKey: process.env.OPENAI_API_KEY || "" });
+// const llm = llamaCppLLMFactory({
+//   rootDir: process.env.LLAMA_CPP_ROOT_DIR || "",
+//   apiKey: process.env.OPENAI_API_KEY || "",
+// });
 
 const datastore = pgDatastoreFactory(database);
 

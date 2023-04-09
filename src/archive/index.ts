@@ -237,14 +237,6 @@ export const archiverFactory = ({
         stringFunc: func.toString(),
       });
 
-      console.log("await archiverInstance.add", {
-        name,
-        func,
-        argTypes,
-        returnType,
-        description,
-        isApplication,
-      });
       await archiverInstance.add({
         name,
         func,
@@ -253,7 +245,6 @@ export const archiverFactory = ({
         description,
         isApplication,
       });
-      console.log("done await archiverInstance.add");
 
       return func;
     },

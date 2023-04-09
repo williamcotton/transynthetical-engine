@@ -1,0 +1,36 @@
+import { QueryEngine } from "../query";
+
+import { load } from "cheerio";
+import request from "request-promise";
+
+async function searchDuckDuckGo(query): Promise<string[]> {
+  try {
+    const response = await request.post("https://lite.duckduckgo.com/lite", {
+      form: {
+        q: query,
+      },
+    });
+    console.log(`Search results for "${query}":`);
+    const $ = load(response);
+    const resultArray = [];
+    $("td.result-snippet").each((index, element) => {
+      const textContent = $(element).text().trim();
+      resultArray.push(textContent);
+    });
+    return resultArray;
+  } catch (error) {
+    return [];
+  }
+}
+
+export const duckDuckGoQueryEngineFactory: QueryEngine = {
+  name: "duckDuckGo",
+  weight: 1,
+  getContext: async ({ prompt, topic, target, type, dispatch }) => {
+    const ddgSummary = await searchDuckDuckGo(prompt);
+    if (dispatch) dispatch({ type: "query_duckduckgo", ddgSummary });
+    const context = ddgSummary.join(" - ");
+
+    return context;
+  },
+};

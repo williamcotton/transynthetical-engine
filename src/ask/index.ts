@@ -118,7 +118,10 @@ export async function ask({
   augmentationOrderPrompt.model = model;
 
   // Request a completion from the large language model.
-  const completion = await llm.requestCompletion(augmentationOrderPrompt);
+  const completion = await llm.requestCompletion({
+    prompt: augmentationOrderPrompt,
+    dispatch,
+  });
   dispatch({ type: "ask_completion", completion });
 
   // Parse the completion text.
