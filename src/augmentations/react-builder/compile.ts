@@ -1,23 +1,11 @@
-import ts from "typescript";
-
-const options = {
-  target: ts.ScriptTarget.ES2017,
-  module: ts.ModuleKind.CommonJS,
-  jsx: ts.JsxEmit.React,
-};
-
 export function compile(
   extractedTarget: string,
   order: string,
   fileContents: string
 ) {
-  const javascriptTarget = ts.transpileModule(extractedTarget, {
-    compilerOptions: options,
-  }).outputText;
-
   // if higher than first-order, wrap in parens to make it a valid expression
   const preparedTarget =
-    order == "first-order" ? extractedTarget : `(${javascriptTarget})`;
+    order == "first-order" ? extractedTarget : `(${extractedTarget})`;
 
   const enMatch = fileContents.match(/export const en = `(.*)`;/);
   const extractedEn = enMatch ? enMatch[1].trim() : "";

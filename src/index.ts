@@ -49,6 +49,7 @@ const queryEngines = [
     apiKey: process.env.WOLFRAM_ALPHA_API_KEY || "",
   }),
   wikipediaQueryEngine,
+  duckDuckGoQueryEngineFactory,
 ];
 
 // openEnded[3]
@@ -63,7 +64,7 @@ const queryEngines = [
 // addition[5]
 // "The hobby store normally sells 10,576 trading cards per month. In June, the hobby store sold 15,498 more trading cards than normal. In total, how many trading cards did the hobby store sell in June?";
 
-const problem = trivia[7];
+const problem = trivia[10];
 
 solve({
   problem,

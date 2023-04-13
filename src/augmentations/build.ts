@@ -40,7 +40,7 @@ orders.forEach((order) => {
   const exemplarsPath = path.join(orderPath, "exemplars");
   const files = fs
     .readdirSync(exemplarsPath)
-    .filter((file) => file.endsWith(".ts"));
+    .filter((file) => file.endsWith(".ts") || file.endsWith(".tsx"));
 
   const preamblePath = path.join(orderPath, preambleFilename);
   const preamble = fs

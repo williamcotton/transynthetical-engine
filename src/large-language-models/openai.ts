@@ -39,12 +39,10 @@ export const openAiLLMFactory = ({ apiKey }: { apiKey: string }): LLM => {
         ];
 
         const response = await openai.createChatCompletion({
-          model: prompt.model ?? "gpt-3.5-turbo",
+          model: "gpt-3.5-turbo",
           temperature: 0.7,
           messages,
         });
-        console.log(response);
-        dispatch({ type: "openai_repsonse", payload: response });
         return response.data.choices[0].message?.content || "";
       } catch (e: unknown) {
         console.error((e as unknown as any).toString());

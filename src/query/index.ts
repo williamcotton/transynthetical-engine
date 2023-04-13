@@ -70,15 +70,17 @@ export function queryFactory({
       (queryEngine) => queryEngine.weight
     );
 
-    const topResponse = queryEngineContexts.reduce(
-      (acc, context, i) =>
-        queryEngineWeights[i] > acc.weight && context
-          ? { weight: queryEngineWeights[i], context }
-          : acc,
-      { weight: 0, context: "" }
-    );
-
-    const queryContext = topResponse.context;
+    // const topResponse = queryEngineContexts.reduce(
+    //   (acc, context, i) =>
+    //     queryEngineWeights[i] > acc.weight && context
+    //       ? { weight: queryEngineWeights[i], context }
+    //       : acc,
+    //   { weight: 0, context: "" }
+    // );
+    // const queryContext = topResponse.context;
+    const queryContext = queryEngineContexts
+      .map((context, i) => (context ? context : ""))
+      .join(" ");
 
     const solution = await ask({
       prompt,

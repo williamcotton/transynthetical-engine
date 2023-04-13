@@ -3,6 +3,7 @@ import ts from "typescript";
 const options = {
   target: ts.ScriptTarget.ES2017,
   module: ts.ModuleKind.CommonJS,
+  jsx: ts.JsxEmit.React,
 };
 
 export function compile(

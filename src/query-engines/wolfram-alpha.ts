@@ -10,16 +10,25 @@ export const wolframAlphaQueryEngineFactory = ({
   const wolframAlpha = WolframAlphaAPI(apiKey);
   return {
     name: "wolfram",
-    weight: 2,
+    weight: 3,
     getContext: async ({ prompt, topic, target, type, dispatch }) => {
+      console.log("prompt wa", prompt);
       let context = "";
       const wolframAlphaQuery = await wolframAlpha.getFull(prompt);
-      if (dispatch) dispatch({ type: "query_wolfram", wolframAlphaQuery });
+      if (dispatch)
+        dispatch({
+          type: "query_wolfram",
+          prompt,
+          topic,
+          target,
+          wolframAlphaQuery,
+        });
       if (wolframAlphaQuery.pods) {
         context = JSON.stringify(
-          wolframAlphaQuery.pods.map((p: any) => ({
-            [p.title]: p.subpods[0].plaintext,
-          }))
+          wolframAlphaQuery.pods &&
+            wolframAlphaQuery.pods.map((p: any) => ({
+              [p.title]: p.subpods[0].plaintext,
+            }))
         );
       }
       return context;

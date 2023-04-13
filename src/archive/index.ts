@@ -25,6 +25,29 @@ export type ArgType =
   | "HTMLElement"
   | "HTMLInputElement"
   | "HTMLCanvasElement"
+  | "ReactElement"
+  | "ReactNode"
+  | "ReactNodeArray"
+  | "ReactPortal"
+  | "ReactFragment"
+  | "ReactChild"
+  | "ReactChildren"
+  | "ReactComponentElement"
+  | "ReactComponentElement<any, any>"
+  | "ReactComponentElement<any, any>[]"
+  | "ReactComponentElement<any, any> | ReactComponentElement<any, any>[]"
+  | "ReactComponentElement<any, any> | null"
+  | "ReactComponentElement<any, any> | undefined"
+  | "ReactComponentElement<any, any> | null | undefined"
+  | "React.FC"
+  | "React.FC<any>"
+  | "React.FC<any>[]"
+  | "React.FC<any> | React.FC<any>[]"
+  | "React.FC<any> | null"
+  | "React.FC<any> | undefined"
+  | "React.FC<any> | null | undefined"
+  | "React.Component<any, any>"
+  | "React.Component<any, any>[]"
   | "CanvasRenderingContext2D";
 
 export type ArgTypes = {
@@ -193,6 +216,7 @@ export const archiverFactory = ({
       return func;
     },
     build: async (newArchive: BuildNewArchive) => {
+      console.log("Building new archive", newArchive);
       const { name, argTypes, returnType, description, isApplication } =
         newArchive;
 

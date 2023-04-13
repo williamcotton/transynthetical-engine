@@ -18,7 +18,7 @@ async function solution(
   query: any,
   archiver: Archiver
 ): Promise<ThunkSolution> {
-  const [populationOfDenver, populationOfAlbequerque] = await Promise.all([
+  const [populationOfDenver, volumeofLakesInAlbequerque] = await Promise.all([
     query({
       prompt: "What is the population of Denver, Colorado?",
       topic: "Denver, Colorado",
@@ -26,14 +26,15 @@ async function solution(
       type: "number",
     }),
     query({
-      prompt: "What is the population of Albequerque, New Mexico?",
+      prompt:
+        "What is volume of all of the fresh water lakes of Albequerque, New Mexico?",
       topic: "Albequerque, New Mexico",
       target: "population",
       type: "number",
     }),
   ]);
   const populationOfAlbequerqueTimesTwoPlusDenver =
-    (populationOfAlbequerque.answer as number) * 2 +
+    (volumeofLakesInAlbequerque.answer as number) * 2 +
     (populationOfDenver.answer as number);
   return {
     answer: populationOfAlbequerqueTimesTwoPlusDenver,
