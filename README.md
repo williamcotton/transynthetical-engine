@@ -1,6 +1,6 @@
 # transynthetical-engine
 
-Applied methods of analytical augmentation to build tools using large-language models.
+Applied methods of [analytical augmentation](https://github.com/williamcotton/empirical-philosophy/blob/main/articles/from-prompt-alchemy-to-prompt-engineering-an-introduction-to-analytic-agumentation.md) to build tools using large-language models.
 
 ## Install
 
