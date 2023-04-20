@@ -6,5 +6,5 @@ export type Action = {
 export type Dispatch = (action: Action) => void;
 
 export const dispatch: Dispatch = (action: Action) => {
-  // console.log(action);
+  console.log(action);
 };

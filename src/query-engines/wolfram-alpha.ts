@@ -12,7 +12,6 @@ export const wolframAlphaQueryEngineFactory = ({
     name: "wolfram",
     weight: 3,
     getContext: async ({ prompt, topic, target, type, dispatch }) => {
-      console.log("prompt wa", prompt);
       let context = "";
       const wolframAlphaQuery = await wolframAlpha.getFull(prompt);
       if (dispatch)
