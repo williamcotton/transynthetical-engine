@@ -1,9 +1,0 @@
-Context()
-Instructions: natural language instructions - 
-{"pthunk":%%%PTHUNK%%%}
-
-Use the natural language instructions to write IQLang in the %%%PTHUNK%%%
-IQLang is a lisp like language.
-Do not answer in Markdown.
-Always answer with IQLang compatible code in the %%%PTHUNK%%%.
-Always answer with this JSON compatible object form: {"pthunk":%%%PTHUNK%%%}
