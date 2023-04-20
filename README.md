@@ -212,6 +212,9 @@ Results in:
 });
 ```
 
+![Screenshot 2023-04-20 at 10 10 58 AM](https://user-images.githubusercontent.com/13163/233414396-81ab36da-dcb2-4b2f-91eb-715fe01a4f9f.png)
+![Screenshot 2023-04-20 at 10 11 06 AM](https://user-images.githubusercontent.com/13163/233414392-2ce1710f-6262-446f-a0f2-52ce57469c97.png)
+
 Which is the function returned by `archiver.build` in the primary query.
 
 The reason for the additional query is so that the dialog of messages isn't cluttered with JavaScript.
@@ -353,5 +356,8 @@ Which results in:
   };
 });
 ```
+
+![Screenshot 2023-04-20 at 10 19 48 AM](https://user-images.githubusercontent.com/13163/233414521-2e983084-d477-4490-ad12-fe6b8da42254.png)
+![Screenshot 2023-04-20 at 10 19 59 AM](https://user-images.githubusercontent.com/13163/233414517-4e1a88f1-0749-4483-9201-3d93ef776ab4.png)
 
 The dialog of messages, including the initial exemplars used for system, user and assistant messages, consists of higher-level JavaScript that orchestrates additional LLM tools to write or rewrite the actual code. LLM tokens are a limited resource when it comes to interactivity and interactions can quickly reach the token limit. Another benefit of separating the `build` and `rebuild` functionality from a specific dialog is that an entirely new dialog can be started with the same code.
