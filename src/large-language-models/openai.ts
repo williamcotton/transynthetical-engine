@@ -10,9 +10,11 @@ export const openAiLLMFactory = ({ apiKey }: { apiKey: string }): LLM => {
     requestCompletion: async ({
       prompt,
       dispatch,
+      model,
     }: {
       prompt: Prompt;
       dispatch: Dispatch;
+      model?: string;
     }) => {
       try {
         const exemplarMessages = prompt.exemplars
@@ -39,7 +41,7 @@ export const openAiLLMFactory = ({ apiKey }: { apiKey: string }): LLM => {
         ];
 
         const response = await openai.createChatCompletion({
-          model: "gpt-3.5-turbo",
+          model: model ?? "gpt-3.5-turbo",
           temperature: 0.7,
           messages,
         });
