@@ -68,9 +68,19 @@ Which the assistant would respond with:
 
 The `query()` function will use a number of external sources including Wikipedia, Wolfram Alpha, and Duck Duck Go combined with a nested call to the LLM to properly parse the query for further computation.
 
+```
+{
+  question: "What is the population of Geneseo, NY combined with the population of Rochester, NY, divided by string length of the answer to the question 'What is the capital of France?'?",
+  expectedAnswer: 43780.4,
+  answer: 43780.4,
+  en_answer: "The combined population of Geneseo, NY and Rochester, NY divided by the string length of the answer to the question 'What is the capital of France?' is 43892.6.",
+  correct: true
+}
+```
+
 This means that this particular question made four total calls to the LLM. The first was to build the nested queries and the other three to parse the response from the search engines.
 
-In essence the question-and-answer exemplars used in the few-shot instructions have tought the engine to use a JavaScript interpreter that has access to a specialized `query` function.
+In essence the question-and-answer exemplars used in the few-shot instructions have taught the engine to use a JavaScript interpreter that has access to a specialized `query` function.
 
 ## Browser Builder
 
