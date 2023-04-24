@@ -82,6 +82,48 @@ This means that this particular question made four total calls to the LLM. The f
 
 In essence the question-and-answer exemplars used in the few-shot instructions have taught the engine to use a JavaScript interpreter that has access to a specialized `query` function.
 
+Let's ask another question:
+
+`What is the statistical variance for the list of numbers: [2, 4, 2, 5, 2, 6, 6]`
+
+This time the response is:
+
+```js
+(async function solution(query, archiver) {
+    const numbers = [2, 4, 2, 5, 2, 6, 6];
+    function compute_variance(numbers) {
+        const mean = numbers.reduce((acc, curr) => acc + curr, 0) / numbers.length;
+        const variance = numbers.reduce((acc, curr) => acc + Math.pow(curr - mean, 2), 0) /
+            numbers.length;
+        return variance;
+    }
+    await archiver.add({
+        name: "compute_variance",
+        func: compute_variance,
+        argTypes: [{ numbers: "number[]" }],
+        returnType: "number",
+        description: `The function compute_variance takes an array of numbers as an input and computes the variance of those numbers. The function accomplishes this by first computing the mean of the input numbers, and then computing the variance of the input numbers by taking the sum of the squared differences between each number and the mean, and dividing by the number of input numbers.`,
+        isApplication: false,
+    });
+    const varianceOfNumbers = compute_variance(numbers);
+    return {
+        answer: varianceOfNumbers,
+        solutions: [],
+        computed: true,
+        query: false,
+    };
+}
+)
+```
+
+Here the LLM has created a function and added it to the archiver. This function can be then be verfied and then used for further questions. If of course used this function on a given list of numbers to compute the variance:
+
+```
+2.979591836734694
+
+The statistical variance for the list [2, 4, 2, 5, 2, 6, 6] is 2.979591836734694.
+```
+
 ## Browser Builder
 
 Another included augmentation assists with constructing web applications.
